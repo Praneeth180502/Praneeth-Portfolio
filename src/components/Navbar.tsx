@@ -36,7 +36,7 @@ const Navbar = () => {
           Praneeth.dev
         </a>
 
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-4 lg:gap-6">
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -52,9 +52,14 @@ const Navbar = () => {
           >
             {dark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
-          <a href="/Praneeth_Resume.pdf" download className="gradient-btn px-5 py-2 rounded-lg text-sm font-semibold">
-            Resume
-          </a>
+          <div className="flex items-center gap-2">
+            <a href="/Resume.pdf" target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-lg text-sm font-medium border border-primary/20 hover:border-primary/50 hover:bg-primary/5 transition-all text-muted-foreground hover:text-primary">
+              View
+            </a>
+            <a href="/Resume.pdf" download className="gradient-btn px-4 py-2 rounded-lg text-sm font-semibold">
+              Download
+            </a>
+          </div>
         </div>
 
         <div className="md:hidden flex items-center gap-3">
@@ -86,9 +91,14 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
-              <a href="/Praneeth_Resume.pdf" download className="gradient-btn px-5 py-3 rounded-lg text-sm font-semibold text-center mt-2">
-                Download Resume
-              </a>
+              <div className="grid grid-cols-2 gap-3 mt-3">
+                <a href="/Resume.pdf" target="_blank" rel="noopener noreferrer" className="py-2.5 px-4 rounded-lg text-sm font-medium border border-border text-center hover:bg-secondary transition-colors text-foreground">
+                  View
+                </a>
+                <a href="/Resume.pdf" download className="gradient-btn px-4 py-2.5 rounded-lg text-sm font-semibold text-center">
+                  Download
+                </a>
+              </div>
             </div>
           </motion.div>
         )}

@@ -5,7 +5,7 @@ This project is organized according to the following structure:
 ```
 portfolio/
 ├── public/                     # Static assets
-│   ├── Praneeth_Resume.pdf
+│   ├── Resume.pdf
 │   ├── favicon.ico
 │   ├── placeholder.svg
 │   └── robots.txt
