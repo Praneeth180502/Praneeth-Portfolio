@@ -32,7 +32,7 @@ const Navbar = () => {
       }`}
     >
       <div className="container mx-auto flex items-center justify-between px-4 sm:px-6">
-        <a href="#" className="font-heading text-xl font-bold gradient-text">
+        <a href="#" className="font-heading text-lg sm:text-xl font-bold gradient-text whitespace-nowrap overflow-hidden text-ellipsis">
           Praneeth.dev
         </a>
 

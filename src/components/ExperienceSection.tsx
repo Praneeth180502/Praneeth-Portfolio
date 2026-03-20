@@ -48,7 +48,7 @@ const ExperienceSection = () => {
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         <Building2 size={18} className="text-primary" />
-                        <h3 className="font-heading font-bold text-lg text-foreground">{exp.company}</h3>
+                        <h3 className="font-heading font-bold text-lg text-foreground break-words">{exp.company}</h3>
                       </div>
                       <p className="text-primary font-medium">{exp.role}</p>
                     </div>

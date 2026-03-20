@@ -37,7 +37,7 @@ const ContactSection = () => {
                 <div className="p-2.5 rounded-lg bg-primary/10">
                   <Icon size={20} className="text-primary" />
                 </div>
-                <span className="text-sm text-foreground">{label}</span>
+                <span className="text-sm text-foreground break-all">{label}</span>
               </a>
             ))}
           </motion.div>

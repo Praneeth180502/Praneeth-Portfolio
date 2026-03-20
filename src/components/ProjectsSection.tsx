@@ -66,7 +66,7 @@ const ProjectsSection = () => {
                   <ExternalLink size={18} className="text-muted-foreground group-hover:text-primary transition-colors mt-2" />
                 </div>
 
-                <h3 className="font-heading font-bold text-xl text-foreground mb-2">{title}</h3>
+                <h3 className="font-heading font-bold text-xl text-foreground mb-2 break-words">{title}</h3>
                 <p className="text-xs font-medium text-accent mb-3">{client}</p>
                 <p className="text-muted-foreground text-sm leading-relaxed mb-5">{description}</p>
 

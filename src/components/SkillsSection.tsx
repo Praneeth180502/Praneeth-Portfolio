@@ -65,7 +65,7 @@ const SkillsSection = () => {
                 <div className="p-2.5 rounded-xl bg-secondary group-hover:bg-primary/10 transition-colors">
                   <Icon size={22} className={color} />
                 </div>
-                <h3 className="font-heading font-bold text-foreground">{title}</h3>
+                <h3 className="font-heading font-bold text-foreground break-words">{title}</h3>
               </div>
               <div className="flex flex-wrap gap-2">
                 {skills.map((skill) => (
