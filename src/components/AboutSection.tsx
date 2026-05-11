@@ -27,7 +27,7 @@ const AboutSection = () => {
                 I've had the privilege of interning at <strong className="text-foreground">DRDO</strong> (Defense Research & Development Organization), where I contributed to the Live Missile Data Simulation project, and currently at <strong className="text-foreground">CognitBotz</strong>, where I build enterprise-grade dashboards for Adani using React.js, FastAPI, and PostgreSQL.
               </p>
               <p>
-                I'm driven by the desire to learn emerging technologies and create products that redefine industry standards.
+                I'm driven by the desire to learn emerging technologies like Generative AI and RAG, and create products that redefine industry standards.
               </p>
             </div>
 

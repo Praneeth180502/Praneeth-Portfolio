@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
-import praneethPhoto from "@/assets/praneeth-photo.jpg";
+import { ArrowDown, Github, Linkedin, Mail, Download } from "lucide-react";
+import praneethPhoto from "@/assets/photo.jpeg";
 
 const HeroSection = () => {
   return (
@@ -23,7 +23,7 @@ const HeroSection = () => {
               <span className="gradient-text">Ankey Praneeth Reddy</span>
             </h1>
             <p className="text-base sm:text-lg leading-relaxed max-w-lg mb-8 mx-auto lg:mx-0" style={{ color: "hsl(220, 15%, 65%)" }}>
-              Aspiring CS graduate passionate about building impactful products with React, FastAPI, and PostgreSQL. Currently interning at CognitBotz, delivering enterprise dashboards for Adani.
+              Full Stack Developer specializing in Generative AI, RAG systems, and enterprise data visualization. Experienced in building production-ready AI agents and high-performance analytics dashboards.
             </p>
 
             <div className="flex flex-wrap justify-center lg:justify-start gap-4 mb-10">
@@ -32,6 +32,10 @@ const HeroSection = () => {
               </a>
               <a href="#projects" className="px-8 py-3 rounded-xl font-semibold text-sm border border-primary/30 hover:border-primary/60 transition-colors" style={{ color: "hsl(220, 15%, 75%)" }}>
                 View Projects
+              </a>
+              <a href="/Praneeth Reddy Resume.pdf" download className="px-8 py-3 rounded-xl font-semibold text-sm bg-secondary text-secondary-foreground hover:bg-muted transition-all flex items-center gap-2">
+                <Download size={18} />
+                Resume
               </a>
             </div>
 

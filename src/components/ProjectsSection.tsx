@@ -3,8 +3,29 @@ import { ExternalLink, BarChart3, Bot, Zap, Activity } from "lucide-react";
 
 const projects = [
   {
-    title: "App Connectivity Dashboard",
+    title: "OpenViz - Generative AI Analytics Platform",
+    icon: BarChart3,
+    description: "Architected a React 19 & Vega-Lite visualization engine featuring a hybrid drag-and-drop/AI interface powered by Llama 4 via Groq SDK. Implemented a client-side RAG pipeline with Arquero for instant data profiling and context-aware chart generation, ensuring data privacy and zero-latency interactions.",
+    tech: ["React 19", "Vega-Lite", "Llama 4", "Groq SDK", "Arquero", "RAG"],
+    client: "GenAI Platform",
+  },
+  {
+    title: "AI-Powered Agent Builder (Agentic RAG)",
+    icon: Bot,
+    description: "Architected a conversational AI system building production-ready Pydantic AI agents, achieving an 85% success rate for generated code. Built an automated pipeline using Crawl4AI to ingest documentation into Supabase pgvector for high-fidelity semantic search.",
+    tech: ["Pydantic AI", "Crawl4AI", "Supabase", "pgvector", "RAG"],
+    client: "Agentic AI",
+  },
+  {
+    title: "SAP Invoice Consolidation",
     icon: Zap,
+    description: "Engineered an AI pipeline utilizing Nanonets OCR for high-accuracy PDF extraction and Groq API for field parsing to generate SAP-ready Excel sheets. Developed a Tkinter desktop app with logic for multi-page handling, vendor validation, and SAP compliance.",
+    tech: ["Python", "Tkinter", "Nanonets OCR", "Groq API", "openpyxl"],
+    client: "Automation Tool",
+  },
+  {
+    title: "App Connectivity Dashboard",
+    icon: Activity,
     description: "Responsive dashboard using React.js and FastAPI to visualize Excel/CSV data with dynamic filters (State, Region, Substation). Features KPI cards and interactive charts for operational metrics.",
     tech: ["React.js", "FastAPI", "PostgreSQL", "Charts"],
     client: "Adani (via CognitBotz)",
@@ -39,10 +60,10 @@ const ProjectsSection = () => {
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <p className="text-accent font-heading text-sm font-semibold uppercase tracking-wider mb-2">Projects</p>
           <h2 className="text-3xl sm:text-4xl font-bold font-heading mb-4">
-            Enterprise <span className="gradient-text">dashboards</span> I've built
+            Featured <span className="gradient-text">Projects</span> & Solutions
           </h2>
           <p className="text-muted-foreground max-w-2xl mb-12">
-            These projects were delivered for Adani during my internship at CognitBotz, showcasing full-stack development with React.js, FastAPI, and PostgreSQL.
+            A collection of enterprise-grade dashboards and AI-powered platforms I've architected, ranging from data visualization engines to agentic RAG systems.
           </p>
         </motion.div>
 

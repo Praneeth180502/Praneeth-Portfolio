@@ -53,10 +53,10 @@ const Navbar = () => {
             {dark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
           <div className="flex items-center gap-2">
-            <a href="/Resume.pdf" target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-lg text-sm font-medium border border-primary/20 hover:border-primary/50 hover:bg-primary/5 transition-all text-muted-foreground hover:text-primary">
-              View
+            <a href="/Praneeth Reddy Resume.pdf" target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-lg text-sm font-medium border border-primary/20 hover:border-primary/50 hover:bg-primary/5 transition-all text-muted-foreground hover:text-primary">
+              View Resume
             </a>
-            <a href="/Resume.pdf" download className="gradient-btn px-4 py-2 rounded-lg text-sm font-semibold">
+            <a href="/Praneeth Reddy Resume.pdf" download className="gradient-btn px-4 py-2 rounded-lg text-sm font-semibold">
               Download
             </a>
           </div>
@@ -92,10 +92,10 @@ const Navbar = () => {
                 </a>
               ))}
               <div className="grid grid-cols-2 gap-3 mt-3">
-                <a href="/Resume.pdf" target="_blank" rel="noopener noreferrer" className="py-2.5 px-4 rounded-lg text-sm font-medium border border-border text-center hover:bg-secondary transition-colors text-foreground">
+                <a href="/Praneeth Reddy Resume.pdf" target="_blank" rel="noopener noreferrer" className="py-2.5 px-4 rounded-lg text-sm font-medium border border-border text-center hover:bg-secondary transition-colors text-foreground">
                   View
                 </a>
-                <a href="/Resume.pdf" download className="gradient-btn px-4 py-2.5 rounded-lg text-sm font-semibold text-center">
+                <a href="/Praneeth Reddy Resume.pdf" download className="gradient-btn px-4 py-2.5 rounded-lg text-sm font-semibold text-center">
                   Download
                 </a>
               </div>
