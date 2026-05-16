@@ -33,7 +33,7 @@ const HeroSection = () => {
               <a href="#projects" className="px-8 py-3 rounded-xl font-semibold text-sm border border-primary/30 hover:border-primary/60 transition-colors" style={{ color: "hsl(220, 15%, 75%)" }}>
                 View Projects
               </a>
-              <a href="/Praneeth Reddy Resume.pdf" download className="px-8 py-3 rounded-xl font-semibold text-sm bg-secondary text-secondary-foreground hover:bg-muted transition-all flex items-center gap-2">
+              <a href="/Praneeth Genai+full stack resume.pdf" download className="px-8 py-3 rounded-xl font-semibold text-sm bg-secondary text-secondary-foreground hover:bg-muted transition-all flex items-center gap-2">
                 <Download size={18} />
                 Resume
               </a>
