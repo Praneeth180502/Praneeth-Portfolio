@@ -28,7 +28,7 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass-card py-3" : "py-5 bg-transparent"
+        scrolled ? "bg-background border-b border-border py-3 shadow-sm" : "py-5 bg-transparent"
       }`}
     >
       <div className="container mx-auto flex items-center justify-between px-4 sm:px-6">
@@ -78,7 +78,7 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden glass-card mx-4 mt-2 rounded-xl overflow-hidden"
+            className="md:hidden bg-background border border-border shadow-md mx-4 mt-2 rounded-xl overflow-hidden"
           >
             <div className="flex flex-col gap-1 p-4">
               {navLinks.map((link) => (
