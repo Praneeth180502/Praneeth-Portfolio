@@ -24,7 +24,7 @@ const AboutSection = () => {
                 I'm a B.Tech Computer Science graduate from Vignan Institute of Technology and Science, Hyderabad. My passion lies in creating full-stack web applications that solve real-world problems.
               </p>
               <p>
-                I've had the privilege of interning at <strong className="text-foreground">DRDO</strong> (Defense Research & Development Organization), where I contributed to the Live Missile Data Simulation project, and currently at <strong className="text-foreground">CognitBotz</strong>, where I build enterprise-grade dashboards for Adani using React.js, FastAPI, and PostgreSQL.
+                I've had the privilege of interning at <strong className="text-foreground">DRDO</strong> (Defense Research & Development Organization), where I contributed to the Live Missile Data Simulation project, and also at <strong className="text-foreground">CognitBotz</strong>, where I built enterprise-grade dashboards for Adani using React.js, FastAPI, and PostgreSQL.
               </p>
               <p>
                 I'm driven by the desire to learn emerging technologies like Generative AI and RAG, and create products that redefine industry standards.
