@@ -17,12 +17,11 @@ const HeroSection = () => {
             transition={{ duration: 0.7 }}
             className="text-center lg:text-left"
           >
-            <p className="text-accent font-medium mb-4 font-heading tracking-wider text-sm uppercase">Full Stack Developer</p>
-            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold font-heading leading-tight mb-6 break-words" style={{ color: "hsl(0, 0%, 95%)" }}>
-              Hi, I'm{" "}
-              <span className="gradient-text">Ankey Praneeth Reddy</span>
+            <p className="text-accent font-medium mb-4 font-heading tracking-wider text-sm uppercase">Full Stack Developer + AI Engineer</p>
+            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold font-heading leading-normal mb-6 break-words gradient-text py-1 pr-1">
+              Hi, I'm Ankey Praneeth Reddy
             </h1>
-            <p className="text-base sm:text-lg leading-relaxed max-w-lg mb-8 mx-auto lg:mx-0" style={{ color: "hsl(220, 15%, 65%)" }}>
+            <p className="text-base sm:text-lg leading-relaxed max-w-lg mb-8 mx-auto lg:mx-0 text-muted-foreground">
               Full Stack Developer specializing in Generative AI, RAG systems, and enterprise data visualization. Experienced in building production-ready AI agents and high-performance analytics dashboards.
             </p>
 
@@ -30,7 +29,7 @@ const HeroSection = () => {
               <a href="#contact" className="gradient-btn px-8 py-3 rounded-xl font-semibold text-sm">
                 Get In Touch
               </a>
-              <a href="#projects" className="px-8 py-3 rounded-xl font-semibold text-sm border border-primary/30 hover:border-primary/60 transition-colors" style={{ color: "hsl(220, 15%, 75%)" }}>
+              <a href="#projects" className="px-8 py-3 rounded-xl font-semibold text-sm border border-primary/30 hover:border-primary/60 transition-colors text-muted-foreground hover:text-foreground">
                 View Projects
               </a>
               <a href="/Praneeth_Resume.pdf" download className="px-8 py-3 rounded-xl font-semibold text-sm bg-secondary text-secondary-foreground hover:bg-muted transition-all flex items-center gap-2">
@@ -50,8 +49,7 @@ const HeroSection = () => {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 rounded-xl border border-primary/20 hover:border-primary/50 hover:bg-primary/10 transition-all"
-                  style={{ color: "hsl(220, 15%, 70%)" }}
+                  className="p-3 rounded-xl border border-primary/20 hover:border-primary/50 hover:bg-primary/10 transition-all text-muted-foreground hover:text-foreground"
                 >
                   <Icon size={20} />
                 </a>
@@ -77,7 +75,7 @@ const HeroSection = () => {
         </div>
       </div>
 
-      <a href="#about" className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce" style={{ color: "hsl(220, 15%, 50%)" }}>
+      <a href="#about" className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-muted-foreground hover:text-primary transition-colors">
         <ArrowDown size={24} />
       </a>
     </section>

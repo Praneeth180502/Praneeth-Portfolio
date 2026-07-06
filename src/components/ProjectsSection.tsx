@@ -1,7 +1,14 @@
 import { motion } from "framer-motion";
-import { ExternalLink, BarChart3, Bot, Zap, Activity } from "lucide-react";
+import { ExternalLink, BarChart3, Bot, Zap, Activity, Video } from "lucide-react";
 
 const projects = [
+  {
+    title: "AURASELECT - AI Video Interview Evaluator",
+    icon: Video,
+    description: "The AI Video Interview Evaluator is a full-stack, AI-powered platform designed to automate and enhance the HR screening process. Candidates are presented with questions and record their responses via their webcam/microphone. Behind the scenes, an advanced AI pipeline transcribes the video, semantically analyzes the content against ideal responses, and evaluates the candidate's performance across multiple dimensions to produce a comprehensive score report.",
+    tech: ["React", "FastAPI", "Groq Whisper", "LLMs", "AI Evaluation"],
+    client: "HR Tech Platform",
+  },
   {
     title: "OpenViz - Generative AI Analytics Platform",
     icon: BarChart3,

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Code, Database, Layout, Server, Terminal, Globe } from "lucide-react";
+import { Code, Database, Layout, Server, Terminal, Globe, Bot } from "lucide-react";
 
 const skillCategories = [
   {
@@ -29,14 +29,20 @@ const skillCategories = [
   {
     title: "Tools & DevOps",
     icon: Terminal,
-    skills: ["Git", "VS Code", "Postman", "Docker"],
+    skills: ["Git", "VS Code", "Postman", "Docker", "FFmpeg"],
     color: "text-primary",
   },
   {
     title: "Web Technologies",
     icon: Globe,
-    skills: ["REST APIs", "JSON", "Responsive Design", "Data Visualization"],
+    skills: ["REST APIs", "WebRTC", "Responsive Design", "Data Visualization"],
     color: "text-accent",
+  },
+  {
+    title: "AI & Machine Learning",
+    icon: Bot,
+    skills: ["Generative AI", "LLMs", "RAG", "Whisper (Audio)", "Vector DBs"],
+    color: "text-primary",
   },
 ];
 
