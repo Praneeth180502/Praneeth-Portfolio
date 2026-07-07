@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowDown, Github, Linkedin, Mail, Download } from "lucide-react";
-import praneethPhoto from "@/assets/photo.jpeg";
+import praneethPhoto from "@/assets/Photo.png";
 
 const HeroSection = () => {
   return (
@@ -63,11 +63,14 @@ const HeroSection = () => {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="flex justify-center lg:justify-end"
           >
-            <div className="relative">
-              <div className="w-56 h-56 sm:w-72 sm:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-4 border-primary/30 animate-pulse-glow">
-                <img src={praneethPhoto} alt="Ankey Praneeth Reddy" className="w-full h-full object-cover" />
+            <div className="relative group">
+              {/* Animated background glow for a premium feel */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200" />
+              
+              <div className="relative w-56 aspect-[2/3] sm:w-72 lg:w-80 rounded-3xl overflow-hidden border-4 border-primary/30 animate-pulse-glow">
+                <img src={praneethPhoto} alt="Ankey Praneeth Reddy" className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500" />
               </div>
-              <div className="absolute bottom-0 right-0 sm:-bottom-4 sm:-right-4 glass-card px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl">
+              <div className="absolute bottom-4 right-4 glass-card px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl shadow-lg border border-white/10">
                 <p className="text-[10px] sm:text-sm font-heading font-semibold text-foreground whitespace-nowrap">🚀 Open to Work</p>
               </div>
             </div>
