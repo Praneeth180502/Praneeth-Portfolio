@@ -21,6 +21,9 @@ configure_logging()
 logger = get_logger(__name__)
 
 
+import torch
+torch.set_num_threads(1)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
