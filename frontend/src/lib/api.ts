@@ -18,7 +18,7 @@ export interface ChatStreamCallbacks {
   onDone?: () => void;
 }
 
-const API_BASE = "/api";
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 export async function sendContactMessage(payload: ContactPayload): Promise<{ status: string; message: string }> {
   const response = await fetch(`${API_BASE}/contact`, {
