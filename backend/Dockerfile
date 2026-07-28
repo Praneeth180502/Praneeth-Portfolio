@@ -40,12 +40,7 @@ COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    HF_HOME="/home/appuser/.cache/huggingface" \
-    OMP_NUM_THREADS=1 \
-    MKL_NUM_THREADS=1 \
-    OPENBLAS_NUM_THREADS=1 \
-    VECLIB_MAXIMUM_THREADS=1 \
-    NUMEXPR_NUM_THREADS=1
+    HF_HOME="/home/appuser/.cache/huggingface"
 
 # Models are downloaded lazily on first usage to stay under 512MB RAM build limits.
 

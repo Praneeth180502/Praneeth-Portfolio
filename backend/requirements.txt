@@ -22,10 +22,10 @@ redis==5.2.1
 
 # --------------------------------------------------------------------------
 # RAG: embeddings, reranking, vector store, sparse retrieval
+# Uses ChromaDB's built-in ONNX embedding (no PyTorch needed — saves ~350MB RAM)
 # --------------------------------------------------------------------------
-sentence-transformers==3.3.1
---extra-index-url https://download.pytorch.org/whl/cpu
-torch==2.5.1+cpu
+onnxruntime==1.20.1
+tokenizers>=0.13.0
 chromadb==0.5.23
 rank-bm25==0.2.2
 langchain-text-splitters==0.3.4

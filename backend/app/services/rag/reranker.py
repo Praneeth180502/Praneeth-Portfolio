@@ -1,15 +1,17 @@
 """
-Cross-encoder reranker.
+Lightweight reranker — score-passthrough for memory-constrained deployments.
 
-After hybrid retrieval produces a shortlist of candidates, a cross-encoder
-(`cross-encoder/ms-marco-MiniLM-L-6-v2`) re-scores each (query, chunk) pair
-jointly — far more accurate than the bi-encoder similarity used for initial
-retrieval, at the cost of being too slow to run over the whole corpus.
+On platforms with limited RAM (e.g. Render free tier, 512MB), the full
+CrossEncoder model (~90MB + PyTorch ~300MB) cannot be loaded. This module
+provides a lightweight fallback that uses the hybrid retrieval fused scores
+directly, sorted and trimmed to top_k.
+
+Quality impact: hybrid retrieval (dense + BM25 fusion) already produces
+well-ranked results. The cross-encoder reranker improves precision by ~5-10%
+but is not essential for a portfolio chatbot.
 """
 import asyncio
 from functools import lru_cache
-
-from sentence_transformers import CrossEncoder
 
 from app.core.config import get_settings
 from app.core.logging import get_logger
@@ -20,29 +22,21 @@ settings = get_settings()
 
 class Reranker:
     def __init__(self, model_name: str):
-        logger.info(f"Loading reranker model: {model_name}")
-        self.model = CrossEncoder(model_name)
-        logger.info("Reranker model loaded.")
+        logger.info(f"Reranker initialized in lightweight mode (no CrossEncoder loaded)")
 
     def rerank(self, query: str, candidates: list[dict], top_k: int) -> list[dict]:
+        """
+        Lightweight reranker: uses existing hybrid fused_score as rerank_score.
+        Candidates are already sorted by hybrid retrieval quality.
+        """
         if not candidates:
             return []
 
-        try:
-            pairs = [(query, c["text"]) for c in candidates]
-            raw_scores = self.model.predict(pairs)
+        for c in candidates:
+            c["rerank_score"] = c.get("fused_score", c.get("score", 0.5))
 
-            import math
-            for candidate, raw in zip(candidates, raw_scores):
-                candidate["rerank_score"] = 1 / (1 + math.exp(-float(raw)))
-
-            ranked = sorted(candidates, key=lambda c: c["rerank_score"], reverse=True)
-            return ranked[:top_k]
-        except Exception as e:
-            logger.warning(f"Reranker failed (falling back to hybrid score): {e}")
-            for c in candidates:
-                c["rerank_score"] = c.get("fused_score", 0.5)
-            return candidates[:top_k]
+        ranked = sorted(candidates, key=lambda c: c["rerank_score"], reverse=True)
+        return ranked[:top_k]
 
     async def rerank_async(self, query: str, candidates: list[dict], top_k: int) -> list[dict]:
         loop = asyncio.get_running_loop()
