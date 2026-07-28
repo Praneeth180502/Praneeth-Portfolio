@@ -4,6 +4,7 @@ __pycache__/
 .venv/
 venv/
 .env
+.env*
 .DS_Store
 
 # RAG index data (regenerate via ingestion, don't commit)

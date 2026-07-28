@@ -25,25 +25,24 @@ class Reranker:
         logger.info("Reranker model loaded.")
 
     def rerank(self, query: str, candidates: list[dict], top_k: int) -> list[dict]:
-        """
-        candidates: list of {id, text, metadata, score} from hybrid retrieval.
-        Returns the top_k candidates re-sorted by cross-encoder relevance,
-        with an added `rerank_score` normalized to [0, 1] via sigmoid.
-        """
         if not candidates:
             return []
 
-        pairs = [(query, c["text"]) for c in candidates]
-        raw_scores = self.model.predict(pairs)
+        try:
+            pairs = [(query, c["text"]) for c in candidates]
+            raw_scores = self.model.predict(pairs)
 
-        # ms-marco cross-encoders output unbounded logits; squash to [0,1].
-        import math
+            import math
+            for candidate, raw in zip(candidates, raw_scores):
+                candidate["rerank_score"] = 1 / (1 + math.exp(-float(raw)))
 
-        for candidate, raw in zip(candidates, raw_scores):
-            candidate["rerank_score"] = 1 / (1 + math.exp(-float(raw)))
-
-        ranked = sorted(candidates, key=lambda c: c["rerank_score"], reverse=True)
-        return ranked[:top_k]
+            ranked = sorted(candidates, key=lambda c: c["rerank_score"], reverse=True)
+            return ranked[:top_k]
+        except Exception as e:
+            logger.warning(f"Reranker failed (falling back to hybrid score): {e}")
+            for c in candidates:
+                c["rerank_score"] = c.get("fused_score", 0.5)
+            return candidates[:top_k]
 
     async def rerank_async(self, query: str, candidates: list[dict], top_k: int) -> list[dict]:
         loop = asyncio.get_running_loop()

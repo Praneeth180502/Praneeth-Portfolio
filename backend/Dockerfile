@@ -47,13 +47,7 @@ ENV PATH="/opt/venv/bin:$PATH" \
     VECLIB_MAXIMUM_THREADS=1 \
     NUMEXPR_NUM_THREADS=1
 
-# Pre-download embedding + reranker models at build time so cold starts in
-# production don't pay the download cost. Comment out to keep the image
-# smaller and download models lazily on first startup instead.
-RUN python -c "\
-from sentence_transformers import SentenceTransformer, CrossEncoder; \
-SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2'); \
-CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')"
+# Models are downloaded lazily on first usage to stay under 512MB RAM build limits.
 
 COPY ./app ./app
 COPY ./knowledge ./knowledge
