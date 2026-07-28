@@ -25,8 +25,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # ---------------------------------------------------------------------------
 FROM python:3.11-slim AS runtime
 
-# Non-root user for security
-RUN groupadd -r appuser && useradd -r -g appuser appuser
+# Non-root user for security (with home directory)
+RUN groupadd -r appuser && useradd -r -m -g appuser appuser
 
 WORKDIR /app
 
@@ -39,7 +39,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1
+    PYTHONDONTWRITEBYTECODE=1 \
+    HF_HOME="/home/appuser/.cache/huggingface"
 
 # Pre-download embedding + reranker models at build time so cold starts in
 # production don't pay the download cost. Comment out to keep the image
@@ -55,8 +56,8 @@ COPY ./scripts ./scripts
 COPY ./alembic ./alembic
 COPY ./alembic.ini .
 
-RUN mkdir -p /app/data/chroma /app/data/bm25 /app/static && \
-    chown -R appuser:appuser /app
+RUN mkdir -p /app/data/chroma /app/data/bm25 /app/static /home/appuser/.cache && \
+    chown -R appuser:appuser /app /home/appuser
 
 USER appuser
 
