@@ -64,4 +64,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
 # scale horizontally with multiple containers instead of --workers if you
 # need more throughput (each worker would otherwise load its own copy of
 # the embedding/reranker models into memory).
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
