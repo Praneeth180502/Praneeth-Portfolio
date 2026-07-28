@@ -1,0 +1,62 @@
+[
+  {
+    "slug": "auraselect-ai-interview",
+    "title": "AURASELECT - AI Video Interview Evaluator",
+    "tagline": "Full-stack AI platform automating HR screening and video response evaluation",
+    "description": "An AI-powered platform automating HR screening. Candidates record video responses, while behind the scenes Groq Whisper transcribes speech and LLMs semantically evaluate performance across multiple dimensions.",
+    "tech_stack": ["React", "FastAPI", "Groq Whisper", "LLMs", "AI Evaluation"],
+    "category": "GenAI / HR Tech",
+    "featured": true,
+    "thumbnail_url": null,
+    "links": [],
+    "year": 2024
+  },
+  {
+    "slug": "openviz-genai-analytics",
+    "title": "OpenViz - Generative AI Analytics Platform",
+    "tagline": "Prompt-driven visualization engine powered by Llama 4 and Vega-Lite",
+    "description": "React 19 & Vega-Lite visualization engine featuring a hybrid drag-and-drop/AI interface powered by Llama 4 via Groq SDK. Implemented a client-side RAG pipeline with Arquero for zero-latency data profiling.",
+    "tech_stack": ["React 19", "Vega-Lite", "Llama 4", "Groq SDK", "Arquero", "RAG"],
+    "category": "GenAI Platform",
+    "featured": true,
+    "thumbnail_url": null,
+    "links": [],
+    "year": 2024
+  },
+  {
+    "slug": "silens-ai-stem-learning",
+    "title": "SiLens AI - AI-Powered STEM Learning Platform",
+    "tagline": "Interactive STEM platform converting textbooks into LaTeX math and interactive Q&A",
+    "description": "Transforms static learning documents into interactive study experiences using OpenCV, PaddleOCR, and Pix2Tex for LaTeX math extraction, with a FastAPI backend and TanStack frontend for document Q&A.",
+    "tech_stack": ["FastAPI", "React", "TypeScript", "Groq LLM", "PaddleOCR", "Pix2Tex", "PostgreSQL"],
+    "category": "EdTech / AI",
+    "featured": true,
+    "thumbnail_url": null,
+    "links": [],
+    "year": 2024
+  },
+  {
+    "slug": "ai-file-explorer",
+    "title": "AI File Explorer - Local AI Indexing & Search Platform",
+    "tagline": "Privacy-first desktop AI app for semantic search across local files and codebases",
+    "description": "Monitors local directories in real time using watchdog & PyMuPDF, ingests documents into ChromaDB vector search, and enables natural language interaction with local (Ollama) and cloud (Groq) LLMs inside Electron.",
+    "tech_stack": ["FastAPI", "React", "TypeScript", "Electron", "Ollama", "ChromaDB", "PyMuPDF"],
+    "category": "Desktop / Local RAG",
+    "featured": true,
+    "thumbnail_url": null,
+    "links": [],
+    "year": 2024
+  },
+  {
+    "slug": "meet-ops-meeting-bot",
+    "title": "Meet-Ops - AI Meeting Analytics",
+    "tagline": "Autonomous Teams meeting bot for transcript capture and AI insights",
+    "description": "Autonomous meeting assistant bot that joins Teams calls, stores transcripts in PostgreSQL, and generates AI summaries and actionable insights displayed on a React dashboard.",
+    "tech_stack": ["React.js", "FastAPI", "AI/ML", "PostgreSQL", "Docker"],
+    "category": "Automation / Enterprise",
+    "featured": false,
+    "thumbnail_url": null,
+    "links": [],
+    "year": 2024
+  }
+]
