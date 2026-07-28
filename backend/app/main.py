@@ -24,31 +24,11 @@ logger = get_logger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
-    Startup: lazily ingest the knowledge base if the vector store is empty,
-    so a fresh deployment "just works" without a manual ingestion step.
-    (For larger knowledge bases, prefer running `scripts/ingest_knowledge.py`
-    as an explicit deploy step instead of relying on this lazy path.)
+    Startup: Log application boot. Knowledge base ingestion and embedding model
+    loading are performed lazily on the first chat request to ensure the web server
+    binds instantly under Render's 512MB RAM limit.
     """
     logger.info(f"Starting {settings.APP_NAME} in {settings.APP_ENV} mode")
-    try:
-        from app.services.rag.embeddings import get_embedding_model
-        from app.services.rag.ingestion import IngestionPipeline
-        from app.services.rag.sparse_retriever import get_sparse_retriever
-        from app.services.rag.vector_store import get_vector_store
-
-        pipeline = IngestionPipeline(
-            vector_store=get_vector_store(),
-            sparse_retriever=get_sparse_retriever(),
-            embedding_model=get_embedding_model(),
-        )
-        indexed_count = await pipeline.run(force=False)
-        logger.info(f"Knowledge base ready with {indexed_count} indexed chunks.")
-    except Exception:
-        # Don't crash the whole app if ingestion fails (e.g. missing knowledge/
-        # dir in a minimal deployment) — the chat endpoint will simply fall
-        # back to "I don't have that information" responses.
-        logger.exception("Knowledge base ingestion failed at startup (non-fatal).")
-
     yield
     logger.info(f"Shutting down {settings.APP_NAME}")
 
