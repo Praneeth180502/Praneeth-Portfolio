@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ExternalLink, BarChart3, Bot, Zap, Activity, Video } from "lucide-react";
+import { ExternalLink, BarChart3, Bot, Zap, Activity, Video, GraduationCap, FolderSearch } from "lucide-react";
 
 const projects = [
   {
@@ -17,18 +17,18 @@ const projects = [
     client: "GenAI Platform",
   },
   {
-    title: "AI-Powered Agent Builder (Agentic RAG)",
-    icon: Bot,
-    description: "Architected a conversational AI system building production-ready Pydantic AI agents, achieving an 85% success rate for generated code. Built an automated pipeline using Crawl4AI to ingest documentation into Supabase pgvector for high-fidelity semantic search.",
-    tech: ["Pydantic AI", "Crawl4AI", "Supabase", "pgvector", "RAG"],
-    client: "Agentic AI",
+    title: "SiLens AI - AI-Powered STEM Learning Platform",
+    icon: GraduationCap,
+    description: "SiLens AI is an intelligent STEM education platform that transforms static learning documents into interactive study experiences. Users can upload complex technical documents or math textbooks, which are processed through computer vision and OCR to extract equations into clean LaTeX format. The platform automatically generates document-grounded Q&A chat, dynamic quizzes, and educational summaries, leveraging low-latency LLMs and intelligent caching to deliver an adaptive, interactive learning environment.",
+    tech: ["FastAPI", "React", "TypeScript", "Groq LLM", "PaddleOCR", "Pix2Tex", "PostgreSQL"],
+    client: "EdTech Platform",
   },
   {
-    title: "SAP Invoice Consolidation",
-    icon: Zap,
-    description: "Engineered an AI pipeline utilizing Nanonets OCR for high-accuracy PDF extraction and Groq API for field parsing to generate SAP-ready Excel sheets. Developed a Tkinter desktop app with logic for multi-page handling, vendor validation, and SAP compliance.",
-    tech: ["Python", "Tkinter", "Nanonets OCR", "Groq API", "openpyxl"],
-    client: "Automation Tool",
+    title: "AI File Explorer - Local AI Indexing & Search Platform",
+    icon: FolderSearch,
+    description: "AI File Explorer is a privacy-first desktop AI application designed for instant semantic search and natural-language interaction across local files and codebases. Operating locally via an Electron shell, it automatically monitors folders in real time, ingests multi-format documents (PDFs, Markdown, source code) into a local ChromaDB vector database, and allows users to query their files using local LLMs (via Ollama) or high-performance cloud APIs.",
+    tech: ["FastAPI", "React", "TypeScript", "Electron", "Ollama", "ChromaDB", "PyMuPDF"],
+    client: "Desktop Platform",
   },
   {
     title: "App Connectivity Dashboard",
