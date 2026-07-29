@@ -63,8 +63,8 @@ class Settings(BaseSettings):
         default="postgresql+psycopg2://postgres:postgres@localhost:5432/portfolio_db",
         description="Sync DSN used by Alembic migrations only.",
     )
-    DB_POOL_SIZE: int = 10
-    DB_MAX_OVERFLOW: int = 20
+    DB_POOL_SIZE: int = 3
+    DB_MAX_OVERFLOW: int = 5
     DB_ECHO: bool = False
 
     # -------------------------------------------------------------- Redis

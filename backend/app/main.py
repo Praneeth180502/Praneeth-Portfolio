@@ -32,6 +32,11 @@ async def lifespan(app: FastAPI):
     """
     Startup: Log application boot and check if knowledge base ingestion is needed.
     """
+    import gc
+    import os
+    os.environ["OMP_NUM_THREADS"] = "1"
+    os.environ["OPENBLAS_NUM_THREADS"] = "1"
+
     logger.info(f"Starting {settings.APP_NAME} in {settings.APP_ENV} mode")
     try:
         from app.services.rag.embeddings import get_embedding_model
@@ -51,6 +56,7 @@ async def lifespan(app: FastAPI):
             logger.info(f"Auto-ingestion complete: {count} chunks indexed.")
         else:
             logger.info(f"Vector store ready with {vector_store.count()} chunks.")
+        gc.collect()
     except Exception as exc:
         logger.exception("Failed to run auto-ingestion on startup", exc_info=exc)
     yield

@@ -67,12 +67,19 @@ class IngestionPipeline:
         if force:
             self.vector_store.reset()
 
-        logger.info(f"Embedding {len(chunks)} chunks with {settings.EMBEDDING_MODEL_NAME}...")
-        texts = [c.text for c in chunks]
-        embeddings = await self.embedding_model.encode_async(texts)
+        import gc
+
+        logger.info(f"Embedding {len(chunks)} chunks in batches with {settings.EMBEDDING_MODEL_NAME}...")
+        embeddings: list[list[float]] = []
+        batch_size = 16
+        for i in range(0, len(chunks), batch_size):
+            batch_texts = [c.text for c in chunks[i : i + batch_size]]
+            batch_embeddings = await self.embedding_model.encode_async(batch_texts)
+            embeddings.extend(batch_embeddings)
 
         self.vector_store.upsert(chunks, embeddings)
         self.sparse_retriever.build(chunks)
 
+        gc.collect()
         logger.info(f"Ingestion complete: {len(chunks)} chunks indexed (dense + sparse).")
         return len(chunks)
