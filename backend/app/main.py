@@ -30,13 +30,32 @@ STATIC_DIR = Path(__file__).parent.parent / "static"
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
-    Startup: Log application boot. Knowledge base ingestion and embedding model
-    loading are performed lazily on the first chat request to ensure the web server
-    binds instantly under Render's 512MB RAM limit.
+    Startup: Log application boot and check if knowledge base ingestion is needed.
     """
     logger.info(f"Starting {settings.APP_NAME} in {settings.APP_ENV} mode")
+    try:
+        from app.services.rag.embeddings import get_embedding_model
+        from app.services.rag.sparse_retriever import get_sparse_retriever
+        from app.services.rag.vector_store import get_vector_store
+        from app.services.rag.ingestion import IngestionPipeline
+
+        vector_store = get_vector_store()
+        if vector_store.count() == 0:
+            logger.info("Vector store is empty. Running automatic knowledge base ingestion...")
+            pipeline = IngestionPipeline(
+                vector_store=vector_store,
+                sparse_retriever=get_sparse_retriever(),
+                embedding_model=get_embedding_model(),
+            )
+            count = await pipeline.run(force=True)
+            logger.info(f"Auto-ingestion complete: {count} chunks indexed.")
+        else:
+            logger.info(f"Vector store ready with {vector_store.count()} chunks.")
+    except Exception as exc:
+        logger.exception("Failed to run auto-ingestion on startup", exc_info=exc)
     yield
     logger.info(f"Shutting down {settings.APP_NAME}")
+
 
 
 def create_app() -> FastAPI:
