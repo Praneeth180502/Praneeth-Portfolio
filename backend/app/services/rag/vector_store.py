@@ -15,8 +15,11 @@ from app.core.config import get_settings
 from app.core.logging import get_logger
 from app.utils.text_processing import Chunk
 
+import os
+
 logger = get_logger(__name__)
 settings = get_settings()
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
 
 
 class VectorStore:

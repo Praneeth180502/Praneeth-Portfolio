@@ -66,8 +66,9 @@ def configure_logging() -> None:
     root.addHandler(handler)
 
     # Quiet down noisy third-party loggers.
-    for noisy in ("uvicorn.access", "httpx", "sentence_transformers"):
-        logging.getLogger(noisy).setLevel(logging.WARNING)
+    for noisy in ("uvicorn.access", "httpx", "sentence_transformers", "chromadb.telemetry"):
+        logging.getLogger(noisy).setLevel(logging.CRITICAL)
+
 
 
 def get_logger(name: str) -> logging.Logger:
