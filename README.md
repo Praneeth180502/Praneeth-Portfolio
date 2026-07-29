@@ -46,12 +46,14 @@ Praneeth Portfolio/
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **Framework**: React 18 + Vite
 - **Styling**: Tailwind CSS + Framer Motion
 - **Icons**: Lucide React
 - **Toast Notifications**: Sonner
 
 ### Backend
+
 - **Framework**: FastAPI (Python 3.11+)
 - **LLM Engine**: Groq API (`llama-3.3-70b-versatile`)
 - **RAG & Vector DB**: ChromaDB + BM25 + Cross-Encoder Reranker (`ms-marco-MiniLM-L-6-v2`)
@@ -63,6 +65,7 @@ Praneeth Portfolio/
 ## 🚀 Getting Started Locally
 
 ### Prerequisites
+
 - Node.js (v18+) & npm
 - Python (v3.10+)
 - PostgreSQL (Optional for local dev without DB connection)
@@ -118,6 +121,7 @@ The app will run on `http://localhost:5173`.
 ## 📦 Deployment Instructions
 
 ### Frontend (Vercel)
+
 1. Import the repository into **Vercel**.
 2. Set the **Root Directory** to `frontend`.
 3. Add Environment Variable:
@@ -125,6 +129,7 @@ The app will run on `http://localhost:5173`.
 4. Click **Deploy**.
 
 ### Backend (Render / Railway / Docker)
+
 1. Deploy the `backend/` directory to **Render**, **Railway**, or any Docker-compatible server.
 2. Set environment variables:
    - `GROQ_API_KEY`: Your Groq API key

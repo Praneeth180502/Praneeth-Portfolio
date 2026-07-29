@@ -6,6 +6,8 @@ Score fusion formula: final_score = DENSE_WEIGHT * dense_score + SPARSE_WEIGHT *
 are pre-normalized to [0, 1] before fusion so the weights are meaningful.
 Results are deduplicated by chunk id, keeping the fused (max-combined) score.
 """
+import re
+
 from app.core.config import get_settings
 from app.core.logging import get_logger
 from app.services.rag.embeddings import EmbeddingModel
@@ -14,6 +16,45 @@ from app.services.rag.vector_store import VectorStore
 
 logger = get_logger(__name__)
 settings = get_settings()
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Intent-based query expansion
+# Maps regex patterns for natural-language phrasings → domain keyword injections.
+# This lets BM25 and dense retrieval find relevant chunks even when the user
+# doesn't use exact keywords from the knowledge base.
+# ──────────────────────────────────────────────────────────────────────────────
+_INTENT_EXPANSIONS: list[tuple[re.Pattern, str]] = [
+    # Work / employment history
+    (re.compile(r"\b(work(?:ed)?|job|employ|compan|firm|organisation|organization|place)\b", re.I),
+     "work experience internship DRDO CognitBotz Adani"),
+    # Internships specifically
+    (re.compile(r"\b(intern(?:ship)?|traineeship|placement)\b", re.I),
+     "internship DRDO CognitBotz work experience"),
+    # Previous / past roles
+    (re.compile(r"\b(previous|past|before|prior|earlier|formerly|used to)\b", re.I),
+     "previous work experience internship DRDO CognitBotz"),
+    # Education / degree
+    (re.compile(r"\b(study|studied|college|university|degree|b\.?tech|graduation|school|cgpa|gpa|grade)\b", re.I),
+     "education degree B.Tech Vignan CGPA graduation 2024"),
+    # Projects
+    (re.compile(r"\b(project|built|made|created|developed|side.?project|portfolio)\b", re.I),
+     "projects OpenViz SiLens AURASELECT AI File Explorer Meet-Ops"),
+    # Skills / tech stack
+    (re.compile(r"\b(skill|tech(?:nolog)?|stack|language|framework|tool|know(?:ledge)?|proficien|expert)\b", re.I),
+     "skills React FastAPI Python TypeScript Docker PostgreSQL GenAI"),
+    # Contact / location
+    (re.compile(r"\b(contact|reach|email|phone|linkedin|location|where.*live|based|city)\b", re.I),
+     "contact email phone Hyderabad LinkedIn"),
+    # Open to work / hiring
+    (re.compile(r"\b(hire|hiring|open.?to.?work|available|looking.?for|job.?search|recruit)\b", re.I),
+     "open to work hiring available full stack GenAI"),
+    # Introduction / about
+    (re.compile(r"\b(introduc|about|who is|tell me|background|overview|summar)\b", re.I),
+     "Praneeth Reddy Ankey full stack developer background introduction"),
+    # Certifications
+    (re.compile(r"\b(certif|award|credential|cisco|pcap|psap|cpa|cla)\b", re.I),
+     "certifications PCAP PSAP CPA CLA Cisco Python"),
+]
 
 
 class HybridRetriever:
@@ -64,7 +105,19 @@ class HybridRetriever:
             if "praneeth" not in query.lower():
                 search_query = f"{query} Praneeth"
 
-        # 2. Follow-up context injection — if query is short or pronoun-heavy,
+        # 2. Intent-based keyword expansion — inject domain terms for paraphrased queries
+        #    so BM25 and dense retrieval can find relevant chunks without exact keywords.
+        expansion_terms: list[str] = []
+        for pattern, expansion in _INTENT_EXPANSIONS:
+            if pattern.search(search_query):
+                expansion_terms.append(expansion)
+        if expansion_terms:
+            # Append unique expansion terms (deduplicated) to the search query
+            all_extra = " ".join(expansion_terms)
+            search_query = f"{search_query} {all_extra}"
+            logger.debug(f"Query expanded: {query!r} -> {search_query!r}")
+
+        # 3. Follow-up context injection — if query is short or pronoun-heavy,
         #    prepend the last user turn so retrieval has richer context.
         query_word_count = len(words)
         is_short_or_pronoun_heavy = (

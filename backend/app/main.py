@@ -6,6 +6,7 @@ Run in production: uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
 (see Dockerfile / docker-compose.yml for the containerized setup)
 """
 from contextlib import asynccontextmanager
+import uvicorn
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware

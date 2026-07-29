@@ -3,13 +3,18 @@
 ## Defence Research & Development Organisation (DRDO) — Hyderabad, India
 **Role:** Project Intern — Full Stack Developer
 **Period:** Nov 2023 – May 2024 (213 Days)
-**Core Technologies:** React.js, Python, FastAPI, WebSockets, Data Simulation, Excel/CSV Processing
+**Core Technologies:** React.js, Python, FastAPI, WebSockets, Data Simulation, Data Accumulation, Excel/CSV Processing
+
+**Project: Live Missile Data Simulation & Live Missile Trajectory Visualisation & Report Generation**
+Led end-to-end development of a Live Missile Data Simulation system — a real-time missile data accumulation, processing, and visualization platform — owning both front-end and back-end modules across the complete 213-day project lifecycle.
 
 ### Key Accomplishments & Technical Deliverables:
-- **Full Lifecycle Leadership:** Owned both front-end and back-end modules across the complete 213-day project lifecycle for DRDO's Live Missile Data Simulation system.
-- **Real-Time Trajectory Dashboards:** Developed dynamic, responsive missile trajectory visualization dashboards in React.js that render live simulation data streams with low latency using WebSocket services.
+- **Full Lifecycle Leadership:** Owned both front-end and back-end modules across the complete 213-day project lifecycle for DRDO's Live Missile Data Simulation / Accumulation system.
+- **Live Missile Trajectory Visualisation & Report Generation:** Built the core DRDO system for real-time accumulation and visualization of missile trajectory data, with automated mission analysis report generation.
+- **Real-Time Trajectory Dashboards:** Developed dynamic, responsive missile trajectory visualization dashboards in React.js that render live simulation/accumulation data streams with low latency using WebSocket services.
 - **High-Throughput Backend:** Engineered Python and FastAPI backend services for high-throughput data ingestion, processing, and automated mission analysis report generation.
 - **Hierarchical NOC Data Model:** Designed a 4-level hierarchical data model (`Main Category → Sub Category → Time-based grouping → Metrics`) for the NOC Dashboard, enabling faster graph rendering and efficient filtering of large-scale Excel-sourced datasets.
+
 
 ---
 

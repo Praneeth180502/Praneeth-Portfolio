@@ -27,9 +27,9 @@ class EmbeddingModel:
 
     def encode(self, texts: list[str], batch_size: int = 32) -> list[list[float]]:
         """Synchronous embedding — call via `encode_async` from async code."""
-        # ONNXMiniLM_L6_V2.__call__ returns list of embeddings
+        # ONNXMiniLM_L6_V2.__call__ returns list of numpy arrays/embeddings
         embeddings = self._ef(list(texts))
-        return [list(e) for e in embeddings]
+        return [[float(x) for x in e] for e in embeddings]
 
     async def encode_async(self, texts: list[str], batch_size: int = 32) -> list[list[float]]:
         """Runs the (CPU-bound) encode call in a thread pool to avoid blocking the event loop."""
