@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowDown, Github, Linkedin, Mail, Download, Cpu, Braces } from "lucide-react";
+import { ArrowDown, Github, Linkedin, Mail, Download, Eye, Cpu, Braces } from "lucide-react";
 import praneethPhoto from "@/assets/Photo.png";
 
 const containerVariants = {
@@ -152,14 +152,14 @@ const HeroSection = () => {
             </motion.p>
 
             {/* CTA Buttons */}
-            <motion.div variants={itemVariants} className="flex flex-wrap justify-center lg:justify-start gap-4 mb-8">
-              <a href="#contact" className="gradient-btn px-8 py-3 rounded-xl font-semibold text-sm">
+            <motion.div variants={itemVariants} className="flex flex-wrap justify-center lg:justify-start gap-3 mb-8">
+              <a href="#contact" className="gradient-btn px-6 py-3 rounded-xl font-semibold text-sm">
                 Get In Touch
               </a>
               <a
                 href="#projects"
                 style={{
-                  padding: "12px 32px",
+                  padding: "12px 24px",
                   borderRadius: 12,
                   fontWeight: 600,
                   fontSize: "0.875rem",
@@ -175,14 +175,15 @@ const HeroSection = () => {
               </a>
               <a
                 href="/Praneeth_Resume.pdf"
-                download
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
-                  padding: "12px 24px",
+                  padding: "12px 20px",
                   borderRadius: 12,
                   fontWeight: 600,
                   fontSize: "0.875rem",
-                  background: "rgba(139, 92, 246, 0.2)",
-                  border: "1px solid rgba(139, 92, 246, 0.4)",
+                  background: "rgba(139, 92, 246, 0.25)",
+                  border: "1px solid rgba(139, 92, 246, 0.5)",
                   color: "#e9d5ff",
                   textDecoration: "none",
                   display: "flex",
@@ -191,8 +192,29 @@ const HeroSection = () => {
                   transition: "all 0.25s ease",
                 }}
               >
+                <Eye size={16} />
+                View Resume
+              </a>
+              <a
+                href="/Praneeth_Resume.pdf"
+                download
+                title="Download Resume PDF"
+                style={{
+                  padding: "12px 14px",
+                  borderRadius: 12,
+                  fontWeight: 600,
+                  fontSize: "0.875rem",
+                  background: "rgba(59, 130, 246, 0.15)",
+                  border: "1px solid rgba(59, 130, 246, 0.3)",
+                  color: "#93c5fd",
+                  textDecoration: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  transition: "all 0.25s ease",
+                }}
+              >
                 <Download size={16} />
-                Resume
               </a>
             </motion.div>
 

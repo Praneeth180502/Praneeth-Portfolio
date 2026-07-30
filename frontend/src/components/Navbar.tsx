@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Zap } from "lucide-react";
+import { Menu, X, Zap, FileText } from "lucide-react";
 
 const navLinks = [
   { href: "#about",      label: "About"      },
@@ -128,6 +128,22 @@ const Navbar = () => {
 
           {/* CTA + mobile toggle */}
           <div className="flex items-center gap-3">
+            <a
+              href="/Praneeth_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold"
+              style={{
+                background: "rgba(139, 92, 246, 0.2)",
+                border: "1px solid rgba(139, 92, 246, 0.4)",
+                color: "#e9d5ff",
+                textDecoration: "none",
+                transition: "all 0.2s ease",
+              }}
+            >
+              <FileText size={14} />
+              Resume
+            </a>
             <a
               href="#contact"
               className="hidden md:flex gradient-btn px-4 py-2 rounded-lg text-sm font-semibold"
