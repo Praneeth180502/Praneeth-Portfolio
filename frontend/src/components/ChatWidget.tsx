@@ -148,7 +148,7 @@ const ChatWidget = () => {
                 </div>
                 <div>
                   <h3 className="font-heading font-bold text-sm text-foreground flex items-center gap-1.5">
-                    Bittu AI
+                    Bittu
                     <Sparkles size={14} className="text-primary animate-pulse" />
                   </h3>
                   <p className="text-xs text-muted-foreground">Praneeth's AI Assistant</p>
@@ -188,8 +188,8 @@ const ChatWidget = () => {
                   <div className={`max-w-[82%] space-y-2`}>
                     <div
                       className={`p-3.5 rounded-2xl leading-relaxed ${msg.sender === "user"
-                          ? "bg-primary text-primary-foreground rounded-tr-none font-medium"
-                          : "bg-secondary text-secondary-foreground rounded-tl-none border border-border/50"
+                        ? "bg-primary text-primary-foreground rounded-tr-none font-medium"
+                        : "bg-secondary text-secondary-foreground rounded-tl-none border border-border/50"
                         }`}
                     >
                       {msg.text || (msg.isStreaming ? "Thinking..." : "")}

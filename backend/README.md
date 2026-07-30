@@ -4,31 +4,130 @@ Production-ready FastAPI backend for a personal AI portfolio site. Provides cont
 handling, project listings, resume download, self-hosted analytics, and a production-grade
 hybrid-retrieval RAG chatbot powered by Groq's Llama 3.3 70B.
 
-## Architecture
+## 🏗️ Architecture & Data Movement Flow
 
-Clean, layered architecture:
+### High-Level Service & Layer Architecture
 
+```mermaid
+flowchart TD
+    subgraph ClientLayer["Frontend Client"]
+        Client["React Web UI (Chat Component)"]
+        Fetch["fetch() with ReadableStream Parser"]
+        Client -->|POST /api/chat { session_id, message }| Fetch
+    end
+
+    subgraph APILayer["FastAPI Gateway (app/api/v1/chat.py)"]
+        Middleware["RequestContextMiddleware"]
+        RateLimiter["Rate Limiter (Token Bucket per IP)"]
+        ChatRouter["Chat Router Endpoint"]
+        Fetch --> Middleware --> RateLimiter --> ChatRouter
+    end
+
+    subgraph ServiceLayer["Service & RAG Pipeline (app/services/rag/)"]
+        ChatService["ChatService.stream_answer()"]
+        ChatRouter -->|Delegate Request| ChatService
+        
+        subgraph Stage1["1. Context & History Retrieval"]
+            Memory["ConversationMemory (Postgres ChatTurn DB)"]
+            ChatService -->|Load History| Memory
+        end
+        
+        subgraph Stage2["2. Hybrid Search Engine"]
+            HybridRetriever["HybridRetriever"]
+            Embeddings["Dense Embeddings (all-MiniLM-L6-v2)"]
+            ChromaDB[("ChromaDB Vector Index")]
+            BM25["Sparse Keyword Search (rank_bm25)"]
+            
+            ChatService -->|Query| HybridRetriever
+            HybridRetriever --> Embeddings --> ChromaDB
+            HybridRetriever --> BM25
+        end
+
+        subgraph Stage3["3. Reranking & Guardrails"]
+            CrossEncoder["CrossEncoder (ms-marco-MiniLM-L-6-v2)"]
+            RelevanceCheck["Relevance Floor Guard (MIN_RELEVANCE_SCORE)"]
+            
+            HybridRetriever -->|Fused Candidates| CrossEncoder --> RelevanceCheck
+        end
+
+        subgraph Stage4["4. Grounded Prompt & Generation"]
+            PromptBuilder["Prompt Builder"]
+            LLMClient["LLM Client (Groq SDK stream=True)"]
+            
+            RelevanceCheck -->|Verified Context Chunks| PromptBuilder
+            PromptBuilder -->|Formatted System + User Prompt| LLMClient
+        end
+    end
+
+    subgraph ExternalProvider["Groq Cloud LLM Engine"]
+        GroqAPI["Llama 3.3 70B Model Engine"]
+        LLMClient <-->|Stream HTTP Chunked Response| GroqAPI
+    end
+
+    subgraph SSEStream["Live Unbuffered Event Stream"]
+        TokenFrame["data: {'type': 'token', 'content': '...'}"]
+        SourcesFrame["data: {'type': 'sources', 'sources': [...]}"]
+        DoneFrame["data: {'type': 'done'}"]
+        
+        LLMClient --> TokenFrame
+        ChatService --> SourcesFrame --> DoneFrame
+    end
+
+    TokenFrame & SourcesFrame & DoneFrame -->|Live Stream to React| Fetch
 ```
-app/
-├── main.py                # FastAPI app factory, lifespan, middleware, CORS
-├── core/                  # Config, logging, DB engine, exceptions, middleware, rate limiting
-├── api/
-│   ├── deps.py            # Dependency-injection wiring for all services
-│   └── v1/                # Routers: health, contact, projects, resume, analytics, chat
-├── models/                 # SQLAlchemy 2.0 ORM models
-├── schemas/                 # Pydantic request/response schemas
-├── repositories/            # Data-access layer (one class per aggregate)
-├── services/
-│   ├── contact_service.py, project_service.py, resume_service.py, analytics_service.py
-│   └── rag/                # The RAG pipeline (see below)
-└── utils/                  # Text splitting, file helpers
 
-knowledge/                  # Markdown knowledge base ingested into the RAG index
-alembic/                    # DB migrations
-scripts/ingest_knowledge.py # Standalone knowledge base (re)indexing script
+---
+
+### Real-Time Live Streaming Workflow (Frame-by-Frame Data Movement)
+
+Like streaming frames in a live video feed, token chunks produced by Groq are formatted as Server-Sent Events (SSE) and streamed over an unbuffered HTTP connection directly to the React state.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant UI as React UI (Browser)
+    participant Decoder as api.ts (TextDecoder)
+    participant FastAPI as FastAPI Router
+    participant Service as ChatService
+    participant RAG as RAG Pipeline
+    participant Groq as Groq API
+    
+    UI->>Decoder: User sends query message
+    Decoder->>FastAPI: POST /api/chat { session_id, message }
+    FastAPI->>Service: stream_answer()
+    
+    Service->>RAG: retrieve & rerank candidates
+    RAG-->>Service: Return top context chunks
+    
+    Service->>Groq: stream_completion(messages)
+    
+    rect rgb(240, 248, 255)
+        note right of Service: Live Token Streaming Phase (Video Frame Analogy)
+        loop Token Delta Streams
+            Groq-->>Service: Token Chunk "Hello"
+            Service-->>FastAPI: yield SSE "data: {\"type\": \"token\", \"content\": \"Hello\"}\n\n"
+            FastAPI-->>Decoder: HTTP Chunked Stream Packet
+            Decoder-->>UI: Trigger onToken("Hello") callback -> UI Renders
+            
+            Groq-->>Service: Token Chunk " world"
+            Service-->>FastAPI: yield SSE "data: {\"type\": \"token\", \"content\": \" world\"}\n\n"
+            FastAPI-->>Decoder: HTTP Chunked Stream Packet
+            Decoder-->>UI: Trigger onToken(" world") callback -> UI Renders
+        end
+    end
+    
+    Service-->>FastAPI: yield SSE "data: {\"type\": \"sources\", \"sources\": [...]}\n\n"
+    FastAPI-->>Decoder: Citations Event Packet
+    Decoder-->>UI: Trigger onSources() callback
+    
+    Service-->>FastAPI: yield SSE "data: {\"type\": \"done\"}\n\n"
+    FastAPI-->>Decoder: Final Done Event Packet
+    Decoder-->>UI: Trigger onDone() callback -> UI Complete
 ```
 
-### RAG Pipeline (`app/services/rag/`)
+---
+
+### RAG Pipeline Component Matrix (`app/services/rag/`)
 
 | Stage | Module | Details |
 |---|---|---|

@@ -18,10 +18,36 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+  plugins: [
+    react(),
+    mode === "development" && componentTagger(),
+  ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  optimizeDeps: {
+    include: [
+      "three",
+      "@react-three/fiber",
+      "@react-three/drei",
+    ],
+    exclude: ["lovable-tagger"],
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "three-core":    ["three"],
+          "three-fiber":   ["@react-three/fiber"],
+          "three-drei":    ["@react-three/drei"],
+          "gsap":          ["gsap"],
+          "vendor-react":  ["react", "react-dom"],
+          "framer":        ["framer-motion"],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
   },
 }));

@@ -37,12 +37,24 @@ Three layers prevent the AI from generating false information:
 2. **Relevance floor:** Reranked candidates below a minimum relevance score are discarded.
 3. **Prompt-level:** The system prompt explicitly instructs the model to answer only from the provided context and to admit when it doesn't know something.
 
-## Real-Time Streaming Architecture
+## Real-Time Streaming Architecture & Live Data Flow
 
-For real-time applications (DRDO missile dashboards, Meet-Ops), Praneeth uses:
-- **WebSockets** for bidirectional real-time data streams (trajectory data, transcript events)
-- **Server-Sent Events (SSE)** for unidirectional streaming (LLM token streaming to chat UI)
-- **ThreadPoolExecutor** for CPU-bound background tasks (chunking, embedding) without blocking the async event loop
+For real-time data movement, Praneeth implements low-latency streaming patterns tailored to the use case:
+- **Server-Sent Events (SSE)** for unidirectional LLM token streaming to the personal portfolio chat UI. Tokens are packed into lightweight `data: {"type": "token", "content": "..."}` JSON frames and emitted over an unbuffered HTTP stream (`X-Accel-Buffering: no`, `Cache-Control: no-cache`). This functions analogous to a live video stream where each token delta is a frame delivered to the client's `ReadableStream` reader and rendered instantly by the React state.
+- **WebSockets** for bidirectional real-time data streams (e.g., DRDO missile telemetry tracking dashboards and Meet-Ops transcript events).
+- **ThreadPoolExecutor / Async Workers** for CPU-bound background tasks (chunking, embedding, cross-encoder reranking) without blocking FastAPI's central async event loop.
+
+### Live Data Movement Sequence (End-to-End Hop-by-Hop)
+
+1. **User Prompt Capture:** React UI captures `message` and `session_id`, delegating to `streamChatMessage()` in `lib/api.ts`.
+2. **FastAPI Ingestion & Rate Limiting:** `POST /api/chat` validates `ChatRequest`, checks client IP token bucket, and invokes `ChatService.stream_answer()`.
+3. **Session Context Fetching:** `ConversationMemory` loads previous conversation turns asynchronously from PostgreSQL via SQLAlchemy 2.0 / AsyncPG.
+4. **Hybrid Retrieval:** Query is executed against ChromaDB (384-dimensional dense embeddings via `all-MiniLM-L6-v2`) and BM25 sparse index (`rank_bm25`). Candidates are normalized and weighted (70% dense + 30% sparse).
+5. **Cross-Encoder Reranking:** Candidates pass through `ms-marco-MiniLM-L-6-v2`. Any chunk below `MIN_RELEVANCE_SCORE` is filtered out.
+6. **Prompt Assembly:** System prompt injects strict grounding anti-hallucination constraints along with reranked context and conversation history.
+7. **LLM Generation Stream:** Groq Cloud API (`llama-3.3-70b-versatile`) streams response deltas.
+8. **SSE Frame Pipeline:** `ChatService` yields SSE frames instantly. The browser's `TextDecoder` parses buffer lines and updates React UI state frame-by-frame.
+9. **Async Persistence:** Turn history, source citations, and latency metrics are saved to PostgreSQL without delaying stream termination.
 
 ## Containerization & DevOps
 
