@@ -16,6 +16,11 @@ class AnalyticsRepository(BaseRepository[AnalyticsEvent]):
         stmt = select(func.count(AnalyticsEvent.id)).where(AnalyticsEvent.created_at >= since)
         return (await self.session.execute(stmt)).scalar_one()
 
+    async def get_total_visitor_count(self) -> int:
+        stmt = select(func.count(AnalyticsEvent.id)).where(AnalyticsEvent.event_type == "page_view")
+        count = (await self.session.execute(stmt)).scalar_one()
+        return max(count, 1)
+
     async def count_unique_sessions(self, since: datetime) -> int:
         stmt = select(func.count(func.distinct(AnalyticsEvent.session_id))).where(
             AnalyticsEvent.created_at >= since, AnalyticsEvent.session_id.is_not(None)

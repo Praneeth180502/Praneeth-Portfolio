@@ -30,6 +30,9 @@ class AnalyticsService:
         )
         return await self.repository.add(event)
 
+    async def get_visitor_count(self) -> int:
+        return await self.repository.get_total_visitor_count()
+
     async def get_summary(self, range_days: int = 30) -> AnalyticsSummaryResponse:
         since = self.repository.since_days_ago(range_days)
 

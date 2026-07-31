@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Zap, FileText } from "lucide-react";
+import VisitorCounter from "@/components/VisitorCounter";
 
 const navLinks = [
   { href: "#about",      label: "About"      },
@@ -128,6 +129,7 @@ const Navbar = () => {
 
           {/* CTA + mobile toggle */}
           <div className="flex items-center gap-3">
+            <VisitorCounter />
             <a
               href="/Praneeth_Resume.pdf"
               target="_blank"
@@ -152,7 +154,7 @@ const Navbar = () => {
             </a>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 rounded-lg"
+              className="md:hidden p-2 rounded-lg flex items-center gap-2"
               style={{ color: "#94a3b8", background: "rgba(30, 41, 59, 0.5)" }}
               aria-label="Toggle menu"
             >
@@ -176,6 +178,9 @@ const Navbar = () => {
             }}
           >
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
+              <div className="pb-2 mb-2 border-b border-slate-800/80">
+                <VisitorCounter isMobile />
+              </div>
               {navLinks.map(({ href, label }) => (
                 <a
                   key={href}

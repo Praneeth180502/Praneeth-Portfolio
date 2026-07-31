@@ -42,3 +42,15 @@ async def get_summary(
     # NOTE: In production, protect this endpoint with authentication
     # (see README "Future Expansion" section) before exposing it publicly.
     return await service.get_summary(range_days=range_days)
+
+
+@router.get(
+    "/visitor-count",
+    summary="Get total site visitor count",
+)
+async def get_visitor_count(
+    service: Annotated[AnalyticsService, Depends(get_analytics_service)],
+) -> dict:
+    count = await service.get_visitor_count()
+    return {"count": count}
+
