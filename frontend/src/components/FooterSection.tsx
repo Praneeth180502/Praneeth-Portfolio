@@ -52,17 +52,17 @@ const FooterSection = () => {
             gap: 6,
           }}
         >
-          Built with
-          <Heart size={12} style={{ color: "#ef4444", fill: "#ef4444" }} />
+          Built
+
           by Ankey Praneeth Reddy · © 2025
         </p>
 
         {/* Socials */}
         <div style={{ display: "flex", gap: 8 }}>
           {[
-            { icon: Github,   href: "https://github.com",                                    label: "GitHub"   },
-            { icon: Linkedin, href: "https://www.linkedin.com/in/praneeth-reddy-ankey",      label: "LinkedIn" },
-            { icon: Mail,     href: "mailto:apraneethreddy20891a0502@gmail.com",             label: "Email"    },
+            { icon: Github, href: "https://github.com", label: "GitHub" },
+            { icon: Linkedin, href: "https://www.linkedin.com/in/praneeth-reddy-ankey", label: "LinkedIn" },
+            { icon: Mail, href: "mailto:apraneethreddy20891a0502@gmail.com", label: "Email" },
           ].map(({ icon: Icon, href, label }) => (
             <a
               key={label}
