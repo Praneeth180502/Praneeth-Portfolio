@@ -13,4 +13,4 @@ jobs:
       - name: Ping API Health Endpoint
         run: |
           echo "Pinging production backend to keep container warm..."
-          curl -s -f --max-time 15 "https://praneeth-portfolio-backend.onrender.com/api/v1/health" || echo "Ping failed or backend initializing"
+          curl -s -f --max-time 15 "https://praneeth-portfolio-22rh.onrender.com/api/v1/health" || echo "Ping failed or backend initializing"
