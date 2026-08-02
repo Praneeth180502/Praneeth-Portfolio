@@ -20,7 +20,7 @@ function TypewriterText({ text, className }: { text: string; className?: string 
           key={i}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 + i * 0.025, duration: 0.3 }}
+          transition={{ delay: 0.08 + i * 0.015, duration: 0.2 }}
           style={{
             display: "inline-block",
             whiteSpace: char === " " ? "pre" : undefined,
