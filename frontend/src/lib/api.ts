@@ -146,7 +146,7 @@ export async function getVisitorCount(): Promise<number> {
   try {
     const counterEndpoint = isNewSession
       ? "https://api.counterapi.dev/v1/praneeth_portfolio_navbar/visitors/up"
-      : "https://api.counterapi.dev/v1/praneeth_portfolio_navbar/visitors/";
+      : "https://api.counterapi.dev/v1/praneeth_portfolio_navbar/visitors";
 
     const res = await fetch(counterEndpoint);
     if (res.ok) {

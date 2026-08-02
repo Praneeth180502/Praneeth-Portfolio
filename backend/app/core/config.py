@@ -38,7 +38,17 @@ class Settings(BaseSettings):
     PORT: int = 8000
 
     # --------------------------------------------------------------- CORS
-    CORS_ORIGINS: List[str] = Field(default_factory=lambda: ["http://localhost:5173"])
+    CORS_ORIGINS: List[str] = Field(
+        default_factory=lambda: [
+            "http://localhost:5173",
+            "http://localhost:3000",
+            "https://praneeth-portfolio-n2na.vercel.app",
+        ]
+    )
+    CORS_ORIGIN_REGEX: str | None = Field(
+        default=r"https://.*\.vercel\.app",
+        description="Regex pattern for allowed CORS origins (e.g. Vercel previews)",
+    )
 
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
