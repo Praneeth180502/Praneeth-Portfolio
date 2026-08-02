@@ -6,6 +6,7 @@ fully-wired service instance, with repositories/DB sessions injected
 underneath. Singletons (embedding model, vector store, reranker, etc.) are
 cached at module scope so heavy ML models load exactly once per process.
 """
+from functools import lru_cache
 from typing import Annotated
 
 from fastapi import Depends, Request
@@ -72,6 +73,7 @@ def get_hybrid_retriever(settings: SettingsDep) -> HybridRetriever:
     )
 
 
+@lru_cache
 def get_llm_client(settings: SettingsDep) -> LLMClient:
     return LLMClient(settings)
 

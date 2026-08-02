@@ -1,0 +1,16 @@
+name: Keep Chatbot Backend Warm
+
+on:
+  schedule:
+    # Run every 10 minutes to prevent serverless container spin-down / cold starts
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping API Health Endpoint
+        run: |
+          echo "Pinging production backend to keep container warm..."
+          curl -s -f --max-time 15 "https://praneeth-portfolio-backend.onrender.com/api/v1/health" || echo "Ping failed or backend initializing"

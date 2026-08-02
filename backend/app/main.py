@@ -56,9 +56,21 @@ async def lifespan(app: FastAPI):
             logger.info(f"Auto-ingestion complete: {count} chunks indexed.")
         else:
             logger.info(f"Vector store ready with {vector_store.count()} chunks.")
+
+        # ── Pre-warm RAG ML models & search engines to eliminate first-query cold start ──
+        logger.info("Pre-warming ONNX embedding model & search engines...")
+        embedding_model = get_embedding_model()
+        sparse_retriever = get_sparse_retriever()
+
+        warmup_vec = await embedding_model.encode_async(["warmup query"])
+        if warmup_vec and len(warmup_vec) > 0:
+            await vector_store.query_async(warmup_vec[0], top_k=1)
+        await sparse_retriever.query_async("warmup query", top_k=1)
+        logger.info("RAG models & search engines successfully pre-warmed.")
+
         gc.collect()
     except Exception as exc:
-        logger.exception("Failed to run auto-ingestion on startup", exc_info=exc)
+        logger.exception("Failed to run auto-ingestion / pre-warming on startup", exc_info=exc)
     yield
     logger.info(f"Shutting down {settings.APP_NAME}")
 
