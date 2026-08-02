@@ -55,9 +55,6 @@ RUN mkdir -p /app/data/chroma /app/data/bm25 /app/static /home/appuser/.cache &&
 
 USER appuser
 
-# Pre-download ONNX embedding model weights into container cache during build
-RUN python -c "from chromadb.utils.embedding_functions import ONNXMiniLM_L6_V2; ONNXMiniLM_L6_V2()(['warmup'])"
-
 EXPOSE 8000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
