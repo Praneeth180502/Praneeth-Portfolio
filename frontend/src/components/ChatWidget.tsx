@@ -93,6 +93,7 @@ const renderMessageText = (text: string) => {
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showGreeting, setShowGreeting] = useState(true);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
@@ -186,6 +187,37 @@ const ChatWidget = () => {
 
   return (
     <>
+      {/* Greeting Bubble near Chatbot Button */}
+      <AnimatePresence>
+        {!isOpen && showGreeting && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, x: 20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            exit={{ opacity: 0, scale: 0.8, x: 20 }}
+            transition={{ delay: 1, duration: 0.3 }}
+            className="fixed bottom-6 right-24 mr-2 z-50 flex items-center gap-2 max-w-[calc(100vw-8rem)] sm:max-w-[280px] bg-background/95 backdrop-blur-md border border-border shadow-lg p-3 rounded-2xl rounded-br-none text-xs text-foreground cursor-pointer hover:bg-secondary/50 transition-colors group/bubble"
+            onClick={() => setIsOpen(true)}
+          >
+            <div className="flex-1 pr-2 leading-relaxed select-none">
+              <span className="font-semibold text-primary">Bittu 🤖: </span>
+              Hi there! I'm Bittu, Praneeth's AI Assistant. Ask me anything!
+            </div>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowGreeting(false);
+              }}
+              className="p-1 rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors self-start -mt-1 -mr-1"
+              title="Dismiss"
+            >
+              <X size={12} />
+            </button>
+            {/* Little tail pointing to the button */}
+            <div className="absolute right-[-6px] bottom-4 w-3 h-3 rotate-45 bg-background border-r border-t border-border group-hover/bubble:bg-secondary/50 transition-colors" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Floating Toggle Button */}
       <motion.button
         initial={{ scale: 0 }}
