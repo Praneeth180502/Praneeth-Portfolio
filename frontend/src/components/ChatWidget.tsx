@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bot, X, Send, Sparkles, RefreshCw, User, FileText } from "lucide-react";
 import { streamChatMessage, ChatSource } from "@/lib/api";
@@ -12,6 +12,84 @@ interface Message {
 }
 
 
+
+const renderMessageText = (text: string) => {
+  if (!text) return null;
+
+  const blocks = text.split("\n\n").map(b => b.trim()).filter(Boolean);
+
+  return (
+    <div className="space-y-3 text-left">
+      {blocks.map((block, blockIdx) => {
+        const lines = block.split("\n");
+        const renderedElements: React.ReactNode[] = [];
+        let currentListItems: React.ReactNode[] = [];
+
+        const flushList = (keyPrefix: number) => {
+          if (currentListItems.length > 0) {
+            renderedElements.push(
+              <ul key={`list-${keyPrefix}`} className="list-disc pl-5 my-1.5 space-y-1">
+                {currentListItems}
+              </ul>
+            );
+            currentListItems = [];
+          }
+        };
+
+        const formatInline = (str: string) => {
+          const parts = str.split(/\*\*([^*]+)\*\*/g);
+          return parts.map((part, i) => {
+            if (i % 2 === 1) {
+              return <strong key={i} className="font-semibold text-foreground">{part}</strong>;
+            }
+            return part;
+          });
+        };
+
+        lines.forEach((line, lineIdx) => {
+          const trimmed = line.trim();
+          if (trimmed === "") return;
+
+          const bulletMatch = line.match(/^(\s*)[*•-]\s+(.*)$/);
+          const numberMatch = line.match(/^(\s*)\d+\.\s+(.*)$/);
+
+          if (bulletMatch) {
+            const contentText = bulletMatch[2];
+            currentListItems.push(
+              <li key={`li-${lineIdx}`} className="leading-relaxed">
+                {formatInline(contentText)}
+              </li>
+            );
+          } else if (numberMatch) {
+            flushList(lineIdx);
+            const contentText = numberMatch[2];
+            renderedElements.push(
+              <div key={`num-${lineIdx}`} className="flex gap-2 my-1 pl-1 leading-relaxed">
+                <span className="font-semibold text-primary">{line.match(/^\s*(\d+\.)/)?.[1]}</span>
+                <span className="flex-1">{formatInline(contentText)}</span>
+              </div>
+            );
+          } else {
+            flushList(lineIdx);
+            renderedElements.push(
+              <p key={`p-${lineIdx}`} className="leading-relaxed my-1">
+                {formatInline(line)}
+              </p>
+            );
+          }
+        });
+
+        flushList(lines.length);
+
+        return (
+          <div key={`block-${blockIdx}`} className="space-y-1.5">
+            {renderedElements}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -183,11 +261,17 @@ const ChatWidget = () => {
                   <div className={`max-w-[82%] space-y-2`}>
                     <div
                       className={`p-3.5 rounded-2xl leading-relaxed ${msg.sender === "user"
-                        ? "bg-primary text-primary-foreground rounded-tr-none font-medium"
+                        ? "bg-primary text-primary-foreground rounded-tr-none font-medium whitespace-pre-wrap"
                         : "bg-secondary text-secondary-foreground rounded-tl-none border border-border/50"
                         }`}
                     >
-                      {msg.text || (msg.isStreaming ? "Thinking..." : "")}
+                      {msg.sender === "user" ? (
+                        msg.text
+                      ) : msg.text ? (
+                        renderMessageText(msg.text)
+                      ) : (
+                        msg.isStreaming ? "Thinking..." : ""
+                      )}
                       {msg.isStreaming && (
                         <span className="inline-block w-2 h-4 ml-1 bg-primary animate-pulse align-middle" />
                       )}
