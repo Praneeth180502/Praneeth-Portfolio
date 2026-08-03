@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, X, Send, Sparkles, RefreshCw, ChevronRight, User, FileText } from "lucide-react";
+import { Bot, X, Send, Sparkles, RefreshCw, User, FileText } from "lucide-react";
 import { streamChatMessage, ChatSource } from "@/lib/api";
 
 interface Message {
@@ -11,12 +11,7 @@ interface Message {
   isStreaming?: boolean;
 }
 
-const SUGGESTED_QUESTIONS = [
-  "What projects has Praneeth built?",
-  "Tell me about SiLens AI and OpenViz",
-  "What is Praneeth's experience at DRDO?",
-  "What technologies and AI tools does he use?",
-];
+
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -209,23 +204,7 @@ const ChatWidget = () => {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Suggested Prompt Chips */}
-            <div className="px-4 py-2 border-t border-border/40 bg-secondary/20">
-              <p className="text-[11px] text-muted-foreground font-medium mb-1.5">Suggested questions:</p>
-              <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1">
-                {SUGGESTED_QUESTIONS.map((q) => (
-                  <button
-                    key={q}
-                    disabled={isGenerating}
-                    onClick={() => handleSend(q)}
-                    className="text-xs px-2.5 py-1 rounded-full bg-secondary border border-border hover:border-primary/50 text-foreground transition-all flex items-center gap-1 hover:bg-primary/10 disabled:opacity-50"
-                  >
-                    <span>{q}</span>
-                    <ChevronRight size={12} className="text-muted-foreground" />
-                  </button>
-                ))}
-              </div>
-            </div>
+
 
             {/* Input Bar */}
             <form
