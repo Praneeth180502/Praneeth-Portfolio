@@ -193,7 +193,7 @@ export default function HeroSection() {
               </a>
 
               <a
-                href="/Praneeth_Reddy_AI_Engineer.pdf"
+                href="/Praneeth_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-xs font-mono text-[#a1a1aa] hover:text-[#ffffff] transition-colors pl-2"
