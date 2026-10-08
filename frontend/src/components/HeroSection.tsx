@@ -1,58 +1,169 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Github, Linkedin, Mail, Download, Eye, Cpu, Braces } from "lucide-react";
+import { ArrowDown, Github, Linkedin, Mail, Download, Eye } from "lucide-react";
 import praneethPhoto from "@/assets/Photo.png";
+
+/* ── Node-graph canvas background ── */
+function NodeGraph() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animId: number;
+    let w = 0, h = 0;
+
+    const isMobile = () => window.innerWidth < 768;
+    const NODE_COUNT = () => (isMobile() ? 25 : 60);
+
+    type Node = { x: number; y: number; vx: number; vy: number; r: number };
+    let nodes: Node[] = [];
+
+    const resize = () => {
+      w = canvas.width = canvas.offsetWidth;
+      h = canvas.height = canvas.offsetHeight;
+      const n = NODE_COUNT();
+      nodes = Array.from({ length: n }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 1.5 + 1,
+      }));
+    };
+
+    const LINK_DIST = 140;
+    const CURSOR_DIST = 120;
+    let mx = -999, my = -999;
+
+    const onMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mx = e.clientX - rect.left;
+      my = e.clientY - rect.top;
+    };
+
+    const draw = () => {
+      if (document.hidden) { animId = requestAnimationFrame(draw); return; }
+      ctx.clearRect(0, 0, w, h);
+
+      // Blue radial glow behind center-left (behind headline)
+      const grd = ctx.createRadialGradient(w * 0.3, h * 0.5, 0, w * 0.3, h * 0.5, w * 0.55);
+      grd.addColorStop(0, "rgba(59,130,246,0.08)");
+      grd.addColorStop(1, "transparent");
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, w, h);
+
+      // Update nodes
+      for (const n of nodes) {
+        n.x += n.vx;
+        n.y += n.vy;
+        if (n.x < 0 || n.x > w) n.vx *= -1;
+        if (n.y < 0 || n.y > h) n.vy *= -1;
+      }
+
+      // Draw edges between nearby nodes
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < LINK_DIST) {
+            const alpha = (1 - dist / LINK_DIST) * 0.18;
+            ctx.strokeStyle = `rgba(6,182,212,${alpha})`;
+            ctx.lineWidth = 0.6;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.stroke();
+          }
+        }
+        // Cursor connections
+        const cdx = nodes[i].x - mx;
+        const cdy = nodes[i].y - my;
+        const cd = Math.hypot(cdx, cdy);
+        if (cd < CURSOR_DIST) {
+          const alpha = (1 - cd / CURSOR_DIST) * 0.4;
+          ctx.strokeStyle = `rgba(59,130,246,${alpha})`;
+          ctx.lineWidth = 0.8;
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(mx, my);
+          ctx.stroke();
+        }
+      }
+
+      // Draw nodes
+      for (const n of nodes) {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(6,182,212,0.7)";
+        ctx.fill();
+      }
+
+      animId = requestAnimationFrame(draw);
+    };
+
+    resize();
+    window.addEventListener("resize", resize);
+    window.addEventListener("mousemove", onMouseMove);
+    draw();
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", onMouseMove);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+      }}
+      aria-hidden="true"
+    />
+  );
+}
 
 const containerVariants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
+  visible: { transition: { staggerChildren: 0.1 } },
 };
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 };
-
-// Animated character-by-character text reveal with high-contrast text shadow
-function TypewriterText({ text, className }: { text: string; className?: string }) {
-  return (
-    <span className={className} aria-label={text}>
-      {text.split("").map((char, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.08 + i * 0.015, duration: 0.2 }}
-          style={{
-            display: "inline-block",
-            whiteSpace: char === " " ? "pre" : undefined,
-            filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.8))",
-          }}
-        >
-          {char}
-        </motion.span>
-      ))}
-    </span>
-  );
-}
 
 const HeroSection = () => {
   return (
     <section
       id="hero"
       className="relative min-h-screen flex items-center overflow-hidden"
-      style={{ background: "transparent" }}
+      style={{ background: "var(--bg)" }}
     >
-      {/* Radial dark gradient backdrop to guarantee 100% text contrast over 3D WebGL canvas */}
+      <NodeGraph />
+
+      {/* Dark gradient so text always reads over canvas */}
       <div
+        aria-hidden="true"
         style={{
           position: "absolute",
           inset: 0,
           background:
-            "radial-gradient(ellipse 65% 75% at 25% 50%, rgba(3, 7, 18, 0.88) 0%, rgba(3, 7, 18, 0.4) 65%, transparent 100%)",
+            "radial-gradient(ellipse 60% 70% at 20% 50%, rgba(10,10,15,0.92) 0%, rgba(10,10,15,0.5) 60%, transparent 100%)",
           pointerEvents: "none",
         }}
       />
 
-      <div className="container mx-auto px-4 sm:px-6 relative z-10 pt-24 lg:pt-0">
+      <div className="container relative z-10 pt-24 lg:pt-0">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
 
           {/* ── Left: Text ── */}
@@ -60,167 +171,83 @@ const HeroSection = () => {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="text-center lg:text-left p-4 sm:p-6 rounded-3xl"
-            style={{
-              background: "rgba(3, 7, 18, 0.45)",
-              backdropFilter: "blur(12px)",
-              border: "1px solid rgba(59, 130, 246, 0.15)",
-              boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
-            }}
           >
-            {/* Eyebrow label */}
-            <motion.div variants={itemVariants} className="flex items-center justify-center lg:justify-start gap-3 mb-6">
-              <span
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 8,
-                  padding: "6px 14px",
-                  borderRadius: 999,
-                  background: "rgba(59, 130, 246, 0.15)",
-                  border: "1px solid rgba(59, 130, 246, 0.4)",
-                  fontSize: "0.75rem",
-                  fontWeight: 700,
-                  letterSpacing: "0.15em",
-                  textTransform: "uppercase",
-                  color: "#93c5fd",
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  boxShadow: "0 0 12px rgba(59,130,246,0.2)",
-                }}
-              >
-                <Cpu size={14} className="text-cyan-400" />
-                Full Stack Developer + AI Engineer
-                <Braces size={14} className="text-cyan-400" />
-              </span>
-            </motion.div>
+            {/* Eyebrow */}
+            <motion.p variants={itemVariants} className="eyebrow mb-6">
+              Associate AI Engineer · Digimaxx AI Solutions
+            </motion.p>
 
-            {/* Name */}
+            {/* H1 */}
             <motion.h1
               variants={itemVariants}
               style={{
-                fontWeight: 800,
-                fontFamily: "'Space Grotesk', sans-serif",
-                lineHeight: 1.15,
+                fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+                fontWeight: 600,
+                letterSpacing: "-0.02em",
+                lineHeight: 1.1,
+                color: "var(--text-strong)",
                 marginBottom: "1.25rem",
-                color: "#ffffff",
-                textShadow: "0 4px 20px rgba(0,0,0,0.9)",
               }}
             >
-              <span
-                style={{
-                  display: "block",
-                  fontSize: "clamp(1.5rem, 3vw, 2.2rem)",
-                  fontWeight: 700,
-                  color: "#cbd5e1",
-                  marginBottom: "0.25rem",
-                }}
-              >
-                Hi, I'm
-              </span>
-              <span
-                style={{
-                  display: "inline-block",
-                  whiteSpace: "nowrap",
-                  fontSize: "clamp(1.8rem, 4.2vw, 3.2rem)",
-                }}
-              >
-                <TypewriterText
-                  text="Praneeth Reddy Ankey"
-                  className="gradient-text"
-                />
-              </span>
+              Praneeth.{" "}
+              <span className="gradient-text">AI Engineer</span>
             </motion.h1>
 
-            {/* Sub-headline */}
+            {/* Tagline — from design.md §9 */}
             <motion.p
               variants={itemVariants}
               style={{
-                fontSize: "1.05rem",
-                lineHeight: 1.75,
-                color: "#cbd5e1",
-                maxWidth: "32rem",
+                fontSize: "1rem",
+                lineHeight: 1.7,
+                color: "var(--text)",
+                maxWidth: "38rem",
                 marginBottom: "2rem",
-                textShadow: "0 2px 10px rgba(0,0,0,0.9)",
               }}
-              className="mx-auto lg:mx-0"
             >
-              AI Engineer building the{" "}
-              <strong style={{ color: "#38bdf8", fontWeight: 700 }}>orchestration layer</strong> behind{" "}
-              <strong style={{ color: "#22d3ee", fontWeight: 700 }}>production AI</strong>, coordinating agents,{" "}
-              <strong style={{ color: "#60a5fa", fontWeight: 700 }}>RAG pipelines</strong>, and workflows into reliable, scalable systems.
+              Building the{" "}
+              <strong style={{ color: "var(--accent)", fontWeight: 600 }}>
+                orchestration layer
+              </strong>{" "}
+              behind production AI. Agents, RAG pipelines, and workflows —
+              coordinated into{" "}
+              <strong style={{ color: "var(--accent-2)", fontWeight: 600 }}>
+                reliable, scalable systems
+              </strong>.
             </motion.p>
 
             {/* CTA Buttons */}
-            <motion.div variants={itemVariants} className="flex flex-wrap justify-center lg:justify-start gap-3 mb-8">
-              <a href="#contact" className="gradient-btn px-6 py-3 rounded-xl font-semibold text-sm">
-                Get In Touch
-              </a>
-              <a
-                href="#projects"
-                style={{
-                  padding: "12px 24px",
-                  borderRadius: 12,
-                  fontWeight: 600,
-                  fontSize: "0.875rem",
-                  border: "1px solid rgba(59, 130, 246, 0.4)",
-                  color: "#e2e8f0",
-                  textDecoration: "none",
-                  transition: "all 0.25s ease",
-                  background: "rgba(15, 23, 42, 0.6)",
-                  backdropFilter: "blur(12px)",
-                }}
-              >
+            <motion.div variants={itemVariants} style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: 32 }}>
+              <a href="#projects" className="btn-primary">
                 View Projects
+              </a>
+              <a href="#contact" className="btn-secondary">
+                Let's talk
               </a>
               <a
                 href="/Praneeth_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  padding: "12px 20px",
-                  borderRadius: 12,
-                  fontWeight: 600,
-                  fontSize: "0.875rem",
-                  background: "rgba(139, 92, 246, 0.25)",
-                  border: "1px solid rgba(139, 92, 246, 0.5)",
-                  color: "#e9d5ff",
-                  textDecoration: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  transition: "all 0.25s ease",
-                }}
+                className="btn-secondary"
+                style={{ gap: 6 }}
               >
-                <Eye size={16} />
-                View Resume
+                <Eye size={15} />
+                Resume
               </a>
               <a
                 href="/Praneeth_Resume.pdf"
                 download
                 title="Download Resume PDF"
-                style={{
-                  padding: "12px 14px",
-                  borderRadius: 12,
-                  fontWeight: 600,
-                  fontSize: "0.875rem",
-                  background: "rgba(59, 130, 246, 0.15)",
-                  border: "1px solid rgba(59, 130, 246, 0.3)",
-                  color: "#93c5fd",
-                  textDecoration: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 6,
-                  transition: "all 0.25s ease",
-                }}
+                className="btn-secondary"
+                style={{ padding: "12px 14px" }}
               >
-                <Download size={16} />
+                <Download size={15} />
               </a>
             </motion.div>
 
             {/* Social icons */}
-            <motion.div variants={itemVariants} className="flex justify-center lg:justify-start gap-4">
+            <motion.div variants={itemVariants} style={{ display: "flex", gap: 12 }}>
               {[
-                { icon: Github, href: "https://github.com", label: "GitHub" },
+                { icon: Github, href: "https://github.com/Praneeth180502", label: "GitHub" },
                 { icon: Linkedin, href: "https://www.linkedin.com/in/praneeth-reddy-ankey", label: "LinkedIn" },
                 { icon: Mail, href: "mailto:apraneethreddy20891a0502@gmail.com", label: "Email" },
               ].map(({ icon: Icon, href, label }) => (
@@ -231,32 +258,30 @@ const HeroSection = () => {
                   rel="noopener noreferrer"
                   aria-label={label}
                   style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 10,
-                    border: "1px solid rgba(59, 130, 246, 0.3)",
-                    background: "rgba(15, 23, 42, 0.7)",
+                    width: 40,
+                    height: 40,
+                    borderRadius: 8,
+                    border: "1px solid var(--border)",
+                    background: "transparent",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    color: "#94a3b8",
-                    transition: "all 0.25s ease",
+                    color: "var(--text-muted)",
+                    transition: "border-color 150ms ease, color 150ms ease",
                     textDecoration: "none",
                   }}
                   onMouseEnter={(e) => {
                     const el = e.currentTarget as HTMLElement;
-                    el.style.borderColor = "rgba(59, 130, 246, 0.8)";
-                    el.style.color = "#ffffff";
-                    el.style.boxShadow = "0 0 16px rgba(59, 130, 246, 0.5)";
+                    el.style.borderColor = "var(--accent)";
+                    el.style.color = "var(--accent)";
                   }}
                   onMouseLeave={(e) => {
                     const el = e.currentTarget as HTMLElement;
-                    el.style.borderColor = "rgba(59, 130, 246, 0.3)";
-                    el.style.color = "#94a3b8";
-                    el.style.boxShadow = "none";
+                    el.style.borderColor = "var(--border)";
+                    el.style.color = "var(--text-muted)";
                   }}
                 >
-                  <Icon size={18} />
+                  <Icon size={17} />
                 </a>
               ))}
             </motion.div>
@@ -264,31 +289,20 @@ const HeroSection = () => {
 
           {/* ── Right: Photo ── */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
+            initial={{ opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="flex justify-center lg:justify-end"
           >
             <div style={{ position: "relative" }}>
-              {/* Glow rings */}
+              {/* Subtle blue glow ring */}
               <div
                 className="animate-spin-slow"
                 style={{
                   position: "absolute",
-                  inset: -20,
+                  inset: -16,
                   borderRadius: "50%",
-                  border: "1px solid rgba(59, 130, 246, 0.2)",
-                  pointerEvents: "none",
-                }}
-              />
-              <div
-                style={{
-                  position: "absolute",
-                  inset: -8,
-                  borderRadius: "24px",
-                  background:
-                    "linear-gradient(135deg, rgba(59,130,246,0.3), rgba(6,182,212,0.2), rgba(139,92,246,0.3))",
-                  filter: "blur(12px)",
+                  border: "1px solid rgba(6,182,212,0.15)",
                   pointerEvents: "none",
                 }}
               />
@@ -297,19 +311,17 @@ const HeroSection = () => {
               <div
                 style={{
                   position: "relative",
-                  width: "min(20rem, 80vw)",
+                  width: "min(18rem, 78vw)",
                   aspectRatio: "2/3",
-                  borderRadius: 24,
+                  borderRadius: 12,
                   overflow: "hidden",
-                  border: "2px solid rgba(59, 130, 246, 0.35)",
-                  boxShadow:
-                    "0 0 40px rgba(59,130,246,0.25), 0 0 80px rgba(6,182,212,0.12)",
+                  border: "1px solid var(--border)",
+                  boxShadow: "0 0 40px rgba(6,182,212,0.15)",
                 }}
-                className="animate-pulse-glow"
               >
                 <img
                   src={praneethPhoto}
-                  alt="Ankey Praneeth Reddy — Full Stack AI Developer"
+                  alt="Ankey Praneeth Reddy — AI Engineer"
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
               </div>
@@ -318,61 +330,52 @@ const HeroSection = () => {
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.2, type: "spring" }}
+                transition={{ delay: 1.1, type: "spring" }}
                 style={{
                   position: "absolute",
                   bottom: 16,
                   right: -16,
-                  background: "rgba(3, 7, 18, 0.95)",
-                  backdropFilter: "blur(16px)",
-                  border: "1px solid rgba(16, 185, 129, 0.5)",
-                  borderRadius: 12,
-                  padding: "8px 14px",
+                  background: "var(--surface)",
+                  border: "1px solid rgba(16,185,129,0.4)",
+                  borderRadius: 8,
+                  padding: "7px 13px",
                   display: "flex",
                   alignItems: "center",
                   gap: 8,
-                  boxShadow: "0 0 20px rgba(16, 185, 129, 0.3)",
+                  boxShadow: "0 0 16px rgba(16,185,129,0.2)",
                 }}
               >
                 <span
+                  className="animate-pulse-glow"
                   style={{
-                    width: 8,
-                    height: 8,
+                    width: 7,
+                    height: 7,
                     borderRadius: "50%",
-                    background: "#10b981",
-                    boxShadow: "0 0 8px #10b981",
+                    background: "var(--success)",
+                    flexShrink: 0,
                   }}
                 />
-                <span
-                  style={{
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    fontWeight: 600,
-                    fontSize: "0.8rem",
-                    color: "#6ee7b7",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  🚀 Open to Work
+                <span style={{ fontSize: "0.78rem", fontWeight: 500, color: "#6ee7b7", whiteSpace: "nowrap" }}>
+                  Open to Work
                 </span>
               </motion.div>
 
               {/* Location badge */}
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 1.5 }}
+                transition={{ delay: 1.3 }}
                 style={{
                   position: "absolute",
                   top: 16,
                   left: -16,
-                  background: "rgba(3, 7, 18, 0.95)",
-                  backdropFilter: "blur(16px)",
-                  border: "1px solid rgba(59, 130, 246, 0.4)",
-                  borderRadius: 12,
-                  padding: "6px 12px",
-                  fontSize: "0.75rem",
-                  color: "#93c5fd",
-                  fontWeight: 600,
+                  background: "var(--surface)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 8,
+                  padding: "5px 11px",
+                  fontSize: "0.72rem",
+                  color: "var(--text-muted)",
+                  fontWeight: 500,
                   whiteSpace: "nowrap",
                 }}
               >
@@ -387,21 +390,12 @@ const HeroSection = () => {
       <a
         href="#about"
         className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce"
-        style={{ color: "#3b82f6", textDecoration: "none" }}
+        style={{ color: "var(--accent)", textDecoration: "none" }}
         aria-label="Scroll to About section"
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 6,
-          }}
-        >
-          <span style={{ fontSize: "0.65rem", color: "#94a3b8", letterSpacing: "0.15em", textTransform: "uppercase" }}>
-            Scroll
-          </span>
-          <ArrowDown size={20} style={{ color: "#38bdf8" }} />
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
+          <span className="eyebrow" style={{ fontSize: "0.6rem" }}>scroll</span>
+          <ArrowDown size={18} />
         </div>
       </a>
     </section>

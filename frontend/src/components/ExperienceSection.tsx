@@ -1,15 +1,19 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Building2, Calendar, ChevronRight, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 
 const experiences = [
   {
     company: "Digimaxx AI Solutions",
     role: "Associate AI Engineer",
     period: "Aug 2026 – Present",
-    description:
-      "Engineering advanced AI solutions, LLM architectures, and intelligent automated systems. Driving production-grade GenAI integrations and enterprise AI products.",
-    tech: ["AI Engineering", "Generative AI", "LLMs", "Python", "FastAPI", "React.js"],
-    color: "#10b981",
+    bullets: [
+      "Engineering the orchestration layer behind production AI — coordinating agents, RAG pipelines, and workflows into reliable, scalable systems.",
+      "Designing multi-agent architectures and LLM integration patterns for enterprise-grade GenAI products.",
+      "Building observable, fault-tolerant AI pipelines with FastAPI and Python.",
+    ],
+    tech: ["AI Agents", "RAG", "LLMs", "Python", "FastAPI"],
+    color: "var(--accent)",   // current role — bright cyan per design.md
     status: "active",
     url: "https://www.digimaxx.co/",
   },
@@ -17,222 +21,228 @@ const experiences = [
     company: "CognitBotz (Client: Adani)",
     role: "Full Stack Developer Intern",
     period: "Jun 2024 – Nov 2024",
-    description:
-      "Building enterprise-grade data analytics dashboards for Adani using React.js, FastAPI, and PostgreSQL. Delivered 4 major projects including NOC Dashboard, App Connectivity, Meet-Ops AI, and Landed Tariff Visualization.",
+    bullets: [
+      "Built 4 enterprise data analytics dashboards for Adani: NOC Dashboard, App Connectivity, Meet-Ops AI, and Landed Tariff Visualisation.",
+      "Stack: React.js, FastAPI, PostgreSQL — from design to production.",
+      "Delivered projects serving thousands of daily operator queries.",
+    ],
     tech: ["React.js", "FastAPI", "PostgreSQL", "Python"],
-    color: "#3b82f6",
+    color: "var(--accent-2)",
     status: "completed",
     url: "https://cognitbotz.com/",
   },
   {
-    company: "DRDO – Defense Research & Development Organization",
+    company: "DRDO – Defence Research & Development",
     role: "Project Intern",
     period: "Nov 2023 – May 2024",
-    description:
-      "Contributed to the Live Missile Data Simulation project, handling both front-end and back-end development. Managed server-client communication using React and Python.",
-    tech: ["React", "Python", "Data Simulation", "WebSockets"],
-    color: "#8b5cf6",
+    bullets: [
+      "Contributed to the Live Missile Data Simulation project — front-end and back-end development.",
+      "Built real-time telemetry visualisation of acceleration, velocity, and trajectory via WebSockets.",
+      "Managed server-client communication using React and Python.",
+    ],
+    tech: ["React", "Python", "WebSockets", "Data Simulation"],
+    color: "#64748b",
     status: "completed",
     url: "https://drdo.gov.in/drdo/en",
   },
 ];
 
 const ExperienceSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
+      { threshold: 0.1 }
+    );
+    const reveals = sectionRef.current?.querySelectorAll(".reveal") ?? [];
+    reveals.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <section id="experience" className="section-padding" style={{ background: "transparent" }}>
-      <div className="container mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-        >
+    <section
+      id="experience"
+      ref={sectionRef}
+      className="section-padding"
+      style={{ background: "var(--bg)" }}
+    >
+      <div className="container">
+        <div className="reveal" style={{ marginBottom: "3rem" }}>
           <p className="section-label mb-3">Experience</p>
           <h2
             style={{
-              fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)",
-              fontWeight: 800,
-              fontFamily: "'Space Grotesk', sans-serif",
-              color: "#f1f5f9",
-              marginBottom: "3rem",
-              lineHeight: 1.2,
+              fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+              fontWeight: 600,
+              color: "var(--text-strong)",
+              letterSpacing: "-0.01em",
             }}
           >
-            Where I've <span className="gradient-text">worked</span>
+            Where I've worked
           </h2>
-        </motion.div>
+        </div>
 
         <div style={{ position: "relative" }}>
-          {/* Glowing timeline line */}
+          {/* Vertical timeline line */}
           <div
             className="hidden md:block"
             style={{
               position: "absolute",
-              left: 24,
+              left: 23,
               top: 0,
               bottom: 0,
-              width: 2,
-              background: "linear-gradient(180deg, #3b82f6, #8b5cf6, transparent)",
-              boxShadow: "0 0 8px rgba(59, 130, 246, 0.4)",
+              width: 1,
+              background: "linear-gradient(180deg, var(--accent), var(--accent-2), var(--border))",
+              opacity: 0.5,
             }}
           />
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem" }}>
             {experiences.map((exp, i) => (
               <motion.div
                 key={exp.company}
-                initial={{ opacity: 0, x: -32 }}
+                initial={{ opacity: 0, x: -24 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: i * 0.15, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 className="md:pl-16"
                 style={{ position: "relative" }}
               >
-                {/* Timeline node */}
+                {/* Timeline dot */}
                 <div
                   className="hidden md:flex"
                   style={{
                     position: "absolute",
                     left: 12,
                     top: 24,
-                    width: 24,
-                    height: 24,
+                    width: 22,
+                    height: 22,
                     borderRadius: "50%",
-                    background: exp.color,
-                    border: "3px solid #030712",
-                    boxShadow: `0 0 12px ${exp.color}80`,
+                    background: "var(--surface)",
+                    border: `2px solid ${exp.color}`,
+                    boxShadow: exp.status === "active" ? `0 0 12px ${exp.color}, 0 0 24px ${exp.color}40` : "none",
                     alignItems: "center",
                     justifyContent: "center",
+                    zIndex: 1,
                   }}
                 >
                   {exp.status === "active" && (
                     <span
                       style={{
-                        width: 8,
-                        height: 8,
+                        width: 7,
+                        height: 7,
                         borderRadius: "50%",
-                        background: "white",
-                        opacity: 0.9,
+                        background: exp.color,
+                        animation: "pulse-glow 2.5s ease-in-out infinite",
                       }}
                     />
                   )}
                 </div>
 
                 {/* Card */}
-                <motion.div
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.25 }}
+                <div
                   style={{
-                    background: "rgba(15, 23, 42, 0.7)",
-                    backdropFilter: "blur(20px)",
-                    border: `1px solid ${exp.color}25`,
-                    borderRadius: 20,
-                    padding: "1.75rem 2rem",
-                    boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
-                    cursor: "default",
-                    transition: "border-color 0.3s, box-shadow 0.3s",
+                    background: "var(--surface)",
+                    border: `1px solid ${exp.status === "active" ? "rgba(6,182,212,0.35)" : "var(--border)"}`,
+                    borderRadius: "var(--radius-card)",
+                    padding: "1.5rem 2rem",
+                    boxShadow: exp.status === "active" ? "0 0 24px rgba(6,182,212,0.08)" : "none",
                     position: "relative",
                     overflow: "hidden",
+                    transition: "border-color 150ms ease, background 150ms ease",
                   }}
                 >
-                  {/* Accent top bar */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: 3,
-                      background: `linear-gradient(90deg, ${exp.color}, transparent)`,
-                    }}
-                  />
+                  {/* Top accent bar — only on active */}
+                  {exp.status === "active" && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: 2,
+                        background: "linear-gradient(90deg, var(--accent), var(--accent-2), transparent)",
+                      }}
+                    />
+                  )}
 
-                  <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
+                  <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: 12 }}>
                     <div>
                       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                        <Building2 size={16} style={{ color: exp.color }} />
                         {exp.url ? (
                           <a
                             href={exp.url}
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{
-                              fontFamily: "'Space Grotesk', sans-serif",
-                              fontWeight: 700,
-                              fontSize: "1.05rem",
-                              color: "#f1f5f9",
+                              fontSize: "1rem",
+                              fontWeight: 600,
+                              color: "var(--text-strong)",
                               display: "inline-flex",
                               alignItems: "center",
                               gap: 6,
                               textDecoration: "none",
-                              transition: "all 0.2s ease",
+                              transition: "color 150ms ease",
                             }}
-                            className="hover:opacity-90 group"
-                            title={`Visit ${exp.company} website`}
+                            className="group"
                           >
-                            <span className="group-hover:underline underline-offset-4 decoration-1">{exp.company}</span>
-                            <ExternalLink size={14} style={{ color: exp.color }} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                            {exp.company}
+                            <ExternalLink size={13} style={{ color: exp.color, opacity: 0.7 }} />
                           </a>
                         ) : (
-                          <h3
-                            style={{
-                              fontFamily: "'Space Grotesk', sans-serif",
-                              fontWeight: 700,
-                              fontSize: "1.05rem",
-                              color: "#f1f5f9",
-                            }}
-                          >
+                          <h3 style={{ fontSize: "1rem", fontWeight: 600, color: "var(--text-strong)" }}>
                             {exp.company}
                           </h3>
                         )}
                       </div>
-                      <p style={{ color: exp.color, fontWeight: 600, fontSize: "0.9rem" }}>
+                      <p style={{ fontSize: "0.875rem", fontWeight: 500, color: exp.color }}>
                         {exp.role}
                       </p>
                     </div>
-                    <div
+
+                    <span
                       style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 6,
-                        padding: "4px 12px",
+                        fontFamily: "'JetBrains Mono', monospace",
+                        fontSize: "0.75rem",
+                        color: "var(--text-muted)",
+                        background: "var(--surface-2)",
+                        border: "1px solid var(--border)",
                         borderRadius: 999,
-                        background: `${exp.color}12`,
-                        border: `1px solid ${exp.color}30`,
-                        color: "#94a3b8",
-                        fontSize: "0.8rem",
-                        fontWeight: 500,
+                        padding: "3px 12px",
                         whiteSpace: "nowrap",
                       }}
                     >
-                      <Calendar size={12} />
                       {exp.period}
-                    </div>
+                    </span>
                   </div>
 
-                  <p style={{ color: "#94a3b8", lineHeight: 1.7, marginBottom: "1rem", fontSize: "0.925rem" }}>
-                    {exp.description}
-                  </p>
-
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                    {exp.tech.map((t) => (
-                      <span
-                        key={t}
+                  {/* Bullet points */}
+                  <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: 7, marginBottom: 14 }}>
+                    {exp.bullets.map((b) => (
+                      <li
+                        key={b}
                         style={{
-                          padding: "4px 12px",
-                          borderRadius: 999,
-                          fontSize: "0.75rem",
-                          fontWeight: 600,
-                          background: `${exp.color}12`,
-                          border: `1px solid ${exp.color}30`,
-                          color: exp.color === "#3b82f6" ? "#93c5fd" : "#c4b5fd",
+                          fontSize: "0.875rem",
+                          color: "var(--text)",
+                          display: "flex",
+                          alignItems: "flex-start",
+                          gap: 8,
+                          lineHeight: 1.6,
                         }}
                       >
-                        {t}
-                      </span>
+                        <span style={{ color: exp.color, flexShrink: 0, marginTop: 3 }}>–</span>
+                        {b}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Tech chips */}
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                    {exp.tech.map((t) => (
+                      <span key={t} className="chip">{t}</span>
                     ))}
                   </div>
-                </motion.div>
+                </div>
               </motion.div>
             ))}
           </div>

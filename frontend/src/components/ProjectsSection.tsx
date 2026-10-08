@@ -1,405 +1,522 @@
-import { motion } from "framer-motion";
-import { ExternalLink, BarChart3, Bot, Activity, Video, GraduationCap, FolderSearch, Zap, Github } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown, Github, ExternalLink } from "lucide-react";
 
-const projects = [
+/* ── Pipeline pulse SVG background ── */
+function PipelineBg() {
+  return (
+    <svg
+      aria-hidden="true"
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        opacity: 0.12,
+        pointerEvents: "none",
+      }}
+      preserveAspectRatio="none"
+    >
+      <defs>
+        <style>{`
+          @keyframes pulse-dot {
+            0%   { opacity: 0; }
+            5%   { opacity: 1; }
+            90%  { opacity: 1; }
+            100% { opacity: 0; }
+          }
+          .pipe-path { fill: none; stroke: #06b6d4; stroke-width: 1; }
+          .pulse { animation: pulse-dot 6s linear infinite; }
+          .pulse1 { animation-delay: 0s; }
+          .pulse2 { animation-delay: 2s; }
+          .pulse3 { animation-delay: 4s; }
+        `}</style>
+      </defs>
+      {/* Horizontal pipeline: Agent → Retriever → LLM */}
+      <path className="pipe-path" d="M 5% 50% H 35%" />
+      <path className="pipe-path" d="M 40% 50% H 65%" />
+      <path className="pipe-path" d="M 70% 50% H 95%" />
+      {/* Node circles */}
+      <circle cx="35%" cy="50%" r="4" fill="#06b6d4" />
+      <circle cx="65%" cy="50%" r="4" fill="#06b6d4" />
+      {/* Labels */}
+      <text x="18%" y="44%" fill="#06b6d4" fontSize="10" textAnchor="middle" fontFamily="monospace">Agent</text>
+      <text x="50%" y="44%" fill="#06b6d4" fontSize="10" textAnchor="middle" fontFamily="monospace">Retriever</text>
+      <text x="82%" y="44%" fill="#06b6d4" fontSize="10" textAnchor="middle" fontFamily="monospace">LLM</text>
+      {/* Pulse dots travelling along paths */}
+      <circle r="4" fill="#22d3ee" opacity="0" className="pulse pulse1">
+        <animateMotion dur="6s" repeatCount="indefinite" begin="0s">
+          <mpath href="#path1" />
+        </animateMotion>
+      </circle>
+      <circle r="4" fill="#3b82f6" opacity="0" className="pulse pulse2">
+        <animateMotion dur="6s" repeatCount="indefinite" begin="2s">
+          <mpath href="#path2" />
+        </animateMotion>
+      </circle>
+      <path id="path1" d="M 5% 50% H 35%" style={{ display: "none" }} />
+      <path id="path2" d="M 40% 50% H 95%" style={{ display: "none" }} />
+    </svg>
+  );
+}
+
+const FILTERS = ["All", "AI Agents", "RAG", "Full-stack", "Automation"];
+
+type Project = {
+  title: string;
+  category: string;
+  filters: string[];
+  outcome: string;
+  capabilities: string[];
+  tech: string[];
+  color: string;
+  github?: string;
+  url?: string;
+};
+
+const projects: Project[] = [
   {
-    title: "NaukriBot — Autonomous Job Application Agent",
-    icon: Bot,
-    description:
-      "NaukriBot is an autonomous job-application agent that automates Naukri searching and applying end to end. It uses Playwright with stealth for persistent sessions, semantic resume-to-job matching (SentenceTransformers + FAISS), and a screening Q&A solver, with a Telegram bot for control and a FastAPI dashboard for analytics.",
+    title: "NaukriBot",
+    category: "AI · Automation",
+    filters: ["AI Agents", "Automation"],
+    outcome: "Autonomous job-application agent that applies to 50+ Naukri listings daily with zero manual effort.",
+    capabilities: [
+      "Persistent browser sessions (Playwright + stealth)",
+      "Semantic resume-to-job matching (SentenceTransformers + FAISS)",
+      "Screening Q&A solver",
+      "Telegram control + FastAPI analytics dashboard",
+    ],
     tech: ["Playwright", "SentenceTransformers", "FAISS", "FastAPI", "Telegram Bot", "Python"],
-    client: "AI Automation Agent",
-    color: "#10b981",
-    featured: true,
+    color: "#06b6d4",
     github: "https://github.com/Praneeth180502/NaukriBot.git",
   },
   {
-    title: "AURASELECT — AI Video Interview Evaluator",
-    icon: Video,
-    description:
-      "AI-powered platform automating the HR screening process. Candidates record responses via webcam; an AI pipeline transcribes audio using Groq Whisper, semantically evaluates against benchmark answers, and produces comprehensive score reports.",
-    tech: ["React", "FastAPI", "Groq Whisper", "LLMs", "AI Evaluation"],
-    client: "HR Tech Platform",
-    color: "#ef4444",
-    featured: true,
-  },
-  {
-    title: "OpenViz — Generative AI Analytics Platform",
-    icon: BarChart3,
-    description:
-      "Prompt-driven data analytics platform turning raw datasets into interactive charts through natural language commands. Client-side RAG with Arquero for zero-latency profiling and data privacy.",
-    tech: ["React 19", "Vega-Lite", "Llama 4", "Groq SDK", "Arquero", "RAG"],
-    client: "GenAI Platform",
+    title: "AURASELECT",
+    category: "AI · HR Tech",
+    filters: ["AI Agents", "RAG"],
+    outcome: "AI platform that automates HR screening — candidates record, AI scores and reports in minutes.",
+    capabilities: [
+      "Webcam video capture and Groq Whisper transcription",
+      "Semantic evaluation against benchmark answers",
+      "Comprehensive AI score reports",
+      "Multi-candidate batch processing",
+    ],
+    tech: ["React", "FastAPI", "Groq Whisper", "LLMs"],
     color: "#3b82f6",
-    featured: true,
   },
   {
-    title: "SiLens AI — STEM Learning Platform",
-    icon: GraduationCap,
-    description:
-      "Transforms static STEM documents into interactive experiences. PaddleOCR + Pix2Tex extract equations to LaTeX; FastAPI Clean Architecture with hot-swappable LLM providers powers document-grounded Q&A.",
-    tech: ["FastAPI", "React", "TypeScript", "Groq LLM", "PaddleOCR", "Pix2Tex"],
-    client: "EdTech Platform",
-    color: "#8b5cf6",
-    featured: true,
+    title: "OpenViz",
+    category: "GenAI · Analytics",
+    filters: ["RAG", "Full-stack"],
+    outcome: "Natural-language data analytics platform turning raw CSV into interactive charts in seconds.",
+    capabilities: [
+      "Prompt-driven chart generation (Vega-Lite)",
+      "Client-side RAG with Arquero — zero latency, full data privacy",
+      "Llama 4 + Groq SDK integration",
+      "React 19 with streaming responses",
+    ],
+    tech: ["React 19", "Vega-Lite", "Llama 4", "Groq SDK", "Arquero"],
+    color: "#3b82f6",
   },
   {
-    title: "AI File Explorer — Local AI Search",
-    icon: FolderSearch,
-    description:
-      "Privacy-first desktop AI app for semantic search across local files. Runs in Electron with real-time folder monitoring, multi-format parsing, and hybrid local/cloud LLM execution.",
-    tech: ["FastAPI", "React", "Electron", "Ollama", "ChromaDB", "PyMuPDF"],
-    client: "Desktop Platform",
+    title: "SiLens AI",
+    category: "EdTech · RAG",
+    filters: ["RAG", "Full-stack"],
+    outcome: "Transforms static STEM PDFs into an interactive Q&A tutor with LaTeX equation support.",
+    capabilities: [
+      "PaddleOCR + Pix2Tex equation extraction to LaTeX",
+      "FastAPI Clean Architecture with hot-swappable LLM providers",
+      "Document-grounded Q&A with source citations",
+      "TypeScript + React frontend",
+    ],
+    tech: ["FastAPI", "React", "TypeScript", "Groq LLM", "PaddleOCR"],
     color: "#06b6d4",
-    featured: false,
   },
   {
-    title: "Meet-Ops — AI Meeting Analytics",
-    icon: Bot,
-    description:
-      "Autonomous meeting bot joining Microsoft Teams calls, capturing transcripts, and surfacing AI summaries on a centralized dashboard using Hugging Face Transformers.",
+    title: "AI File Explorer",
+    category: "Desktop · AI Search",
+    filters: ["AI Agents", "RAG"],
+    outcome: "Privacy-first desktop app for semantic search across local files — entirely offline.",
+    capabilities: [
+      "Electron app with real-time folder monitoring",
+      "Multi-format parsing (PDF, DOCX, TXT)",
+      "Hybrid local/cloud LLM (Ollama + ChromaDB)",
+      "Zero data leaves the machine",
+    ],
+    tech: ["FastAPI", "React", "Electron", "Ollama", "ChromaDB"],
+    color: "#06b6d4",
+  },
+  {
+    title: "Meet-Ops AI",
+    category: "AI · Enterprise",
+    filters: ["AI Agents", "Full-stack"],
+    outcome: "Autonomous meeting bot that joins Teams calls, captures transcripts, and surfaces AI summaries.",
+    capabilities: [
+      "MS Teams API integration",
+      "Hugging Face Transformers summarisation",
+      "Centralised analytics dashboard",
+      "PostgreSQL history store",
+    ],
     tech: ["React.js", "FastAPI", "AI/ML", "PostgreSQL", "MS Teams API"],
-    client: "Adani (via CognitBotz)",
-    color: "#10b981",
-    featured: false,
+    color: "#3b82f6",
   },
   {
-    title: "Live Missile Trajectory Simulation",
-    icon: Activity,
-    description:
-      "Real-time simulation and visualization platform presenting live missile telemetry data including acceleration, velocity, height, and flight trajectory streams using WebSockets.",
-    tech: ["React.js", "Python", "FastAPI", "WebSockets", "Data Simulation"],
-    client: "DRDO",
-    color: "#8b5cf6",
-    featured: false,
+    title: "NOC Analytics Dashboard",
+    category: "Enterprise · Data",
+    filters: ["Full-stack"],
+    outcome: "Enterprise operational dashboard processing millions of rows with sub-second filter response.",
+    capabilities: [
+      "4-level hierarchical data model",
+      "High-performance rendering with virtual scroll",
+      "PostgreSQL + REST API backend",
+      "Delivered for Adani via CognitBotz",
+    ],
+    tech: ["React.js", "FastAPI", "PostgreSQL"],
+    color: "#3b82f6",
   },
   {
-    title: "NOC Data Analytics Dashboard",
-    icon: BarChart3,
-    description:
-      "Enterprise operational dashboard featuring a 4-level hierarchical data model for organizing and filtering huge operational datasets with high rendering performance.",
-    tech: ["React.js", "FastAPI", "PostgreSQL", "Hierarchical Data Model"],
-    client: "Adani (via CognitBotz)",
-    color: "#f59e0b",
-    featured: false,
+    title: "Live Missile Trajectory",
+    category: "Defence · Real-time",
+    filters: ["Full-stack"],
+    outcome: "Real-time telemetry platform streaming live missile data — acceleration, velocity, trajectory.",
+    capabilities: [
+      "WebSocket real-time data pipeline",
+      "2D/3D trajectory visualisation",
+      "Python simulation backend",
+      "Delivered for DRDO",
+    ],
+    tech: ["React.js", "Python", "FastAPI", "WebSockets"],
+    color: "#06b6d4",
   },
   {
     title: "App Connectivity Dashboard",
-    icon: Activity,
-    description:
-      "Operational dashboard visualizing Excel/CSV datasets with dynamic cascading filters (State → Region → Substation), KPI summary cards, and interactive charts.",
-    tech: ["React.js", "FastAPI", "PostgreSQL", "Charts"],
-    client: "Adani (via CognitBotz)",
-    color: "#ec4899",
-    featured: false,
+    category: "Enterprise · Analytics",
+    filters: ["Full-stack"],
+    outcome: "Operational dashboard with cascading State→Region→Substation filters over dynamic CSV datasets.",
+    capabilities: [
+      "Dynamic cascading filter architecture",
+      "KPI summary cards with trend indicators",
+      "Interactive Recharts visualisations",
+      "Excel/CSV ingestion pipeline",
+    ],
+    tech: ["React.js", "FastAPI", "PostgreSQL"],
+    color: "#3b82f6",
   },
   {
-    title: "Landed Tariff Data Visualization",
-    icon: BarChart3,
-    description:
-      "Analytics dashboard processing landed tariff datasets with multi-level dependent filters backed by REST APIs processing CSV/Excel into structured JSON responses.",
-    tech: ["React.js", "FastAPI", "Python", "Data Analytics"],
-    client: "Adani (via CognitBotz)",
-    color: "#6366f1",
-    featured: false,
+    title: "Landed Tariff Visualisation",
+    category: "Enterprise · Analytics",
+    filters: ["Full-stack"],
+    outcome: "Tariff analytics dashboard processing multi-level CSV datasets into structured REST responses.",
+    capabilities: [
+      "Multi-level dependent filter system",
+      "CSV → JSON transformation pipeline",
+      "Comparative tariff charts",
+      "Delivered for Adani via CognitBotz",
+    ],
+    tech: ["React.js", "FastAPI", "Python"],
+    color: "#06b6d4",
   },
 ];
 
-const ProjectsSection = () => {
-  const featured = projects.filter((p) => p.featured);
-  const rest = projects.filter((p) => !p.featured);
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const [open, setOpen] = useState(false);
+  const num = String(index + 1).padStart(2, "0");
 
   return (
-    <section id="projects" className="section-padding" style={{ background: "transparent" }}>
-      <div className="container mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-        >
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.06, duration: 0.5 }}
+      style={{
+        background: "var(--surface)",
+        border: "1px solid var(--border)",
+        borderRadius: "var(--radius-card)",
+        padding: "var(--pad-card)",
+        transition: "border-color 150ms ease, background 150ms ease, box-shadow 150ms ease",
+        position: "relative",
+        overflow: "hidden",
+      }}
+      onHoverStart={(e) => {
+        const el = e.target as HTMLElement;
+        const card = el.closest("[data-project-card]") as HTMLElement;
+        if (card) {
+          card.style.borderColor = `${project.color}66`;
+          card.style.background = "var(--surface-2)";
+          card.style.boxShadow = `0 0 20px ${project.color}12`;
+        }
+      }}
+      onHoverEnd={(e) => {
+        const el = e.target as HTMLElement;
+        const card = el.closest("[data-project-card]") as HTMLElement;
+        if (card) {
+          card.style.borderColor = "var(--border)";
+          card.style.background = "var(--surface)";
+          card.style.boxShadow = "none";
+        }
+      }}
+      data-project-card=""
+    >
+      {/* Index number */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
+        <span className="card-index">{num}</span>
+        {project.github && (
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 5,
+              padding: "4px 10px",
+              borderRadius: 999,
+              background: "rgba(6,182,212,0.08)",
+              border: "1px solid rgba(6,182,212,0.3)",
+              color: "var(--accent)",
+              fontSize: "0.72rem",
+              fontFamily: "'JetBrains Mono', monospace",
+              textDecoration: "none",
+              transition: "all 150ms ease",
+            }}
+            title="View GitHub Repository"
+          >
+            <Github size={12} />
+            Repo
+          </a>
+        )}
+      </div>
+
+      {/* Category */}
+      <p
+        style={{
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: "0.72rem",
+          color: "var(--text-muted)",
+          marginBottom: 6,
+          letterSpacing: "0.04em",
+        }}
+      >
+        {project.category}
+      </p>
+
+      {/* Title */}
+      <h3
+        style={{
+          fontSize: "1.1rem",
+          fontWeight: 500,
+          color: "var(--text-strong)",
+          marginBottom: 8,
+          lineHeight: 1.35,
+        }}
+      >
+        {project.title}
+      </h3>
+
+      {/* Outcome */}
+      <p style={{ fontSize: "0.875rem", color: "var(--text)", lineHeight: 1.65, marginBottom: 14 }}>
+        {project.outcome}
+      </p>
+
+      {/* Tech chips */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14 }}>
+        {project.tech.map((t) => (
+          <span key={t} className="chip">{t}</span>
+        ))}
+      </div>
+
+      {/* View details toggle */}
+      <button
+        onClick={() => setOpen(!open)}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          background: "none",
+          border: "none",
+          padding: 0,
+          cursor: "pointer",
+          color: "var(--accent)",
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: "0.8rem",
+          fontWeight: 500,
+        }}
+        aria-expanded={open}
+      >
+        View details
+        <ChevronDown
+          size={14}
+          style={{
+            transition: "transform 200ms ease",
+            transform: open ? "rotate(180deg)" : "rotate(0deg)",
+          }}
+        />
+      </button>
+
+      {/* Expandable capabilities panel */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            style={{ overflow: "hidden" }}
+          >
+            <div
+              style={{
+                marginTop: 16,
+                paddingTop: 16,
+                borderTop: "1px solid var(--border)",
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: "0.72rem",
+                  color: "var(--text-muted)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  marginBottom: 10,
+                }}
+              >
+                Core capabilities
+              </p>
+              <ul style={{ paddingLeft: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 6 }}>
+                {project.capabilities.map((cap) => (
+                  <li
+                    key={cap}
+                    style={{
+                      fontSize: "0.875rem",
+                      color: "var(--text)",
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: 8,
+                    }}
+                  >
+                    <span style={{ color: "var(--accent)", flexShrink: 0, marginTop: 2 }}>–</span>
+                    {cap}
+                  </li>
+                ))}
+              </ul>
+              {(project.github || project.url) && (
+                <a
+                  href={project.github ?? project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
+                    marginTop: 14,
+                    color: "var(--accent)",
+                    fontSize: "0.875rem",
+                    fontWeight: 500,
+                    textDecoration: "none",
+                    transition: "opacity 150ms ease",
+                  }}
+                >
+                  Explore this work
+                  <ExternalLink size={13} />
+                </a>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
+const ProjectsSection = () => {
+  const [activeFilter, setActiveFilter] = useState("All");
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const filtered = activeFilter === "All"
+    ? projects
+    : projects.filter((p) => p.filters.includes(activeFilter));
+
+  // Reveal on scroll
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) e.target.classList.add("visible");
+        });
+      },
+      { threshold: 0.1 }
+    );
+    const reveals = sectionRef.current?.querySelectorAll(".reveal") ?? [];
+    reveals.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <section
+      id="projects"
+      ref={sectionRef}
+      className="section-padding"
+      style={{ background: "var(--bg)", position: "relative", overflow: "hidden" }}
+    >
+      <PipelineBg />
+
+      <div className="container" style={{ position: "relative", zIndex: 1 }}>
+        {/* Header */}
+        <div className="reveal" style={{ marginBottom: "2.5rem" }}>
           <p className="section-label mb-3">Projects</p>
           <h2
             style={{
-              fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)",
-              fontWeight: 800,
-              fontFamily: "'Space Grotesk', sans-serif",
-              color: "#f1f5f9",
+              fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+              fontWeight: 600,
+              color: "var(--text-strong)",
+              letterSpacing: "-0.01em",
               marginBottom: "0.75rem",
-              lineHeight: 1.2,
             }}
           >
-            Featured <span className="gradient-text">Projects</span> & Solutions
+            Systems built to work in the real world,{" "}
+            <span className="gradient-text">not just demo well.</span>
           </h2>
-          <p style={{ color: "#64748b", maxWidth: "36rem", marginBottom: "3rem", fontSize: "0.95rem", lineHeight: 1.7 }}>
-            Enterprise-grade dashboards and AI-powered platforms — from data visualization engines to agentic RAG systems.
+          <p style={{ color: "var(--text-muted)", maxWidth: "38rem", fontSize: "0.95rem" }}>
+            Enterprise dashboards and AI-powered platforms — from data analytics engines to agentic RAG systems.
           </p>
+        </div>
+
+        {/* Filter tabs */}
+        <div
+          className="reveal"
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 8,
+            marginBottom: "2.5rem",
+          }}
+        >
+          {FILTERS.map((f) => (
+            <button
+              key={f}
+              className={`filter-pill${activeFilter === f ? " active" : ""}`}
+              onClick={() => setActiveFilter(f)}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+
+        {/* Cards grid — 3-up desktop, 2-up tablet, 1-up mobile */}
+        <motion.div
+          key={activeFilter}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.25 }}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 340px), 1fr))",
+            gap: 20,
+          }}
+        >
+          {filtered.map((project, i) => (
+            <ProjectCard key={project.title} project={project} index={i} />
+          ))}
         </motion.div>
-
-        {/* Featured projects — large cards */}
-        <div className="grid md:grid-cols-2 gap-6 mb-6">
-          {featured.map(({ title, icon: Icon, description, tech, client, color, github }, i) => (
-            <motion.div
-              key={title}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.12, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              whileHover={{ y: -8, scale: 1.01 }}
-              style={{
-                background: "rgba(15, 23, 42, 0.7)",
-                backdropFilter: "blur(24px)",
-                border: `1px solid ${color}25`,
-                borderRadius: 20,
-                padding: "1.75rem",
-                position: "relative",
-                overflow: "hidden",
-                cursor: "default",
-                transition: "border-color 0.3s, box-shadow 0.3s",
-                boxShadow: "0 8px 40px rgba(0,0,0,0.45)",
-              }}
-            >
-              {/* Corner glow */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  width: 120,
-                  height: 120,
-                  background: `radial-gradient(circle at top right, ${color}18, transparent 70%)`,
-                  pointerEvents: "none",
-                }}
-              />
-              {/* Top accent bar */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: 2,
-                  background: `linear-gradient(90deg, ${color}, transparent)`,
-                }}
-              />
-
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem" }}>
-                <div
-                  style={{
-                    width: 46,
-                    height: 46,
-                    borderRadius: 14,
-                    background: `${color}15`,
-                    border: `1px solid ${color}30`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Icon size={22} style={{ color }} />
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <span
-                    style={{
-                      padding: "3px 10px",
-                      borderRadius: 999,
-                      fontSize: "0.68rem",
-                      fontWeight: 700,
-                      background: `${color}18`,
-                      border: `1px solid ${color}35`,
-                      color,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.08em",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 4,
-                    }}
-                  >
-                    <Zap size={10} /> Featured
-                  </span>
-                  {github ? (
-                    <a
-                      href={github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 5,
-                        padding: "4px 10px",
-                        borderRadius: 999,
-                        background: "rgba(16, 185, 129, 0.2)",
-                        border: "1px solid rgba(16, 185, 129, 0.5)",
-                        color: "#34d399",
-                        fontSize: "0.72rem",
-                        fontWeight: 700,
-                        textDecoration: "none",
-                        transition: "all 0.2s ease",
-                        boxShadow: "0 0 14px rgba(16, 185, 129, 0.3)",
-                      }}
-                      className="hover:scale-105 hover:bg-emerald-500/30"
-                      title="View GitHub Repository"
-                    >
-                      <Github size={13} />
-                      <span>Repo</span>
-                    </a>
-                  ) : (
-                    <ExternalLink size={16} style={{ color: "#475569" }} />
-                  )}
-                </div>
-              </div>
-
-              <h3
-                style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontWeight: 700,
-                  fontSize: "1rem",
-                  color: "#f1f5f9",
-                  marginBottom: 6,
-                  lineHeight: 1.35,
-                }}
-              >
-                {title}
-              </h3>
-              <p style={{ color, fontSize: "0.75rem", fontWeight: 600, marginBottom: 10 }}>
-                {client}
-              </p>
-              <p style={{ color: "#94a3b8", fontSize: "0.875rem", lineHeight: 1.65, marginBottom: "1rem" }}>
-                {description}
-              </p>
-
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                {tech.map((t) => (
-                  <span
-                    key={t}
-                    style={{
-                      padding: "3px 10px",
-                      borderRadius: 999,
-                      fontSize: "0.7rem",
-                      fontWeight: 600,
-                      background: `${color}10`,
-                      border: `1px solid ${color}22`,
-                      color: "#94a3b8",
-                    }}
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-
-              {github && (
-                <div style={{ marginTop: "1.25rem", paddingTop: "0.85rem", borderTop: `1px dashed ${color}35` }}>
-                  <a
-                    href={github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 8,
-                      padding: "7px 16px",
-                      borderRadius: 12,
-                      background: `${color}18`,
-                      border: `1px solid ${color}50`,
-                      color: "#ffffff",
-                      fontSize: "0.825rem",
-                      fontWeight: 700,
-                      textDecoration: "none",
-                      transition: "all 0.25 ease",
-                      boxShadow: `0 0 20px ${color}35`,
-                    }}
-                    className="hover:scale-105 hover:bg-emerald-500/25 group"
-                  >
-                    <Github size={16} style={{ color }} className="transition-transform group-hover:rotate-12" />
-                    <span>View GitHub Repository</span>
-                    <ExternalLink size={13} style={{ opacity: 0.8 }} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </a>
-                </div>
-              )}
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Other projects — compact grid */}
-        <div className="grid md:grid-cols-2 gap-5">
-          {rest.map(({ title, icon: Icon, description, tech, client, color }, i) => (
-            <motion.div
-              key={title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.6 }}
-              whileHover={{ y: -4 }}
-              style={{
-                background: "rgba(15, 23, 42, 0.6)",
-                backdropFilter: "blur(20px)",
-                border: `1px solid ${color}20`,
-                borderRadius: 16,
-                padding: "1.4rem 1.6rem",
-                position: "relative",
-                overflow: "hidden",
-                cursor: "default",
-                transition: "border-color 0.25s, box-shadow 0.25s",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "flex-start", gap: 14, marginBottom: 10 }}>
-                <div
-                  style={{
-                    width: 38,
-                    height: 38,
-                    borderRadius: 10,
-                    background: `${color}12`,
-                    border: `1px solid ${color}25`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0,
-                  }}
-                >
-                  <Icon size={18} style={{ color }} />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <h3
-                    style={{
-                      fontFamily: "'Space Grotesk', sans-serif",
-                      fontWeight: 700,
-                      fontSize: "0.95rem",
-                      color: "#f1f5f9",
-                      marginBottom: 2,
-                      lineHeight: 1.3,
-                    }}
-                  >
-                    {title}
-                  </h3>
-                  <p style={{ color: "#64748b", fontSize: "0.73rem", fontWeight: 600 }}>
-                    {client}
-                  </p>
-                </div>
-              </div>
-              <p style={{ color: "#94a3b8", fontSize: "0.85rem", lineHeight: 1.6, marginBottom: 12 }}>
-                {description}
-              </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                {tech.slice(0, 4).map((t) => (
-                  <span
-                    key={t}
-                    style={{
-                      padding: "3px 10px",
-                      borderRadius: 999,
-                      fontSize: "0.7rem",
-                      fontWeight: 600,
-                      background: `${color}10`,
-                      border: `1px solid ${color}22`,
-                      color: "#94a3b8",
-                    }}
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
       </div>
     </section>
   );
