@@ -251,14 +251,6 @@ export default function HeroSection() {
                   alt="Praneeth Reddy Ankey"
                   className="w-full h-80 sm:h-96 object-cover object-top transition-transform duration-500 group-hover/img:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0e] via-transparent to-transparent opacity-80" />
-                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-                  <div>
-                    <h3 className="font-bold text-xl text-[#ffffff] tracking-tight">Praneeth Reddy Ankey</h3>
-                    <p className="text-xs font-mono text-[#a1a1aa]">Associate AI Engineer · Digimaxx</p>
-                  </div>
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#10b981] animate-pulse" title="Available for AI Projects" />
-                </div>
               </div>
 
               <div className="mt-5 pt-4 border-t border-[#27272a] space-y-2 text-xs font-mono text-[#a1a1aa]">

@@ -68,23 +68,18 @@ export default function AboutSection() {
           {/* Large Photo & Quick Stats Column (5 cols) */}
           <div className="lg:col-span-5 space-y-6">
             
-            {/* Enlarged Featured Photo Frame */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4 }}
-              className="relative overflow-hidden rounded-2xl bg-[#0c0c0e] border border-[#3f3f46] shadow-2xl p-2 group"
+              className="relative overflow-hidden rounded-2xl bg-[#0c0c0e] border border-[#3f3f46] shadow-2xl p-1.5 group"
             >
               <img
                 src={praneethPhoto}
                 alt="Praneeth Reddy Ankey"
                 className="w-full h-72 sm:h-80 object-cover object-top rounded-xl transition-transform duration-500 group-hover:scale-105"
               />
-              <div className="p-3 flex items-center justify-between text-xs font-mono text-[#a1a1aa]">
-                <span className="text-[#ffffff] font-semibold">Ankey Praneeth Reddy</span>
-                <span>AI Engineer</span>
-              </div>
             </motion.div>
 
             {/* Quick Stats Grid */}
