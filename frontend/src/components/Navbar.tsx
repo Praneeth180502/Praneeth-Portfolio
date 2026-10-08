@@ -4,215 +4,168 @@ import { Menu, X, FileText } from "lucide-react";
 import VisitorCounter from "@/components/VisitorCounter";
 
 const navLinks = [
-  { href: "#about",      label: "About"      },
-  { href: "#skills",     label: "Skills"     },
+  { href: "#about", label: "About" },
+  { href: "#skills", label: "Skills" },
   { href: "#experience", label: "Experience" },
-  { href: "#projects",   label: "Projects"   },
-  { href: "#contact",    label: "Contact"    },
+  { href: "#projects", label: "Projects" },
+  { href: "#contact", label: "Contact" },
 ];
 
-const Navbar = () => {
+export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [active, setActive] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 40);
-      for (const link of navLinks) {
-        const el = document.querySelector(link.href);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 120 && rect.bottom > 0) setActive(link.href);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+
+      const sections = navLinks.map((link) => link.href.substring(1));
+      const scrollPosition = window.scrollY + 200;
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sections[i]);
+        if (el && el.offsetTop <= scrollPosition) {
+          setActiveSection(sections[i]);
+          break;
         }
       }
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <header
-      id="site-nav"
+    <motion.header
+      initial={{ y: -60, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.4 }}
+      className="fixed top-0 left-0 right-0 z-40 transition-all duration-300"
       style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-        transition: "background 0.3s ease, border-color 0.3s ease",
-        background: scrolled ? "rgba(10,10,15,0.88)" : "transparent",
-        backdropFilter: scrolled ? "blur(20px) saturate(1.5)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(20px) saturate(1.5)" : "none",
-        borderBottom: scrolled ? "1px solid var(--border)" : "1px solid transparent",
+        background: scrolled ? "rgba(0, 0, 0, 0.9)" : "transparent",
+        backdropFilter: scrolled ? "blur(12px)" : "none",
+        borderBottom: scrolled ? "1px solid #27272a" : "1px solid transparent",
       }}
     >
-      <div className="container">
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
+      <div className="container mx-auto px-6 h-16 flex items-center justify-between">
+        
+        {/* Wordmark logo per design.md §1 & §4 */}
+        <a href="#hero" className="flex items-center gap-2 group">
+          <span className="font-mono font-bold text-lg tracking-tight text-[#ffffff] group-hover:text-[#d4d4d8] transition-colors">
+            P<span className="text-[#a1a1aa]">.</span>AI
+          </span>
+          <span className="hidden sm:inline-block text-xs font-mono text-[#a1a1aa] border-l border-[#27272a] pl-2">
+            AI Engineer
+          </span>
+        </a>
 
-          {/* Logo / wordmark */}
-          <a
-            href="#"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              textDecoration: "none",
-            }}
-          >
-            <span
-              style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                fontWeight: 500,
-                fontSize: "1rem",
-                color: "var(--text-strong)",
-                letterSpacing: "-0.01em",
-              }}
-            >
-              <span style={{ color: "var(--accent)" }}>P.</span>AI
-            </span>
-          </a>
-
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center" style={{ gap: 4 }} aria-label="Main navigation">
-            {navLinks.map(({ href, label }) => (
+        {/* Desktop Nav links */}
+        <nav className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.href.substring(1);
+            return (
               <a
-                key={href}
-                href={href}
-                style={{
-                  position: "relative",
-                  padding: "6px 14px",
-                  borderRadius: 8,
-                  fontSize: "0.875rem",
-                  fontWeight: 500,
-                  color: active === href ? "var(--text-strong)" : "var(--text-muted)",
-                  transition: "color 150ms ease",
-                  textDecoration: "none",
-                }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--text-strong)"; }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.color =
-                    active === href ? "var(--text-strong)" : "var(--text-muted)";
-                }}
+                key={link.href}
+                href={link.href}
+                className={`relative text-xs font-mono tracking-wider transition-colors duration-150 py-1 ${
+                  isActive ? "text-[#ffffff] font-semibold" : "text-[#a1a1aa] hover:text-[#ffffff]"
+                }`}
               >
-                {label}
-                {active === href && (
+                {link.label}
+                {isActive && (
                   <motion.div
-                    layoutId="nav-indicator"
-                    style={{
-                      position: "absolute",
-                      bottom: 2,
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      width: 16,
-                      height: 2,
-                      borderRadius: 1,
-                      background: "var(--accent)",
-                    }}
+                    layoutId="activeUnderline"
+                    className="absolute left-0 right-0 bottom-0 h-[2px] bg-[#ffffff] rounded-full"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
               </a>
-            ))}
-          </nav>
+            );
+          })}
+        </nav>
 
-          {/* Right side */}
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <VisitorCounter />
-            <a
-              href="/Praneeth_Resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden md:inline-flex btn-secondary"
-              style={{ padding: "7px 14px", fontSize: "0.8rem", gap: 6 }}
-            >
-              <FileText size={13} />
-              Resume
-            </a>
-            <a
-              href="#contact"
-              className="hidden md:inline-flex btn-primary"
-              style={{ padding: "7px 16px", fontSize: "0.8rem" }}
-            >
-              Let's talk
-            </a>
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden"
-              style={{
-                padding: "6px 8px",
-                borderRadius: 8,
-                border: "1px solid var(--border)",
-                background: "transparent",
-                color: "var(--text-muted)",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-              }}
-              aria-label="Toggle menu"
-              aria-expanded={isOpen}
-            >
-              {isOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
-          </div>
+        {/* Right Action: Visitor Counter + Resume + CTA */}
+        <div className="hidden md:flex items-center gap-4">
+          <VisitorCounter />
+
+          <a
+            href="/Praneeth_Reddy_AI_Engineer.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-xs font-mono text-[#a1a1aa] hover:text-[#ffffff] transition-colors"
+            title="Download Resume"
+          >
+            <FileText size={14} />
+            <span>CV</span>
+          </a>
+
+          <a
+            href="#contact"
+            className="px-4 py-2 rounded-lg bg-[#ffffff] text-[#000000] font-semibold text-xs hover:bg-[#e4e4e7] transition-all shadow-sm"
+          >
+            Let's talk
+          </a>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <div className="flex md:hidden items-center gap-3">
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 text-[#a1a1aa] hover:text-[#ffffff] focus:outline-none"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile Drawer */}
       <AnimatePresence>
-        {isOpen && (
+        {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            style={{
-              background: "rgba(10,10,15,0.96)",
-              backdropFilter: "blur(20px)",
-              borderTop: "1px solid var(--border)",
-            }}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="md:hidden border-b border-[#27272a] bg-[#0c0c0e] px-6 py-4 space-y-3"
           >
-            <nav className="container" style={{ paddingBlock: 16 }} aria-label="Mobile navigation">
-              <div style={{ paddingBottom: 12, marginBottom: 12, borderBottom: "1px solid var(--border)" }}>
-                <VisitorCounter isMobile />
-              </div>
-              {navLinks.map(({ href, label }) => (
+            <VisitorCounter isMobile />
+
+            <div className="flex flex-col space-y-2 pt-2">
+              {navLinks.map((link) => (
                 <a
-                  key={href}
-                  href={href}
-                  onClick={() => setIsOpen(false)}
-                  style={{
-                    display: "block",
-                    padding: "10px 0",
-                    fontSize: "0.95rem",
-                    fontWeight: 500,
-                    color: "var(--text-muted)",
-                    textDecoration: "none",
-                    borderBottom: "1px solid var(--border)",
-                  }}
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-mono text-[#e4e4e7] hover:text-[#ffffff] py-2 border-b border-[#16161a]"
                 >
-                  {label}
+                  {link.label}
                 </a>
               ))}
-              <div style={{ marginTop: 16, display: "flex", gap: 10 }}>
-                <a href="#contact" className="btn-primary" style={{ flex: 1, justifyContent: "center" }} onClick={() => setIsOpen(false)}>
-                  Let's talk
-                </a>
-                <a
-                  href="/Praneeth_Resume.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-secondary"
-                  style={{ flex: 1, justifyContent: "center", gap: 6 }}
-                >
-                  <FileText size={13} />
-                  Resume
-                </a>
-              </div>
-            </nav>
+            </div>
+
+            <div className="pt-2 flex items-center justify-between gap-3">
+              <a
+                href="/Praneeth_Reddy_AI_Engineer.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-xs font-mono text-[#a1a1aa] hover:text-[#ffffff]"
+              >
+                <FileText size={14} />
+                <span>Resume (PDF)</span>
+              </a>
+
+              <a
+                href="#contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-4 py-2 rounded-lg bg-[#ffffff] text-[#000000] font-semibold text-xs text-center"
+              >
+                Let's talk
+              </a>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
   );
-};
-
-export default Navbar;
+}

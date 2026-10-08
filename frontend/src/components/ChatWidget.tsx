@@ -38,7 +38,7 @@ const renderMessageText = (text: string) => {
           const parts = str.split(/\*\*([^*]+)\*\*/g);
           return parts.map((part, i) => {
             if (i % 2 === 1) {
-              return <strong key={i} className="font-semibold text-[#f8fafc]">{part}</strong>;
+              return <strong key={i} className="font-semibold text-[#ffffff]">{part}</strong>;
             }
             return part;
           });
@@ -63,7 +63,7 @@ const renderMessageText = (text: string) => {
             const contentText = numberMatch[2];
             renderedElements.push(
               <div key={`num-${lineIdx}`} className="flex gap-2 my-1 pl-1 leading-relaxed">
-                <span className="font-semibold text-[#06b6d4] font-mono">{line.match(/^\s*(\d+\.)/)?.[1]}</span>
+                <span className="font-semibold text-[#ffffff] font-mono">{line.match(/^\s*(\d+\.)/)?.[1]}</span>
                 <span className="flex-1">{formatInline(contentText)}</span>
               </div>
             );
@@ -193,11 +193,11 @@ const ChatWidget = () => {
             animate={{ opacity: 1, scale: 1, x: 0 }}
             exit={{ opacity: 0, scale: 0.9, x: 20 }}
             transition={{ delay: 1, duration: 0.3 }}
-            className="fixed bottom-6 right-24 mr-2 z-50 flex items-center gap-2.5 max-w-[calc(100vw-8rem)] sm:max-w-[280px] bg-[#12121a]/95 backdrop-blur-md border border-[#1e293b] shadow-xl p-3 rounded-xl text-xs text-[#cbd5e1] cursor-pointer hover:bg-[#181824] transition-colors group/bubble"
+            className="fixed bottom-6 right-24 mr-2 z-50 flex items-center gap-2.5 max-w-[calc(100vw-8rem)] sm:max-w-[280px] bg-[#0c0c0e]/95 backdrop-blur-md border border-[#27272a] shadow-xl p-3 rounded-xl text-xs text-[#e4e4e7] cursor-pointer hover:bg-[#16161a] transition-colors group/bubble"
             onClick={() => setIsOpen(true)}
           >
             <div className="flex-1 pr-1 leading-relaxed select-none">
-              <span className="font-mono text-[#06b6d4] font-medium">Assistant: </span>
+              <span className="font-mono text-[#ffffff] font-semibold">Assistant: </span>
               Ask about my work & RAG projects!
             </div>
             <button
@@ -205,12 +205,12 @@ const ChatWidget = () => {
                 e.stopPropagation();
                 setShowGreeting(false);
               }}
-              className="p-1 rounded text-[#94a3b8] hover:text-[#f8fafc] hover:bg-[#181824] transition-colors self-start -mt-0.5 -mr-1"
+              className="p-1 rounded text-[#a1a1aa] hover:text-[#ffffff] hover:bg-[#16161a] transition-colors self-start -mt-0.5 -mr-1"
               title="Dismiss"
             >
               <X size={12} />
             </button>
-            <div className="absolute right-[-5px] bottom-4 w-2.5 h-2.5 rotate-45 bg-[#12121a] border-r border-t border-[#1e293b] group-hover/bubble:bg-[#181824] transition-colors" />
+            <div className="absolute right-[-5px] bottom-4 w-2.5 h-2.5 rotate-45 bg-[#0c0c0e] border-r border-t border-[#27272a] group-hover/bubble:bg-[#16161a] transition-colors" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -222,11 +222,11 @@ const ChatWidget = () => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-full bg-[#06b6d4] text-[#040810] font-medium text-xs tracking-wide shadow-lg hover:bg-[#22d3ee] transition-all flex items-center gap-2 group border border-[#06b6d4]/40"
+        className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-full bg-[#ffffff] text-[#000000] font-semibold text-xs tracking-wide shadow-xl hover:bg-[#e4e4e7] transition-all flex items-center gap-2 group border border-[#ffffff]/30"
         aria-label="Ask about my work"
       >
-        <Bot size={18} className="text-[#040810] group-hover:rotate-12 transition-transform" />
-        <span className="font-mono font-semibold">Ask about my work</span>
+        <Bot size={18} className="text-[#000000] group-hover:rotate-12 transition-transform" />
+        <span className="font-mono font-bold">Ask about my work</span>
         <span className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse" />
       </motion.button>
 
@@ -238,34 +238,34 @@ const ChatWidget = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 15, scale: 0.96 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-24 top-20 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[420px] max-h-[calc(100vh-8rem)] flex flex-col rounded-xl border border-[#1e293b] shadow-2xl overflow-hidden bg-[#0a0a0f]"
+            className="fixed bottom-24 top-20 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[420px] max-h-[calc(100vh-8rem)] flex flex-col rounded-xl border border-[#27272a] shadow-2xl overflow-hidden bg-[#000000]"
           >
             {/* Header */}
-            <div className="px-4 py-3.5 bg-[#12121a] border-b border-[#1e293b] flex items-center justify-between">
+            <div className="px-4 py-3.5 bg-[#0c0c0e] border-b border-[#27272a] flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="p-1.5 rounded-lg bg-[#06b6d4]/12 text-[#06b6d4]">
+                <div className="p-1.5 rounded-lg bg-[#ffffff] text-[#000000]">
                   <Bot size={18} />
                 </div>
                 <div>
-                  <h3 className="font-sans font-semibold text-sm text-[#f8fafc] flex items-center gap-1.5">
+                  <h3 className="font-sans font-semibold text-sm text-[#ffffff] flex items-center gap-1.5">
                     Portfolio Assistant
-                    <Sparkles size={13} className="text-[#06b6d4]" />
+                    <Sparkles size={13} className="text-[#a1a1aa]" />
                   </h3>
-                  <p className="text-[11px] font-mono text-[#94a3b8]">Powered by RAG & LangChain</p>
+                  <p className="text-[11px] font-mono text-[#a1a1aa]">Powered by RAG & LangChain</p>
                 </div>
               </div>
               <div className="flex items-center gap-1">
                 <button
                   onClick={clearChat}
                   title="Clear chat"
-                  className="p-1.5 rounded-lg text-[#94a3b8] hover:text-[#f8fafc] hover:bg-[#181824] transition-colors"
+                  className="p-1.5 rounded-lg text-[#a1a1aa] hover:text-[#ffffff] hover:bg-[#16161a] transition-colors"
                 >
                   <RefreshCw size={14} />
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
                   title="Close"
-                  className="p-1.5 rounded-lg text-[#94a3b8] hover:text-[#f8fafc] hover:bg-[#181824] transition-colors"
+                  className="p-1.5 rounded-lg text-[#a1a1aa] hover:text-[#ffffff] hover:bg-[#16161a] transition-colors"
                 >
                   <X size={16} />
                 </button>
@@ -280,7 +280,7 @@ const ChatWidget = () => {
                   className={`flex gap-2.5 ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
                 >
                   {msg.sender === "assistant" && (
-                    <div className="w-7 h-7 rounded-lg bg-[#06b6d4]/12 text-[#06b6d4] flex items-center justify-center flex-shrink-0 mt-0.5 border border-[#06b6d4]/20">
+                    <div className="w-7 h-7 rounded-lg bg-[#16161a] text-[#ffffff] flex items-center justify-center flex-shrink-0 mt-0.5 border border-[#27272a]">
                       <Bot size={14} />
                     </div>
                   )}
@@ -289,8 +289,8 @@ const ChatWidget = () => {
                     <div
                       className={`p-3 rounded-xl leading-relaxed ${
                         msg.sender === "user"
-                          ? "bg-[#06b6d4] text-[#040810] font-medium"
-                          : "bg-[#12121a] text-[#cbd5e1] border border-[#1e293b]"
+                          ? "bg-[#ffffff] text-[#000000] font-semibold"
+                          : "bg-[#0c0c0e] text-[#e4e4e7] border border-[#27272a]"
                       }`}
                     >
                       {msg.sender === "user" ? (
@@ -301,13 +301,13 @@ const ChatWidget = () => {
                         msg.isStreaming ? "Retrieving contextual answer..." : ""
                       )}
                       {msg.isStreaming && (
-                        <span className="inline-block w-1.5 h-3 ml-1 bg-[#06b6d4] animate-pulse align-middle" />
+                        <span className="inline-block w-1.5 h-3 ml-1 bg-[#ffffff] animate-pulse align-middle" />
                       )}
                     </div>
                   </div>
 
                   {msg.sender === "user" && (
-                    <div className="w-7 h-7 rounded-lg bg-[#3b82f6]/15 text-[#3b82f6] flex items-center justify-center flex-shrink-0 mt-0.5 border border-[#3b82f6]/20">
+                    <div className="w-7 h-7 rounded-lg bg-[#16161a] text-[#ffffff] flex items-center justify-center flex-shrink-0 mt-0.5 border border-[#27272a]">
                       <User size={14} />
                     </div>
                   )}
@@ -322,7 +322,7 @@ const ChatWidget = () => {
                 e.preventDefault();
                 handleSend();
               }}
-              className="p-3 border-t border-[#1e293b] bg-[#12121a] flex items-center gap-2"
+              className="p-3 border-t border-[#27272a] bg-[#0c0c0e] flex items-center gap-2"
             >
               <input
                 type="text"
@@ -330,12 +330,12 @@ const ChatWidget = () => {
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask about NaukriBot, DRDO, or AI Agents..."
                 disabled={isGenerating}
-                className="flex-1 px-3.5 py-2 rounded-lg bg-[#0a0a0f] border border-[#1e293b] focus:border-[#06b6d4] outline-none text-xs text-[#f8fafc] placeholder:text-[#94a3b8] font-sans transition-all"
+                className="flex-1 px-3.5 py-2 rounded-lg bg-[#000000] border border-[#27272a] focus:border-[#ffffff] outline-none text-xs text-[#ffffff] placeholder:text-[#a1a1aa] font-sans transition-all"
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isGenerating}
-                className="p-2 rounded-lg bg-[#06b6d4] text-[#040810] hover:bg-[#22d3ee] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                className="p-2 rounded-lg bg-[#ffffff] text-[#000000] hover:bg-[#e4e4e7] disabled:opacity-40 disabled:cursor-not-allowed transition-all font-semibold"
               >
                 <Send size={14} />
               </button>

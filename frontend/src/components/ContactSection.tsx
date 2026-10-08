@@ -1,6 +1,19 @@
-import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Linkedin, Briefcase, Send } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Send } from "lucide-react";
+
+/* ── Concentric signal rings per design.md §6 ── */
+function ConcentricSignalRings() {
+  return (
+    <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-15 overflow-hidden">
+      <svg className="w-[600px] h-[600px]" viewBox="0 0 600 600" fill="none">
+        <circle cx="300" cy="300" r="100" stroke="#52525b" strokeWidth="1" strokeDasharray="4 4" />
+        <circle cx="300" cy="300" r="180" stroke="#3f3f46" strokeWidth="1" />
+        <circle cx="300" cy="300" r="260" stroke="#27272a" strokeWidth="1" strokeDasharray="6 6" />
+        <circle cx="300" cy="300" r="340" stroke="#27272a" strokeWidth="1" />
+      </svg>
+    </div>
+  );
+}
 
 const contactItems = [
   {
@@ -12,14 +25,8 @@ const contactItems = [
   {
     icon: Phone,
     label: "Phone",
-    value: "+91 8179141580",
-    href: "tel:+918179141580",
-  },
-  {
-    icon: MapPin,
-    label: "Location",
-    value: "Hyderabad, India",
-    href: "#",
+    value: "+91 80963 80608",
+    href: "tel:+918096380608",
   },
   {
     icon: Linkedin,
@@ -28,242 +35,156 @@ const contactItems = [
     href: "https://www.linkedin.com/in/praneeth-reddy-ankey",
   },
   {
-    icon: Briefcase,
-    label: "Naukri",
-    value: "View Naukri Profile",
-    href: "https://www.naukri.com/mnjuser/profile?id=&altresid",
+    icon: MapPin,
+    label: "Location",
+    value: "Hyderabad, Telangana, India",
   },
 ];
 
-/* ── Concentric signal rings background ── */
-function SignalRings() {
+export default function ContactSection() {
   return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%,-50%)",
-        pointerEvents: "none",
-        zIndex: 0,
-      }}
-    >
-      {[1, 2, 3, 4].map((n) => (
-        <div
-          key={n}
-          style={{
-            position: "absolute",
-            borderRadius: "50%",
-            border: "1px solid rgba(6,182,212,0.15)",
-            width: n * 160,
-            height: n * 160,
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%,-50%)",
-            animation: `signal-ring-pulse ${2 + n * 0.8}s ease-out infinite`,
-            animationDelay: `${n * 0.5}s`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
+    <section id="contact" className="relative py-24 bg-[#000000] text-[#e4e4e7] overflow-hidden">
+      <ConcentricSignalRings />
 
-const ContactSection = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
-      { threshold: 0.1 }
-    );
-    const reveals = sectionRef.current?.querySelectorAll(".reveal") ?? [];
-    reveals.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
-
-  return (
-    <section
-      id="contact"
-      ref={sectionRef}
-      className="section-padding"
-      style={{ background: "var(--bg)", position: "relative", overflow: "hidden" }}
-    >
-      <SignalRings />
-
-      <div className="container" style={{ position: "relative", zIndex: 1, maxWidth: 800 }}>
-
-        {/* Header */}
-        <div className="reveal" style={{ marginBottom: "3rem", textAlign: "center" }}>
-          <p className="section-label mb-3" style={{ justifyContent: "center" }}>Contact</p>
-          <h2
-            style={{
-              fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
-              fontWeight: 600,
-              color: "var(--text-strong)",
-              letterSpacing: "-0.01em",
-              marginBottom: "0.75rem",
-            }}
-          >
-            Have a complex problem?{" "}
-            <span className="gradient-text">Let's build the intelligence to solve it.</span>
+      <div className="container relative z-10 mx-auto px-6">
+        
+        {/* Section Header with design.md §9 Headline */}
+        <div className="space-y-3 mb-16 text-center max-w-3xl mx-auto">
+          <span className="eyebrow text-[#a1a1aa]">CONTACT</span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#ffffff] tracking-tight">
+            Have a complex problem? Let's build the intelligence to solve it.
           </h2>
-          <p style={{ color: "var(--text-muted)", fontSize: "0.95rem", maxWidth: "36rem", margin: "0 auto" }}>
-            Open to full-time opportunities, freelance projects, and collaboration.
-            I typically respond within 24 hours.
+          <p className="text-[#a1a1aa] text-base font-normal pt-2">
+            Open for AI engineering projects, multi-agent system deployment, and enterprise RAG architecture consultation.
           </p>
         </div>
 
-        {/* Contact cards */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 320px), 1fr))",
-            gap: 12,
-          }}
-        >
-          {contactItems.map(({ icon: Icon, label, value, href }, i) => (
-            <motion.a
-              key={label}
-              id={`contact-${label.toLowerCase()}`}
-              href={href}
-              target={href.startsWith("http") ? "_blank" : undefined}
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.09, duration: 0.5 }}
-              whileHover={{ y: -4 }}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 14,
-                background: "var(--surface)",
-                border: "1px solid var(--border)",
-                borderRadius: "var(--radius-card)",
-                padding: "1rem 1.25rem",
-                textDecoration: "none",
-                transition: "border-color 150ms ease, background 150ms ease",
-                cursor: "pointer",
-                position: "relative",
-                overflow: "hidden",
-              }}
-              onHoverStart={(e) => {
-                const el = e.target as HTMLElement;
-                const card = el.closest("a") as HTMLElement;
-                if (card) {
-                  card.style.borderColor = "rgba(6,182,212,0.4)";
-                  card.style.background = "var(--surface-2)";
-                }
-              }}
-              onHoverEnd={(e) => {
-                const el = e.target as HTMLElement;
-                const card = el.closest("a") as HTMLElement;
-                if (card) {
-                  card.style.borderColor = "var(--border)";
-                  card.style.background = "var(--surface)";
-                }
-              }}
-            >
-              {/* Left accent bar */}
-              <div
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  bottom: 0,
-                  width: 2,
-                  background: "linear-gradient(180deg, var(--accent), var(--accent-2))",
-                  borderRadius: "var(--radius-card) 0 0 var(--radius-card)",
-                }}
-              />
-
-              <div
-                style={{
-                  width: 38,
-                  height: 38,
-                  borderRadius: 8,
-                  background: "rgba(6,182,212,0.08)",
-                  border: "1px solid rgba(6,182,212,0.2)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                }}
-              >
-                <Icon size={17} style={{ color: "var(--accent)" }} />
-              </div>
-
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <p
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: "0.68rem",
-                    color: "var(--text-muted)",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1em",
-                    marginBottom: 2,
-                  }}
-                >
-                  {label}
-                </p>
-                <p
-                  style={{
-                    color: "var(--text)",
-                    fontSize: "0.875rem",
-                    fontWeight: 500,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {value}
-                </p>
-              </div>
-
-              <Send size={13} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
-            </motion.a>
-          ))}
-        </div>
-
-        {/* Availability status */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-          style={{ marginTop: "2.5rem", display: "flex", justifyContent: "center" }}
-        >
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "9px 22px",
-              borderRadius: 999,
-              background: "rgba(16,185,129,0.06)",
-              border: "1px solid rgba(16,185,129,0.25)",
-            }}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          {/* Contact Details List (5 cols) */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="lg:col-span-5 space-y-4"
           >
-            <span
-              className="animate-pulse-glow"
-              style={{
-                width: 7,
-                height: 7,
-                borderRadius: "50%",
-                background: "var(--success)",
-                flexShrink: 0,
-              }}
-            />
-            <span style={{ color: "#6ee7b7", fontWeight: 500, fontSize: "0.875rem" }}>
-              Available for new opportunities
-            </span>
-          </div>
-        </motion.div>
+            {contactItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={item.label}
+                  className="card-silver flex items-center gap-4 p-4 hover:border-[#3f3f46]"
+                >
+                  <div className="p-3 rounded-lg bg-[#16161a] border border-[#27272a] text-[#ffffff]">
+                    <Icon size={18} />
+                  </div>
+                  <div className="overflow-hidden">
+                    <div className="text-[11px] font-mono text-[#a1a1aa] uppercase tracking-wider">
+                      {item.label}
+                    </div>
+                    {item.href ? (
+                      <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm font-medium text-[#ffffff] hover:underline truncate block"
+                      >
+                        {item.value}
+                      </a>
+                    ) : (
+                      <div className="text-sm font-medium text-[#ffffff] truncate">
+                        {item.value}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </motion.div>
+
+          {/* Quick Direct Message Form (7 cols) */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="lg:col-span-7 p-6 sm:p-8 rounded-xl bg-[#0c0c0e] border border-[#27272a]"
+          >
+            <h3 className="text-xl font-bold text-[#ffffff] mb-6">
+              Send a message directly
+            </h3>
+
+            <form
+              action="https://formspree.io/f/xbjnqpyz"
+              method="POST"
+              className="space-y-4"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-mono text-[#a1a1aa] uppercase mb-1.5">
+                    Your Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    required
+                    placeholder="Enter your name"
+                    className="w-full px-4 py-2.5 rounded-lg bg-[#000000] border border-[#27272a] focus:border-[#ffffff] outline-none text-sm text-[#ffffff] placeholder:text-[#a1a1aa] font-sans transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono text-[#a1a1aa] uppercase mb-1.5">
+                    Your Email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    placeholder="name@company.com"
+                    className="w-full px-4 py-2.5 rounded-lg bg-[#000000] border border-[#27272a] focus:border-[#ffffff] outline-none text-sm text-[#ffffff] placeholder:text-[#a1a1aa] font-sans transition-all"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono text-[#a1a1aa] uppercase mb-1.5">
+                  Subject / Project Scope
+                </label>
+                <input
+                  type="text"
+                  name="subject"
+                  placeholder="e.g. Multi-Agent RAG System"
+                  className="w-full px-4 py-2.5 rounded-lg bg-[#000000] border border-[#27272a] focus:border-[#ffffff] outline-none text-sm text-[#ffffff] placeholder:text-[#a1a1aa] font-sans transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono text-[#a1a1aa] uppercase mb-1.5">
+                  Message Details
+                </label>
+                <textarea
+                  name="message"
+                  rows={4}
+                  required
+                  placeholder="Describe your AI architecture requirements..."
+                  className="w-full px-4 py-2.5 rounded-lg bg-[#000000] border border-[#27272a] focus:border-[#ffffff] outline-none text-sm text-[#ffffff] placeholder:text-[#a1a1aa] font-sans transition-all resize-none"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full btn-primary justify-center py-3 text-sm font-semibold"
+              >
+                <Send size={16} />
+                <span>Send Message</span>
+              </button>
+            </form>
+          </motion.div>
+
+        </div>
       </div>
     </section>
   );
-};
-
-export default ContactSection;
+}

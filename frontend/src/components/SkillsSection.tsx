@@ -1,160 +1,110 @@
-import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
-/* ── Skill groups (design.md §7) ── */
+/* ── Skill groups per design.md §7 ── */
 const skillGroups = [
   {
-    label: "AI & ML",
+    label: "AI & Machine Learning",
     skills: [
       "Generative AI",
-      "LLMs",
-      "RAG",
-      "AI Agents",
-      "Agent Orchestration",
-      "Vector Search · FAISS",
-      "ChromaDB",
-      "SentenceTransformers",
-      "spaCy",
-      "Prompt Engineering",
+      "LLMs & Prompt Engineering",
+      "Agent Frameworks (LangChain / LlamaIndex / CrewAI)",
+      "RAG Architecture & Hybrid Search",
+      "Multi-Agent Orchestration",
+      "SentenceTransformers & Embeddings",
     ],
   },
   {
-    label: "Backend",
-    skills: ["Python", "FastAPI", "Node.js", "REST APIs", "WebSockets"],
-  },
-  {
-    label: "Frontend",
+    label: "Vector & Databases",
     skills: [
-      "React.js",
-      "TypeScript",
-      "JavaScript",
-      "HTML5",
-      "CSS3",
-      "Vite",
-      "Responsive Design",
-      "Data Visualisation",
+      "FAISS",
+      "Qdrant",
+      "ChromaDB",
+      "PostgreSQL",
+      "Vector Similarity Indexing",
+      "SQL Optimization",
     ],
   },
   {
-    label: "Database",
-    skills: ["PostgreSQL", "MySQL", "SQL", "ChromaDB"],
+    label: "Backend & Systems",
+    skills: [
+      "Python (FastAPI / Flask)",
+      "C++",
+      "Node.js",
+      "RESTful API Design",
+      "Async IO & Concurrency",
+      "Microservices Architecture",
+    ],
   },
   {
-    label: "Languages",
-    skills: ["Python", "TypeScript", "JavaScript", "Java", "C", "C++"],
+    label: "Automation & Browser",
+    skills: [
+      "Playwright (Python / JS)",
+      "Persistent Browser Sessions",
+      "Anti-Detection Scrapers",
+      "Telegram Bot API",
+      "Task Queue Pipelines",
+    ],
   },
   {
-    label: "Tools & DevOps",
-    skills: ["Git", "Docker", "VS Code", "Postman", "Playwright", "FFmpeg", "Claude Code"],
+    label: "Frontend & UI",
+    skills: [
+      "React.js & Next.js",
+      "TypeScript & JavaScript",
+      "TailwindCSS & CSS Systems",
+      "Three.js & Canvas WebGL",
+      "Framer Motion",
+    ],
+  },
+  {
+    label: "DevOps & Tools",
+    skills: [
+      "Git & GitHub Actions",
+      "Docker & Containers",
+      "Vercel & Cloud Deployment",
+      "Postman",
+      "Linux / Bash",
+    ],
   },
 ];
 
-const SkillsSection = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
-      { threshold: 0.1 }
-    );
-    const reveals = sectionRef.current?.querySelectorAll(".reveal") ?? [];
-    reveals.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
-
+export default function SkillsSection() {
   return (
-    <section
-      id="skills"
-      ref={sectionRef}
-      className="section-padding"
-      style={{ background: "var(--bg)", position: "relative", overflow: "hidden" }}
-    >
-      {/* Faint dot grid */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage:
-            "radial-gradient(circle, rgba(6,182,212,0.08) 1px, transparent 1px)",
-          backgroundSize: "36px 36px",
-          pointerEvents: "none",
-        }}
-      />
-
-      <div className="container" style={{ position: "relative", zIndex: 1 }}>
-        <div className="reveal" style={{ marginBottom: "3rem" }}>
-          <p className="section-label mb-3">Skills</p>
-          <h2
-            style={{
-              fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
-              fontWeight: 600,
-              color: "var(--text-strong)",
-              letterSpacing: "-0.01em",
-            }}
-          >
-            Tech stack
+    <section id="skills" className="relative py-24 bg-[#000000] text-[#e4e4e7]">
+      <div className="container mx-auto px-6">
+        
+        {/* Section Header */}
+        <div className="space-y-3 mb-16">
+          <span className="eyebrow text-[#a1a1aa]">SKILLS</span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#ffffff] tracking-tight">
+            Technical Stack & Engineering Expertise.
           </h2>
+          <p className="text-[#a1a1aa] text-base max-w-2xl font-normal">
+            Clustered by domain strength, ordered by production experience.
+          </p>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 320px), 1fr))",
-            gap: 20,
-          }}
-        >
-          {skillGroups.map(({ label, skills }, i) => (
+        {/* Skill Groups Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {skillGroups.map((group, groupIdx) => (
             <motion.div
-              key={label}
+              key={group.label}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.07, duration: 0.5 }}
-              style={{
-                background: "var(--surface)",
-                border: "1px solid var(--border)",
-                borderRadius: "var(--radius-card)",
-                padding: "var(--pad-card)",
-                transition: "border-color 150ms ease, background 150ms ease",
-              }}
-              onHoverStart={(e) => {
-                const el = e.target as HTMLElement;
-                const card = el.closest("[data-skill-card]") as HTMLElement;
-                if (card) {
-                  card.style.borderColor = "rgba(6,182,212,0.4)";
-                  card.style.background = "var(--surface-2)";
-                }
-              }}
-              onHoverEnd={(e) => {
-                const el = e.target as HTMLElement;
-                const card = el.closest("[data-skill-card]") as HTMLElement;
-                if (card) {
-                  card.style.borderColor = "var(--border)";
-                  card.style.background = "var(--surface)";
-                }
-              }}
-              data-skill-card=""
+              transition={{ duration: 0.4, delay: groupIdx * 0.08 }}
+              className="p-6 rounded-xl bg-[#0c0c0e] border border-[#27272a] hover:border-[#3f3f46] transition-all"
             >
-              {/* Group label */}
-              <p
-                style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: "0.72rem",
-                  fontWeight: 500,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.12em",
-                  color: "var(--accent)",
-                  marginBottom: 14,
-                }}
-              >
-                {label}
-              </p>
+              <h3 className="font-mono text-xs uppercase tracking-widest text-[#ffffff] font-bold mb-4 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ffffff]" />
+                {group.label}
+              </h3>
 
-              {/* Chips */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
-                {skills.map((skill) => (
-                  <span key={skill} className="chip">
+              <div className="flex flex-wrap gap-2">
+                {group.skills.map((skill) => (
+                  <span
+                    key={skill}
+                    className="skill-chip"
+                  >
                     {skill}
                   </span>
                 ))}
@@ -165,6 +115,4 @@ const SkillsSection = () => {
       </div>
     </section>
   );
-};
-
-export default SkillsSection;
+}

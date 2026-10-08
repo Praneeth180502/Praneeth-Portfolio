@@ -3,8 +3,8 @@ import { motion } from "framer-motion";
 import { ArrowDown, Github, Linkedin, Mail, Download, Eye } from "lucide-react";
 import praneethPhoto from "@/assets/Photo.png";
 
-/* ── Node-graph canvas background ── */
-function NodeGraph() {
+/* ── Node-graph canvas background (White & Silver) ── */
+function NodeGraphCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -14,392 +14,291 @@ function NodeGraph() {
     if (!ctx) return;
 
     let animId: number;
-    let w = 0, h = 0;
+    let width = (canvas.width = canvas.offsetWidth);
+    let height = (canvas.height = canvas.offsetHeight);
 
-    const isMobile = () => window.innerWidth < 768;
-    const NODE_COUNT = () => (isMobile() ? 25 : 60);
+    const isMobile = window.innerWidth < 768;
+    const nodeCount = isMobile ? 25 : 60;
 
-    type Node = { x: number; y: number; vx: number; vy: number; r: number };
-    let nodes: Node[] = [];
+    // Nodes with white and silver tones
+    const nodes = Array.from({ length: nodeCount }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.45,
+      vy: (Math.random() - 0.5) * 0.45,
+      radius: Math.random() * 2 + 1.2,
+      isSilver: Math.random() > 0.4,
+    }));
 
-    const resize = () => {
-      w = canvas.width = canvas.offsetWidth;
-      h = canvas.height = canvas.offsetHeight;
-      const n = NODE_COUNT();
-      nodes = Array.from({ length: n }, () => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        r: Math.random() * 1.5 + 1,
-      }));
-    };
+    let mouseX = -9999;
+    let mouseY = -9999;
 
-    const LINK_DIST = 140;
-    const CURSOR_DIST = 120;
-    let mx = -999, my = -999;
-
-    const onMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      mx = e.clientX - rect.left;
-      my = e.clientY - rect.top;
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
     };
 
-    const draw = () => {
-      if (document.hidden) { animId = requestAnimationFrame(draw); return; }
-      ctx.clearRect(0, 0, w, h);
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = canvas.offsetWidth;
+      height = canvas.height = canvas.offsetHeight;
+    };
 
-      // Blue radial glow behind center-left (behind headline)
-      const grd = ctx.createRadialGradient(w * 0.3, h * 0.5, 0, w * 0.3, h * 0.5, w * 0.55);
-      grd.addColorStop(0, "rgba(59,130,246,0.08)");
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("resize", handleResize);
+
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      // Radial spotlight glow behind headline
+      const grd = ctx.createRadialGradient(
+        width * 0.4, height * 0.4, 10,
+        width * 0.4, height * 0.4, width * 0.5
+      );
+      grd.addColorStop(0, "rgba(255, 255, 255, 0.05)");
+      grd.addColorStop(0.6, "rgba(161, 161, 170, 0.02)");
       grd.addColorStop(1, "transparent");
       ctx.fillStyle = grd;
-      ctx.fillRect(0, 0, w, h);
+      ctx.fillRect(0, 0, width, height);
 
-      // Update nodes
-      for (const n of nodes) {
+      // Update positions
+      for (let i = 0; i < nodes.length; i++) {
+        const n = nodes[i];
         n.x += n.vx;
         n.y += n.vy;
-        if (n.x < 0 || n.x > w) n.vx *= -1;
-        if (n.y < 0 || n.y > h) n.vy *= -1;
-      }
+        if (n.x < 0 || n.x > width) n.vx *= -1;
+        if (n.y < 0 || n.y > height) n.vy *= -1;
 
-      // Draw edges between nearby nodes
-      for (let i = 0; i < nodes.length; i++) {
+        // Draw connections
         for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].x - nodes[j].x;
-          const dy = nodes[i].y - nodes[j].y;
-          const dist = Math.hypot(dx, dy);
-          if (dist < LINK_DIST) {
-            const alpha = (1 - dist / LINK_DIST) * 0.18;
-            ctx.strokeStyle = `rgba(6,182,212,${alpha})`;
-            ctx.lineWidth = 0.6;
+          const n2 = nodes[j];
+          const dx = n.x - n2.x;
+          const dy = n.y - n2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 130) {
+            const alpha = (1 - dist / 130) * 0.22;
+            ctx.strokeStyle = `rgba(228, 228, 231, ${alpha})`;
+            ctx.lineWidth = 0.75;
             ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.moveTo(n.x, n.y);
+            ctx.lineTo(n2.x, n2.y);
             ctx.stroke();
           }
         }
-        // Cursor connections
-        const cdx = nodes[i].x - mx;
-        const cdy = nodes[i].y - my;
-        const cd = Math.hypot(cdx, cdy);
-        if (cd < CURSOR_DIST) {
-          const alpha = (1 - cd / CURSOR_DIST) * 0.4;
-          ctx.strokeStyle = `rgba(59,130,246,${alpha})`;
-          ctx.lineWidth = 0.8;
+
+        // Connect to mouse cursor
+        const mdx = n.x - mouseX;
+        const mdy = n.y - mouseY;
+        const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+        if (mdist < 160) {
+          const alpha = (1 - mdist / 160) * 0.45;
+          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+          ctx.lineWidth = 1;
           ctx.beginPath();
-          ctx.moveTo(nodes[i].x, nodes[i].y);
-          ctx.lineTo(mx, my);
+          ctx.moveTo(n.x, n.y);
+          ctx.lineTo(mouseX, mouseY);
           ctx.stroke();
         }
-      }
 
-      // Draw nodes
-      for (const n of nodes) {
+        // Draw Node
+        ctx.fillStyle = n.isSilver ? "rgba(255, 255, 255, 0.85)" : "rgba(161, 161, 170, 0.6)";
         ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(6,182,212,0.7)";
+        ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      animId = requestAnimationFrame(draw);
+      animId = requestAnimationFrame(render);
     };
 
-    resize();
-    window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", onMouseMove);
-    draw();
+    render();
 
     return () => {
       cancelAnimationFrame(animId);
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-      }}
-      aria-hidden="true"
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ opacity: 0.85 }}
     />
   );
 }
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.1 } },
-};
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
-};
-
-const HeroSection = () => {
+export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center overflow-hidden"
-      style={{ background: "var(--bg)" }}
+      className="relative min-h-screen flex items-center justify-center pt-24 pb-16 bg-[#000000] text-[#e4e4e7] overflow-hidden"
     >
-      <NodeGraph />
+      <NodeGraphCanvas />
 
-      {/* Dark gradient so text always reads over canvas */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            "radial-gradient(ellipse 60% 70% at 20% 50%, rgba(10,10,15,0.92) 0%, rgba(10,10,15,0.5) 60%, transparent 100%)",
-          pointerEvents: "none",
-        }}
-      />
+      {/* Ambient top light */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-b from-white/[0.04] to-transparent rounded-full blur-3xl pointer-events-none" />
 
-      <div className="container relative z-10 pt-24 lg:pt-0">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-
-          {/* ── Left: Text ── */}
+      <div className="container relative z-10 mx-auto px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          
+          {/* Headline & Value Statement (8 cols desktop) */}
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="lg:col-span-7 space-y-6 text-left"
           >
-            {/* Eyebrow */}
-            <motion.p variants={itemVariants} className="eyebrow mb-6">
-              Associate AI Engineer · Digimaxx AI Solutions
-            </motion.p>
+            {/* Eyebrow Label */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0c0c0e] border border-[#27272a]">
+              <span className="w-2 h-2 rounded-full bg-[#ffffff] animate-pulse" />
+              <span className="eyebrow text-[#a1a1aa] tracking-widest text-[11px]">
+                ASSOCIATE AI ENGINEER · DIGIMAXX
+              </span>
+            </div>
 
-            {/* H1 */}
-            <motion.h1
-              variants={itemVariants}
-              style={{
-                fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
-                fontWeight: 600,
-                letterSpacing: "-0.02em",
-                lineHeight: 1.1,
-                color: "var(--text-strong)",
-                marginBottom: "1.25rem",
-              }}
-            >
-              Praneeth.{" "}
-              <span className="gradient-text">AI Engineer</span>
-            </motion.h1>
+            {/* H1 Headline per design.md §9 */}
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#ffffff] leading-[1.1] tracking-tight">
+              Praneeth Reddy Ankey.
+              <span className="block mt-2 text-[#a1a1aa] font-semibold text-3xl sm:text-4xl lg:text-5xl">
+                Building the orchestration layer behind production AI.
+              </span>
+            </h1>
 
-            {/* Tagline — from design.md §9 */}
-            <motion.p
-              variants={itemVariants}
-              style={{
-                fontSize: "1rem",
-                lineHeight: 1.7,
-                color: "var(--text)",
-                maxWidth: "38rem",
-                marginBottom: "2rem",
-              }}
-            >
-              Building the{" "}
-              <strong style={{ color: "var(--accent)", fontWeight: 600 }}>
-                orchestration layer
-              </strong>{" "}
-              behind production AI. Agents, RAG pipelines, and workflows —
-              coordinated into{" "}
-              <strong style={{ color: "var(--accent-2)", fontWeight: 600 }}>
-                reliable, scalable systems
-              </strong>.
-            </motion.p>
+            {/* Sub-headline per design.md §9 */}
+            <p className="text-base sm:text-lg text-[#e4e4e7] max-w-2xl font-normal leading-relaxed">
+              Autonomous agents, RAG pipelines, and intelligent workflows, coordinated into reliable, enterprise-ready software systems.
+            </p>
 
-            {/* CTA Buttons */}
-            <motion.div variants={itemVariants} style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: 32 }}>
+            {/* Key Capability Chips */}
+            <div className="flex flex-wrap gap-2 pt-1 font-mono text-xs text-[#a1a1aa]">
+              {["LangChain & LlamaIndex", "Multi-Agent Swarms", "Hybrid RAG + Vector DBs", "FastAPI & Python", "React / Next.js"].map((tag) => (
+                <span key={tag} className="px-2.5 py-1 rounded-md bg-[#0c0c0e] border border-[#27272a] text-[#e4e4e7]">
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            {/* CTAs per design.md §7 */}
+            <div className="flex flex-wrap items-center gap-4 pt-4">
               <a href="#projects" className="btn-primary">
-                View Projects
+                <Eye size={16} />
+                <span>View projects</span>
               </a>
+
               <a href="#contact" className="btn-secondary">
-                Let's talk
+                <Mail size={16} />
+                <span>Contact me</span>
               </a>
+
               <a
-                href="/Praneeth_Resume.pdf"
+                href="/Praneeth_Reddy_AI_Engineer.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-secondary"
-                style={{ gap: 6 }}
+                className="inline-flex items-center gap-2 text-xs font-mono text-[#a1a1aa] hover:text-[#ffffff] transition-colors pl-2"
               >
-                <Eye size={15} />
-                Resume
+                <Download size={14} />
+                <span>Resume (PDF)</span>
+              </a>
+            </div>
+
+            {/* Social Links */}
+            <div className="flex items-center gap-4 pt-2">
+              <span className="text-xs font-mono text-[#a1a1aa]">CONNECT:</span>
+              <a
+                href="https://github.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#a1a1aa] hover:text-[#ffffff] transition-colors"
+                aria-label="GitHub"
+              >
+                <Github size={18} />
               </a>
               <a
-                href="/Praneeth_Resume.pdf"
-                download
-                title="Download Resume PDF"
-                className="btn-secondary"
-                style={{ padding: "12px 14px" }}
+                href="https://www.linkedin.com/in/praneeth-reddy-ankey"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#a1a1aa] hover:text-[#ffffff] transition-colors"
+                aria-label="LinkedIn"
               >
-                <Download size={15} />
+                <Linkedin size={18} />
               </a>
-            </motion.div>
-
-            {/* Social icons */}
-            <motion.div variants={itemVariants} style={{ display: "flex", gap: 12 }}>
-              {[
-                { icon: Github, href: "https://github.com/Praneeth180502", label: "GitHub" },
-                { icon: Linkedin, href: "https://www.linkedin.com/in/praneeth-reddy-ankey", label: "LinkedIn" },
-                { icon: Mail, href: "mailto:apraneethreddy20891a0502@gmail.com", label: "Email" },
-              ].map(({ icon: Icon, href, label }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 8,
-                    border: "1px solid var(--border)",
-                    background: "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "var(--text-muted)",
-                    transition: "border-color 150ms ease, color 150ms ease",
-                    textDecoration: "none",
-                  }}
-                  onMouseEnter={(e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.borderColor = "var(--accent)";
-                    el.style.color = "var(--accent)";
-                  }}
-                  onMouseLeave={(e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.borderColor = "var(--border)";
-                    el.style.color = "var(--text-muted)";
-                  }}
-                >
-                  <Icon size={17} />
-                </a>
-              ))}
-            </motion.div>
-          </motion.div>
-
-          {/* ── Right: Photo ── */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="flex justify-center lg:justify-end"
-          >
-            <div style={{ position: "relative" }}>
-              {/* Subtle blue glow ring */}
-              <div
-                className="animate-spin-slow"
-                style={{
-                  position: "absolute",
-                  inset: -16,
-                  borderRadius: "50%",
-                  border: "1px solid rgba(6,182,212,0.15)",
-                  pointerEvents: "none",
-                }}
-              />
-
-              {/* Photo */}
-              <div
-                style={{
-                  position: "relative",
-                  width: "min(18rem, 78vw)",
-                  aspectRatio: "2/3",
-                  borderRadius: 12,
-                  overflow: "hidden",
-                  border: "1px solid var(--border)",
-                  boxShadow: "0 0 40px rgba(6,182,212,0.15)",
-                }}
+              <a
+                href="mailto:apraneethreddy20891a0502@gmail.com"
+                className="text-[#a1a1aa] hover:text-[#ffffff] transition-colors"
+                aria-label="Email"
               >
-                <img
-                  src={praneethPhoto}
-                  alt="Ankey Praneeth Reddy — AI Engineer"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </div>
-
-              {/* Status badge */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.1, type: "spring" }}
-                style={{
-                  position: "absolute",
-                  bottom: 16,
-                  right: -16,
-                  background: "var(--surface)",
-                  border: "1px solid rgba(16,185,129,0.4)",
-                  borderRadius: 8,
-                  padding: "7px 13px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  boxShadow: "0 0 16px rgba(16,185,129,0.2)",
-                }}
-              >
-                <span
-                  className="animate-pulse-glow"
-                  style={{
-                    width: 7,
-                    height: 7,
-                    borderRadius: "50%",
-                    background: "var(--success)",
-                    flexShrink: 0,
-                  }}
-                />
-                <span style={{ fontSize: "0.78rem", fontWeight: 500, color: "#6ee7b7", whiteSpace: "nowrap" }}>
-                  Open to Work
-                </span>
-              </motion.div>
-
-              {/* Location badge */}
-              <motion.div
-                initial={{ opacity: 0, x: -16 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 1.3 }}
-                style={{
-                  position: "absolute",
-                  top: 16,
-                  left: -16,
-                  background: "var(--surface)",
-                  border: "1px solid var(--border)",
-                  borderRadius: 8,
-                  padding: "5px 11px",
-                  fontSize: "0.72rem",
-                  color: "var(--text-muted)",
-                  fontWeight: 500,
-                  whiteSpace: "nowrap",
-                }}
-              >
-                📍 Hyderabad, India
-              </motion.div>
+                <Mail size={18} />
+              </a>
             </div>
           </motion.div>
+
+          {/* Profile Card & Engineering Fact Box (5 cols desktop) */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="lg:col-span-5 flex flex-col items-center lg:items-end justify-center"
+          >
+            <div className="relative w-full max-w-sm rounded-2xl bg-[#0c0c0e] border border-[#27272a] p-6 shadow-2xl hover:border-[#3f3f46] transition-all group">
+              {/* Silver top accent line */}
+              <div className="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-[#ffffff] to-transparent opacity-40" />
+
+              <div className="flex items-center gap-4">
+                <img
+                  src={praneethPhoto}
+                  alt="Praneeth Reddy Ankey"
+                  className="w-20 h-20 rounded-xl object-cover border border-[#27272a] shadow-md group-hover:scale-105 transition-transform duration-300"
+                />
+                <div>
+                  <h3 className="font-semibold text-lg text-[#ffffff]">Praneeth Reddy Ankey</h3>
+                  <p className="text-xs font-mono text-[#a1a1aa]">Associate AI Engineer</p>
+                  <p className="text-xs text-[#e4e4e7] mt-1">Digimaxx AI Solutions</p>
+                </div>
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-[#27272a] space-y-2 text-xs font-mono text-[#a1a1aa]">
+                <div className="flex justify-between">
+                  <span>LOCATION:</span>
+                  <span className="text-[#ffffff]">Hyderabad, India</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>SPECIALIZATION:</span>
+                  <span className="text-[#ffffff]">Agents & RAG Systems</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>EXPERIENCE:</span>
+                  <span className="text-[#ffffff]">Associate AI Eng @ Digimaxx</span>
+                </div>
+              </div>
+
+              {/* Status Indicator */}
+              <div className="mt-4 p-2.5 rounded-lg bg-[#16161a] border border-[#27272a] flex items-center gap-2.5">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10b981] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10b981]"></span>
+                </span>
+                <span className="text-[11px] font-mono text-[#e4e4e7]">
+                  Building autonomous agent workflows
+                </span>
+              </div>
+            </div>
+          </motion.div>
+
+        </div>
+
+        {/* Scroll down indicator */}
+        <div className="mt-16 text-center">
+          <a
+            href="#about"
+            className="inline-flex flex-col items-center gap-1.5 text-xs font-mono text-[#a1a1aa] hover:text-[#ffffff] transition-colors"
+          >
+            <span>EXPLORE</span>
+            <ArrowDown size={14} className="animate-bounce" />
+          </a>
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      <a
-        href="#about"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce"
-        style={{ color: "var(--accent)", textDecoration: "none" }}
-        aria-label="Scroll to About section"
-      >
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
-          <span className="eyebrow" style={{ fontSize: "0.6rem" }}>scroll</span>
-          <ArrowDown size={18} />
-        </div>
-      </a>
     </section>
   );
-};
-
-export default HeroSection;
+}

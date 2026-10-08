@@ -1,209 +1,104 @@
-import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { GraduationCap, MapPin, Briefcase, Award } from "lucide-react";
 
 const stats = [
-  { icon: Briefcase,     label: "Internships",     value: "2+",        color: "var(--accent-2)" },
-  { icon: GraduationCap, label: "CGPA",             value: "7.58",      color: "var(--accent)"   },
-  { icon: Award,         label: "Certifications",   value: "3+",        color: "var(--accent-2)" },
-  { icon: MapPin,        label: "Location",         value: "Hyderabad", color: "var(--accent)"   },
+  { icon: Briefcase, label: "Internships", value: "2+", desc: "DRDO & CognitBotz" },
+  { icon: Award, label: "Current Role", value: "AI Eng", desc: "Digimaxx AI Solutions" },
+  { icon: GraduationCap, label: "Education", value: "B.Tech", desc: "Vignan Institute (VITS)" },
+  { icon: MapPin, label: "Location", value: "Hyderabad", desc: "Telangana, India" },
 ];
 
-const AboutSection = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  // IntersectionObserver for .reveal elements
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
-      { threshold: 0.1 }
-    );
-    const reveals = sectionRef.current?.querySelectorAll(".reveal") ?? [];
-    reveals.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
-
+export default function AboutSection() {
   return (
-    <section
-      id="about"
-      ref={sectionRef}
-      className="section-padding"
-      style={{ background: "var(--bg)", position: "relative", overflow: "hidden" }}
-    >
-      {/* Faint dot grid with animated opacity — subtle cursor-spotlight feel */}
+    <section id="about" className="relative py-24 bg-[#000000] text-[#e4e4e7] overflow-hidden">
+      
+      {/* Background Dot Grid */}
       <div
-        aria-hidden="true"
+        className="absolute inset-0 pointer-events-none opacity-10"
         style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage:
-            "radial-gradient(circle, rgba(6,182,212,0.06) 1px, transparent 1px)",
-          backgroundSize: "32px 32px",
-          animation: "dot-cursor 4s ease-in-out infinite",
-          pointerEvents: "none",
+          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
         }}
       />
 
-      <div className="container" style={{ position: "relative", zIndex: 1 }}>
-
-        {/* Header */}
-        <div className="reveal" style={{ marginBottom: "2.5rem" }}>
-          <p className="section-label mb-3">About Me</p>
-          <h2
-            style={{
-              fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
-              fontWeight: 600,
-              color: "var(--text-strong)",
-              letterSpacing: "-0.01em",
-            }}
-          >
-            Intelligence, engineered for{" "}
-            <span className="gradient-text">the real world.</span>
+      <div className="container relative z-10 mx-auto px-6">
+        
+        {/* Section Header */}
+        <div className="space-y-3 mb-16">
+          <span className="eyebrow text-[#a1a1aa]">ABOUT</span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#ffffff] tracking-tight">
+            Engineering background & problem domain.
           </h2>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 400px), 1fr))",
-            gap: "2rem",
-            alignItems: "start",
-          }}
-        >
-          {/* Bio text card */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          {/* Bio Copy per design.md §9 (7 cols) */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            style={{
-              background: "var(--surface)",
-              border: "1px solid var(--border)",
-              borderRadius: "var(--radius-card)",
-              padding: "var(--pad-card)",
-              display: "flex",
-              flexDirection: "column",
-              gap: "1rem",
-            }}
+            transition={{ duration: 0.5 }}
+            className="lg:col-span-7 space-y-6 text-base leading-relaxed text-[#e4e4e7]"
           >
-            {[
-              <>
-                B.Tech Computer Science graduate from{" "}
-                <strong style={{ color: "var(--accent)", fontWeight: 600 }}>
-                  Vignan Institute of Technology and Science
-                </strong>, Hyderabad.
-                Associate AI Engineer at{" "}
-                <strong style={{ color: "var(--accent)", fontWeight: 600 }}>Digimaxx AI Solutions</strong>.
-              </>,
-              <>
-                Started with internships at{" "}
-                <strong style={{ color: "var(--accent-2)", fontWeight: 600 }}>DRDO</strong>{" "}
-                (Live Missile Data Simulation) and{" "}
-                <strong style={{ color: "var(--accent-2)", fontWeight: 600 }}>CognitBotz</strong>{" "}
-                (enterprise dashboards for Adani using React.js, FastAPI, and PostgreSQL).
-              </>,
-              <>
-                Today I build the <strong style={{ color: "var(--accent)", fontWeight: 600 }}>orchestration layer</strong> behind production AI —
-                coordinating agents,{" "}
-                <strong style={{ color: "var(--accent-2)", fontWeight: 600 }}>RAG pipelines</strong>, and workflows into reliable, scalable systems.
-              </>,
-            ].map((para, i) => (
-              <p
-                key={i}
-                style={{ color: "var(--text)", lineHeight: 1.75, fontSize: "0.95rem" }}
-              >
-                {para}
-              </p>
-            ))}
+            <p className="text-lg text-[#ffffff] font-medium leading-relaxed">
+              B.Tech Computer Science graduate from Vignan Institute of Technology and Science (VITS), Hyderabad, currently working as an Associate AI Engineer at Digimaxx AI Solutions.
+            </p>
+
+            <p>
+              My journey started with defense software engineering at DRDO (Defense Research & Development Organisation), where I engineered real-time telemetry simulation and data visualization tools for live missile testing datasets.
+            </p>
+
+            <p>
+              Following DRDO, I interned at CognitBotz, building high-throughput enterprise operational dashboards for Adani Group using React.js, TypeScript, FastAPI, and PostgreSQL.
+            </p>
+
+            <p>
+              Today at Digimaxx, I focus on building the orchestration layer behind enterprise Generative AI — combining multi-agent task swarms, hybrid vector RAG pipelines, and deterministic API execution layers.
+            </p>
+
+            <div className="pt-4 border-t border-[#27272a] flex flex-wrap gap-4 text-xs font-mono text-[#a1a1aa]">
+              <div><strong className="text-[#ffffff]">Degree:</strong> B.Tech CSE (2020–2024)</div>
+              <div><strong className="text-[#ffffff]">Status:</strong> Full-Time AI Engineer</div>
+              <div><strong className="text-[#ffffff]">Focus:</strong> Autonomous AI Systems</div>
+            </div>
           </motion.div>
 
-          {/* Stats grid */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 12,
-            }}
-          >
-            {stats.map(({ icon: Icon, label, value, color }, i) => (
-              <motion.div
-                key={label}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-                whileHover={{ y: -4 }}
-                style={{
-                  background: "var(--surface)",
-                  border: "1px solid var(--border)",
-                  borderRadius: "var(--radius-card)",
-                  padding: "1.5rem",
-                  textAlign: "center",
-                  transition: "border-color 150ms ease, background 150ms ease",
-                  cursor: "default",
-                }}
-                onHoverStart={(e) => {
-                  const el = e.target as HTMLElement;
-                  const card = el.closest("[data-stat]") as HTMLElement;
-                  if (card) {
-                    card.style.borderColor = `${color === "var(--accent)" ? "rgba(6,182,212,0.45)" : "rgba(59,130,246,0.45)"}`;
-                    card.style.background = "var(--surface-2)";
-                  }
-                }}
-                onHoverEnd={(e) => {
-                  const el = e.target as HTMLElement;
-                  const card = el.closest("[data-stat]") as HTMLElement;
-                  if (card) {
-                    card.style.borderColor = "var(--border)";
-                    card.style.background = "var(--surface)";
-                  }
-                }}
-                data-stat=""
-              >
-                <div
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 10,
-                    background: color === "var(--accent)" ? "rgba(6,182,212,0.1)" : "rgba(59,130,246,0.1)",
-                    border: `1px solid ${color === "var(--accent)" ? "rgba(6,182,212,0.25)" : "rgba(59,130,246,0.25)"}`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    margin: "0 auto 10px",
-                  }}
+          {/* Quick Stats Grid (5 cols) */}
+          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {stats.map((stat, idx) => {
+              const Icon = stat.icon;
+              return (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: idx * 0.08 }}
+                  className="card-silver p-5 flex flex-col justify-between"
                 >
-                  <Icon size={19} style={{ color }} />
-                </div>
-                <p
-                  style={{
-                    fontSize: "1.6rem",
-                    fontWeight: 600,
-                    color: "var(--text-strong)",
-                    lineHeight: 1,
-                    marginBottom: 5,
-                  }}
-                >
-                  {value}
-                </p>
-                <p
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: "0.72rem",
-                    color: "var(--text-muted)",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1em",
-                  }}
-                >
-                  {label}
-                </p>
-              </motion.div>
-            ))}
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-mono text-[#a1a1aa] uppercase tracking-wider">
+                      {stat.label}
+                    </span>
+                    <Icon size={18} className="text-[#ffffff]" />
+                  </div>
+
+                  <div>
+                    <div className="text-2xl font-bold font-mono text-[#ffffff] mb-1">
+                      {stat.value}
+                    </div>
+                    <div className="text-xs text-[#a1a1aa] font-sans">
+                      {stat.desc}
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
+
         </div>
       </div>
     </section>
   );
-};
-
-export default AboutSection;
+}
