@@ -7,7 +7,7 @@ const experiences = [
     role: "Associate AI Engineer",
     period: "August 2026 — PRESENT",
     status: "active",
-    location: "Hyderabad, India",
+    location: "Chennai, India",
     description: "Designing and engineering autonomous agent workflows, enterprise RAG pipelines, and intelligent decision systems.",
     bullets: [
       "Engineered multi-agent automation systems integrating LangChain, LlamaIndex, and custom tool calling.",

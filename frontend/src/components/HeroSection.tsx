@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { ArrowDown, Github, Linkedin, Mail, Download, Eye } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowDown, Github, Linkedin, Mail, Download, Eye, Zap, Cpu, Bot } from "lucide-react";
 import praneethPhoto from "@/assets/Photo.jpg";
 
 /* ── Node-graph canvas background (White & Silver) ── */
@@ -129,6 +129,168 @@ function NodeGraphCanvas() {
   );
 }
 
+/* ── Interactive P.R.A Acronym Torch Headline ── */
+function InteractivePRAName() {
+  const [activeAcronym, setActiveAcronym] = useState<"P" | "R" | "A" | null>(null);
+
+  return (
+    <div className="relative space-y-4">
+      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#ffffff] leading-[1.25] tracking-tight">
+        
+        {/* P - Prompt Engineering */}
+        <span
+          className="relative inline-block group cursor-pointer mr-3"
+          onMouseEnter={() => setActiveAcronym("P")}
+          onMouseLeave={() => setActiveAcronym(null)}
+        >
+          <span className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#16161a] border-2 border-[#ffffff] text-[#ffffff] font-black text-2xl sm:text-3xl shadow-[0_0_20px_rgba(255,255,255,0.6)] group-hover:bg-[#ffffff] group-hover:text-[#000000] group-hover:shadow-[0_0_35px_rgba(255,255,255,1)] transition-all duration-300 align-baseline mr-1">
+            P
+          </span>
+          <span className="text-[#ffffff]">raneeth</span>
+
+          {/* Torch Spotlight Glow Popover */}
+          <AnimatePresence>
+            {activeAcronym === "P" && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="absolute left-0 bottom-full mb-3 z-[100] w-80 sm:w-96 p-4 rounded-xl bg-[#0c0c0e] border border-[#ffffff] shadow-[0_0_40px_rgba(255,255,255,0.35)] text-left pointer-events-none tracking-normal font-sans"
+              >
+                <div className="flex items-center gap-2 mb-2 text-sm font-mono text-[#ffffff] font-bold tracking-normal border-b border-[#27272a] pb-2">
+                  <Zap size={16} className="text-[#ffffff] animate-pulse" />
+                  <span>P — PROMPT ENGINEERING</span>
+                </div>
+                <p className="text-xs text-[#e4e4e7] font-normal leading-relaxed tracking-normal">
+                  System prompt architecture, structured JSON output parsing, and few-shot context optimization.
+                </p>
+                <div className="absolute left-6 -bottom-1.5 w-3 h-3 rotate-45 bg-[#0c0c0e] border-r border-b border-[#ffffff]" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </span>
+
+        {/* R - RAG */}
+        <span
+          className="relative inline-block group cursor-pointer mr-3"
+          onMouseEnter={() => setActiveAcronym("R")}
+          onMouseLeave={() => setActiveAcronym(null)}
+        >
+          <span className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#16161a] border-2 border-[#ffffff] text-[#ffffff] font-black text-2xl sm:text-3xl shadow-[0_0_20px_rgba(255,255,255,0.6)] group-hover:bg-[#ffffff] group-hover:text-[#000000] group-hover:shadow-[0_0_35px_rgba(255,255,255,1)] transition-all duration-300 align-baseline mr-1">
+            R
+          </span>
+          <span className="text-[#ffffff]">eddy</span>
+
+          {/* Torch Spotlight Glow Popover */}
+          <AnimatePresence>
+            {activeAcronym === "R" && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="absolute left-0 bottom-full mb-3 z-[100] w-80 sm:w-96 p-4 rounded-xl bg-[#0c0c0e] border border-[#ffffff] shadow-[0_0_40px_rgba(255,255,255,0.35)] text-left pointer-events-none tracking-normal font-sans"
+              >
+                <div className="flex items-center gap-2 mb-2 text-sm font-mono text-[#ffffff] font-bold tracking-normal border-b border-[#27272a] pb-2">
+                  <Cpu size={16} className="text-[#ffffff] animate-pulse" />
+                  <span>R — RETRIEVAL-AUGMENTED GEN (RAG)</span>
+                </div>
+                <p className="text-xs text-[#e4e4e7] font-normal leading-relaxed tracking-normal">
+                  Hybrid vector search, dense-sparse re-ranking, and high-precision document grounding.
+                </p>
+                <div className="absolute left-6 -bottom-1.5 w-3 h-3 rotate-45 bg-[#0c0c0e] border-r border-b border-[#ffffff]" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </span>
+
+        {/* A - Agentic AI */}
+        <span
+          className="relative inline-block group cursor-pointer"
+          onMouseEnter={() => setActiveAcronym("A")}
+          onMouseLeave={() => setActiveAcronym(null)}
+        >
+          <span className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#16161a] border-2 border-[#ffffff] text-[#ffffff] font-black text-2xl sm:text-3xl shadow-[0_0_20px_rgba(255,255,255,0.6)] group-hover:bg-[#ffffff] group-hover:text-[#000000] group-hover:shadow-[0_0_35px_rgba(255,255,255,1)] transition-all duration-300 align-baseline mr-1">
+            A
+          </span>
+          <span className="text-[#ffffff]">nkey.</span>
+
+          {/* Torch Spotlight Glow Popover */}
+          <AnimatePresence>
+            {activeAcronym === "A" && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="absolute left-0 bottom-full mb-3 z-[100] w-80 sm:w-96 p-4 rounded-xl bg-[#0c0c0e] border border-[#ffffff] shadow-[0_0_40px_rgba(255,255,255,0.35)] text-left pointer-events-none tracking-normal font-sans"
+              >
+                <div className="flex items-center gap-2 mb-2 text-sm font-mono text-[#ffffff] font-bold tracking-normal border-b border-[#27272a] pb-2">
+                  <Bot size={16} className="text-[#ffffff] animate-pulse" />
+                  <span>A — AGENTIC AI</span>
+                </div>
+                <p className="text-xs text-[#e4e4e7] font-normal leading-relaxed tracking-normal">
+                  Autonomous multi-agent swarms, deterministic tool calling, and self-healing workflows.
+                </p>
+                <div className="absolute left-6 -bottom-1.5 w-3 h-3 rotate-45 bg-[#0c0c0e] border-r border-b border-[#ffffff]" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </span>
+
+        <span className="block mt-3 text-[#a1a1aa] font-semibold text-3xl sm:text-4xl lg:text-5xl tracking-normal">
+          Building the orchestration layer behind production AI.
+        </span>
+      </h1>
+
+      {/* P.R.A Acronym Torch Spotlight Ticker */}
+      <div className="inline-flex flex-wrap items-center gap-2 p-2 rounded-xl bg-[#0c0c0e] border border-[#27272a] text-xs font-mono transition-all">
+        <span className="text-[#a1a1aa] uppercase text-[10px] tracking-widest pl-1 font-semibold">P.R.A SPECS:</span>
+
+        <div
+          onMouseEnter={() => setActiveAcronym("P")}
+          onMouseLeave={() => setActiveAcronym(null)}
+          className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer flex items-center gap-2 ${
+            activeAcronym === "P"
+              ? "bg-[#ffffff] text-[#000000] border-[#ffffff] font-bold shadow-[0_0_20px_rgba(255,255,255,0.9)]"
+              : "bg-[#16161a] text-[#e4e4e7] border-[#27272a] hover:border-[#ffffff]"
+          }`}
+        >
+          <Zap size={13} className={activeAcronym === "P" ? "text-[#000000]" : "text-[#ffffff]"} />
+          <span><strong className="font-bold">P</strong> — Prompt Engineering</span>
+        </div>
+
+        <div
+          onMouseEnter={() => setActiveAcronym("R")}
+          onMouseLeave={() => setActiveAcronym(null)}
+          className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer flex items-center gap-2 ${
+            activeAcronym === "R"
+              ? "bg-[#ffffff] text-[#000000] border-[#ffffff] font-bold shadow-[0_0_20px_rgba(255,255,255,0.9)]"
+              : "bg-[#16161a] text-[#e4e4e7] border-[#27272a] hover:border-[#ffffff]"
+          }`}
+        >
+          <Cpu size={13} className={activeAcronym === "R" ? "text-[#000000]" : "text-[#ffffff]"} />
+          <span><strong className="font-bold">R</strong> — RAG</span>
+        </div>
+
+        <div
+          onMouseEnter={() => setActiveAcronym("A")}
+          onMouseLeave={() => setActiveAcronym(null)}
+          className={`px-3 py-1.5 rounded-lg border transition-all cursor-pointer flex items-center gap-2 ${
+            activeAcronym === "A"
+              ? "bg-[#ffffff] text-[#000000] border-[#ffffff] font-bold shadow-[0_0_20px_rgba(255,255,255,0.9)]"
+              : "bg-[#16161a] text-[#e4e4e7] border-[#27272a] hover:border-[#ffffff]"
+          }`}
+        >
+          <Bot size={13} className={activeAcronym === "A" ? "text-[#000000]" : "text-[#ffffff]"} />
+          <span><strong className="font-bold">A</strong> — Agentic AI</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function HeroSection() {
   return (
     <section
@@ -158,13 +320,8 @@ export default function HeroSection() {
               </span>
             </div>
 
-            {/* H1 Headline per design.md §9 */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#ffffff] leading-[1.1] tracking-tight">
-              Praneeth Reddy Ankey.
-              <span className="block mt-2 text-[#a1a1aa] font-semibold text-3xl sm:text-4xl lg:text-5xl">
-                Building the orchestration layer behind production AI.
-              </span>
-            </h1>
+            {/* Interactive P.R.A Acronym Headline */}
+            <InteractivePRAName />
 
             {/* Sub-headline per design.md §9 */}
             <p className="text-base sm:text-lg text-[#e4e4e7] max-w-2xl font-normal leading-relaxed">
