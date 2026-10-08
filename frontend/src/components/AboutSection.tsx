@@ -63,9 +63,9 @@ const AboutSection = () => {
               }}
             >
               {[
-                <>I'm a B.Tech Computer Science graduate from <strong style={{ color: "#38bdf8", fontWeight: 700 }}>Vignan Institute of Technology and Science</strong>, Hyderabad. My passion lies in creating full-stack web applications that solve real-world problems.</>,
-                <>I've had the privilege of interning at <strong style={{ color: "#22d3ee", fontWeight: 700 }}>DRDO</strong> (Defense Research & Development Organization), where I contributed to the Live Missile Data Simulation project, and at <strong style={{ color: "#c084fc", fontWeight: 700 }}>CognitBotz</strong>, where I built enterprise-grade dashboards for Adani using React.js, FastAPI, and PostgreSQL.</>,
-                <>I'm driven by the desire to learn emerging technologies like <strong style={{ color: "#38bdf8", fontWeight: 700 }}>Generative AI</strong> and <strong style={{ color: "#22d3ee", fontWeight: 700 }}>RAG pipelines</strong>, creating products that redefine industry standards.</>,
+                <>I'm a B.Tech Computer Science graduate from <strong style={{ color: "#38bdf8", fontWeight: 700 }}>Vignan Institute of Technology and Science</strong>, Hyderabad, with a passion for building full-stack applications that solve real-world problems.</>,
+                <>I started with internships at <strong style={{ color: "#22d3ee", fontWeight: 700 }}>DRDO</strong>, contributing to the Live Missile Data Simulation project, and at <strong style={{ color: "#c084fc", fontWeight: 700 }}>CognitBotz</strong>, where I built enterprise dashboards for Adani using React.js, FastAPI, and PostgreSQL.</>,
+                <>Today, I'm an Associate AI Engineer at <strong style={{ color: "#10b981", fontWeight: 700 }}>Digimaxx AI Solutions</strong>, building the <strong style={{ color: "#38bdf8", fontWeight: 700 }}>orchestration layer</strong> behind production AI, coordinating agents, <strong style={{ color: "#22d3ee", fontWeight: 700 }}>RAG pipelines</strong>, and workflows into reliable, scalable systems.</>,
               ].map((para, i) => (
                 <p
                   key={i}

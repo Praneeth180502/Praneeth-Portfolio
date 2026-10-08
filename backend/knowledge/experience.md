@@ -1,8 +1,21 @@
 # Professional Experience (Detailed)
 
+## Digimaxx AI Solutions
+**Role:** Associate AI Engineer
+**Period:** Aug 2026 – Present
+**Website:** https://www.digimaxx.co/
+**Core Technologies:** AI Engineering, Generative AI, LLMs, Python, FastAPI, React.js
+
+### Key Accomplishments & Technical Deliverables:
+- **GenAI & LLM Solutions:** Engineering advanced AI solutions, LLM architectures, and intelligent automated systems.
+- **Enterprise AI Products:** Driving production-grade GenAI integrations and full-stack AI features.
+
+---
+
 ## Defence Research & Development Organisation (DRDO) — Hyderabad, India
 **Role:** Project Intern — Full Stack Developer
 **Period:** Nov 2023 – May 2024 (213 Days)
+**Website:** https://drdo.gov.in/drdo/en
 **Core Technologies:** React.js, Python, FastAPI, WebSockets, Data Simulation, Data Accumulation, Excel/CSV Processing
 
 **Project: Live Missile Data Simulation & Live Missile Trajectory Visualisation & Report Generation**
@@ -20,7 +33,8 @@ Led end-to-end development of a Live Missile Data Simulation system — a real-t
 
 ## CognitBotz — Hyderabad, India (Client: Adani)
 **Role:** Software Development Intern / Full Stack Developer Intern
-**Period:** 170 Days (Current / Recent)
+**Period:** Jun 2024 – Nov 2024 (170 Days)
+**Website:** https://cognitbotz.com/
 **Core Technologies:** React.js, FastAPI, PostgreSQL, Python, Docker, GitHub Actions, Microsoft Teams API, Hugging Face Transformers
 
 ### Key Accomplishments & Technical Deliverables:

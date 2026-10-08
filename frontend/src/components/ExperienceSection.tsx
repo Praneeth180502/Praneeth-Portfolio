@@ -1,16 +1,28 @@
 import { motion } from "framer-motion";
-import { Building2, Calendar, ChevronRight } from "lucide-react";
+import { Building2, Calendar, ChevronRight, ExternalLink } from "lucide-react";
 
 const experiences = [
   {
+    company: "Digimaxx AI Solutions",
+    role: "Associate AI Engineer",
+    period: "Aug 2026 – Present",
+    description:
+      "Engineering advanced AI solutions, LLM architectures, and intelligent automated systems. Driving production-grade GenAI integrations and enterprise AI products.",
+    tech: ["AI Engineering", "Generative AI", "LLMs", "Python", "FastAPI", "React.js"],
+    color: "#10b981",
+    status: "active",
+    url: "https://www.digimaxx.co/",
+  },
+  {
     company: "CognitBotz (Client: Adani)",
     role: "Full Stack Developer Intern",
-    period: "Current",
+    period: "Jun 2024 – Nov 2024",
     description:
       "Building enterprise-grade data analytics dashboards for Adani using React.js, FastAPI, and PostgreSQL. Delivered 4 major projects including NOC Dashboard, App Connectivity, Meet-Ops AI, and Landed Tariff Visualization.",
     tech: ["React.js", "FastAPI", "PostgreSQL", "Python"],
     color: "#3b82f6",
-    status: "active",
+    status: "completed",
+    url: "https://cognitbotz.com/",
   },
   {
     company: "DRDO – Defense Research & Development Organization",
@@ -21,6 +33,7 @@ const experiences = [
     tech: ["React", "Python", "Data Simulation", "WebSockets"],
     color: "#8b5cf6",
     status: "completed",
+    url: "https://drdo.gov.in/drdo/en",
   },
 ];
 
@@ -138,16 +151,40 @@ const ExperienceSection = () => {
                     <div>
                       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
                         <Building2 size={16} style={{ color: exp.color }} />
-                        <h3
-                          style={{
-                            fontFamily: "'Space Grotesk', sans-serif",
-                            fontWeight: 700,
-                            fontSize: "1.05rem",
-                            color: "#f1f5f9",
-                          }}
-                        >
-                          {exp.company}
-                        </h3>
+                        {exp.url ? (
+                          <a
+                            href={exp.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              fontFamily: "'Space Grotesk', sans-serif",
+                              fontWeight: 700,
+                              fontSize: "1.05rem",
+                              color: "#f1f5f9",
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: 6,
+                              textDecoration: "none",
+                              transition: "all 0.2s ease",
+                            }}
+                            className="hover:opacity-90 group"
+                            title={`Visit ${exp.company} website`}
+                          >
+                            <span className="group-hover:underline underline-offset-4 decoration-1">{exp.company}</span>
+                            <ExternalLink size={14} style={{ color: exp.color }} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                          </a>
+                        ) : (
+                          <h3
+                            style={{
+                              fontFamily: "'Space Grotesk', sans-serif",
+                              fontWeight: 700,
+                              fontSize: "1.05rem",
+                              color: "#f1f5f9",
+                            }}
+                          >
+                            {exp.company}
+                          </h3>
+                        )}
                       </div>
                       <p style={{ color: exp.color, fontWeight: 600, fontSize: "0.9rem" }}>
                         {exp.role}

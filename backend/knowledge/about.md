@@ -4,7 +4,11 @@
 Ankey Praneeth Reddy (Praneeth Reddy Ankey) is a Full Stack Developer and AI Engineer specializing in Generative AI, RAG (Retrieval-Augmented Generation) systems, and enterprise data visualization. He holds a B.Tech degree in Computer Science and Engineering from Vignan Institute of Technology and Science, Hyderabad (Graduated 2024, CGPA: 7.58 / 10).
 
 ## Core Philosophy & Passions
-Praneeth is passionate about creating full-stack web applications that solve real-world problems. He focuses on building production-ready AI agents, high-performance analytics dashboards, and RAG pipelines that redefine industry standards by delivering zero-latency, privacy-preserving, and grounded AI responses.
+I'm a B.Tech Computer Science graduate from Vignan Institute of Technology and Science, Hyderabad, with a passion for building full-stack applications that solve real-world problems.
+
+I started with internships at DRDO, contributing to the Live Missile Data Simulation project, and at CognitBotz, where I built enterprise dashboards for Adani using React.js, FastAPI, and PostgreSQL.
+
+Today, I'm an Associate AI Engineer at Digimaxx AI Solutions, building the orchestration layer behind production AI, coordinating agents, RAG pipelines, and workflows into reliable, scalable systems.
 
 ## Key Statistics & Highlights
 - **Internships:** 2+ Industry Internships at DRDO (Defense Research & Development Organization) and CognitBotz (working on Adani enterprise systems).

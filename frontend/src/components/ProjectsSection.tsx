@@ -1,7 +1,18 @@
 import { motion } from "framer-motion";
-import { ExternalLink, BarChart3, Bot, Activity, Video, GraduationCap, FolderSearch, Zap } from "lucide-react";
+import { ExternalLink, BarChart3, Bot, Activity, Video, GraduationCap, FolderSearch, Zap, Github } from "lucide-react";
 
 const projects = [
+  {
+    title: "NaukriBot — Autonomous Job Application Agent",
+    icon: Bot,
+    description:
+      "NaukriBot is an autonomous job-application agent that automates Naukri searching and applying end to end. It uses Playwright with stealth for persistent sessions, semantic resume-to-job matching (SentenceTransformers + FAISS), and a screening Q&A solver, with a Telegram bot for control and a FastAPI dashboard for analytics.",
+    tech: ["Playwright", "SentenceTransformers", "FAISS", "FastAPI", "Telegram Bot", "Python"],
+    client: "AI Automation Agent",
+    color: "#10b981",
+    featured: true,
+    github: "https://github.com/Praneeth180502/NaukriBot.git",
+  },
   {
     title: "AURASELECT — AI Video Interview Evaluator",
     icon: Video,
@@ -53,12 +64,22 @@ const projects = [
     featured: false,
   },
   {
-    title: "NOC Dashboard & Missile Trajectory",
+    title: "Live Missile Trajectory Simulation",
     icon: Activity,
     description:
-      "High-performance enterprise dashboard rendering live simulation streams with 4-level hierarchical data model, real-time WebSocket stream rendering, and dynamic filtering.",
-    tech: ["React.js", "FastAPI", "WebSockets", "PostgreSQL"],
-    client: "DRDO & Adani (via CognitBotz)",
+      "Real-time simulation and visualization platform presenting live missile telemetry data including acceleration, velocity, height, and flight trajectory streams using WebSockets.",
+    tech: ["React.js", "Python", "FastAPI", "WebSockets", "Data Simulation"],
+    client: "DRDO",
+    color: "#8b5cf6",
+    featured: false,
+  },
+  {
+    title: "NOC Data Analytics Dashboard",
+    icon: BarChart3,
+    description:
+      "Enterprise operational dashboard featuring a 4-level hierarchical data model for organizing and filtering huge operational datasets with high rendering performance.",
+    tech: ["React.js", "FastAPI", "PostgreSQL", "Hierarchical Data Model"],
+    client: "Adani (via CognitBotz)",
     color: "#f59e0b",
     featured: false,
   },
@@ -116,8 +137,8 @@ const ProjectsSection = () => {
         </motion.div>
 
         {/* Featured projects — large cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-6">
-          {featured.map(({ title, icon: Icon, description, tech, client, color }, i) => (
+        <div className="grid md:grid-cols-2 gap-6 mb-6">
+          {featured.map(({ title, icon: Icon, description, tech, client, color, github }, i) => (
             <motion.div
               key={title}
               initial={{ opacity: 0, y: 28 }}
@@ -196,7 +217,35 @@ const ProjectsSection = () => {
                   >
                     <Zap size={10} /> Featured
                   </span>
-                  <ExternalLink size={16} style={{ color: "#475569" }} />
+                  {github ? (
+                    <a
+                      href={github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 5,
+                        padding: "4px 10px",
+                        borderRadius: 999,
+                        background: "rgba(16, 185, 129, 0.2)",
+                        border: "1px solid rgba(16, 185, 129, 0.5)",
+                        color: "#34d399",
+                        fontSize: "0.72rem",
+                        fontWeight: 700,
+                        textDecoration: "none",
+                        transition: "all 0.2s ease",
+                        boxShadow: "0 0 14px rgba(16, 185, 129, 0.3)",
+                      }}
+                      className="hover:scale-105 hover:bg-emerald-500/30"
+                      title="View GitHub Repository"
+                    >
+                      <Github size={13} />
+                      <span>Repo</span>
+                    </a>
+                  ) : (
+                    <ExternalLink size={16} style={{ color: "#475569" }} />
+                  )}
                 </div>
               </div>
 
@@ -237,6 +286,36 @@ const ProjectsSection = () => {
                   </span>
                 ))}
               </div>
+
+              {github && (
+                <div style={{ marginTop: "1.25rem", paddingTop: "0.85rem", borderTop: `1px dashed ${color}35` }}>
+                  <a
+                    href={github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 8,
+                      padding: "7px 16px",
+                      borderRadius: 12,
+                      background: `${color}18`,
+                      border: `1px solid ${color}50`,
+                      color: "#ffffff",
+                      fontSize: "0.825rem",
+                      fontWeight: 700,
+                      textDecoration: "none",
+                      transition: "all 0.25 ease",
+                      boxShadow: `0 0 20px ${color}35`,
+                    }}
+                    className="hover:scale-105 hover:bg-emerald-500/25 group"
+                  >
+                    <Github size={16} style={{ color }} className="transition-transform group-hover:rotate-12" />
+                    <span>View GitHub Repository</span>
+                    <ExternalLink size={13} style={{ opacity: 0.8 }} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </a>
+                </div>
+              )}
             </motion.div>
           ))}
         </div>

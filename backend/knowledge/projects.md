@@ -1,6 +1,17 @@
 # Projects Portfolio
 
-## 1. OpenViz — Generative AI Analytics Platform
+## 1. NaukriBot — Autonomous Job Application Agent
+- **Role & Client:** Creator / AI Automation Agent
+- **Repository:** https://github.com/Praneeth180502/NaukriBot.git
+- **Tech Stack:** Playwright (stealth), SentenceTransformers, FAISS, FastAPI, Telegram Bot, Python
+- **General Description:** NaukriBot is an autonomous job-application agent that automates Naukri searching and applying end to end.
+- **Key Features & Architecture:**
+  - Uses Playwright with stealth plugin for persistent automated browser sessions on Naukri.
+  - Implements semantic resume-to-job matching using SentenceTransformers and FAISS vector index.
+  - Features an automated screening Q&A solver to handle application questionnaires.
+  - Provides a Telegram bot interface for real-time control and notifications, along with a FastAPI analytics dashboard.
+
+## 2. OpenViz — Generative AI Analytics Platform
 - **Role & Client:** Creator / GenAI Platform
 - **Tech Stack:** React 19, TypeScript, Vega-Lite, Llama 4, Groq SDK, Arquero, RAG
 - **General Description:** OpenViz is a prompt-driven visualization engine featuring a hybrid drag-and-drop and natural language AI interface powered by Llama 4 via Groq SDK.
@@ -55,8 +66,14 @@
 - **General Description:** Analytics dashboard designed to process and analyze landed tariff datasets.
 - **Key Features:** Dependent multi-level filters (State → Region → Substation) backed by REST APIs processing CSV and Excel datasets into structured JSON responses.
 
-## 8. NOC Dashboard & Live Missile Trajectory Visualization
-- **Role & Client:** Project Intern / DRDO & CognitBotz (Adani)
-- **Tech Stack:** React.js, Python, FastAPI, WebSockets, Performance Optimization
-- **General Description:** High-performance dashboard rendering live simulation streams and large operational datasets.
-- **Key Features:** 4-level hierarchical data model (`Main Category → Sub Category → Time-based grouping → Metrics`), real-time WebSocket stream rendering, dynamic filtering, and automated mission report generation.
+## 8. Live Missile Trajectory Simulation
+- **Role & Client:** Project Intern / DRDO
+- **Tech Stack:** React.js, Python, FastAPI, WebSockets, Real-time Data Streaming
+- **General Description:** Real-time simulation and visualization platform presenting live missile telemetry data including acceleration, velocity, height, and trajectory.
+- **Key Features:** Live WebSocket stream rendering of trajectory metrics, automated mission analysis report generation, and low-latency interactive React dashboard.
+
+## 9. NOC Data Analytics Dashboard
+- **Role & Client:** Full Stack Developer Intern / CognitBotz (Client: Adani)
+- **Tech Stack:** React.js, FastAPI, PostgreSQL, Hierarchical Data Model
+- **General Description:** Enterprise operational data analytics dashboard processing high-volume operational datasets.
+- **Key Features:** 4-level hierarchical data model (`Main Category → Sub Category → Time-based grouping → Metrics`) enabling faster rendering and efficient filtering of large operational datasets.

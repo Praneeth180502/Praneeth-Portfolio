@@ -7,7 +7,7 @@
 **Background:**
 - Graduated with a **B.Tech in Computer Science and Engineering** from Vignan Institute of Technology and Science, Hyderabad in **2024** (CGPA: 7.58/10).
 - Completed **2 industry internships**: at **DRDO** (Defence Research & Development Organisation) and at **CognitBotz** (working on Adani enterprise systems).
-- Passionate about building production-ready AI agents, RAG pipelines, full-stack web applications, and high-performance analytics dashboards.
+- AI Engineer building the orchestration layer behind production AI, coordinating agents, RAG pipelines, and workflows into reliable, scalable systems.
 
 **Key Projects:**
 - **OpenViz** — Generative AI analytics platform using Llama 4 via Groq SDK and Vega-Lite for prompt-driven chart generation.
@@ -59,14 +59,19 @@ Bittu 🤖 is Praneeth Reddy Ankey's official AI Portfolio Assistant. Bittu can 
 
 ## Q: What internships has Praneeth done? / What is his work experience? / Where did he work? / Where did he work previously? / What companies has he worked at? / What jobs has he had? / Where has he worked before? / What is his professional background? / What organizations has he worked for? / Tell me about his career / What is his employment history? / Where was he employed? / What firms has he worked in?
 
-**1. DRDO — Defence Research & Development Organisation (Hyderabad)**
+**1. Digimaxx AI Solutions** (Website: https://www.digimaxx.co/)
+- **Role:** Associate AI Engineer
+- **Duration:** Aug 2026 – Present
+- **Work:** Developing and engineering advanced AI solutions, LLM architectures, and intelligent automated systems.
+
+**2. DRDO — Defence Research & Development Organisation (Hyderabad)** (Website: https://drdo.gov.in/drdo/en)
 - **Role:** Project Intern / Full Stack Developer
 - **Duration:** Nov 2023 – May 2024 (213 Days)
 - **Work:** Built a Live Missile Data Simulation system featuring real-time WebSocket-based trajectory dashboards in React.js, high-throughput Python/FastAPI backend services, and a 4-level hierarchical NOC data model for rendering large datasets efficiently.
 
-**2. CognitBotz (Client: Adani) — Hyderabad**
+**3. CognitBotz (Client: Adani) — Hyderabad** (Website: https://cognitbotz.com/)
 - **Role:** Software Development Intern / Full Stack Developer Intern
-- **Duration:** 170 Days
+- **Duration:** Jun 2024 – Nov 2024 (170 Days)
 - **Work:** Built Meet-Ops (autonomous Teams meeting bot with AI summarization), App Connectivity Dashboard, Landed Tariff Data Visualization dashboard, and NOC Dashboard — all for Adani enterprise use. Also set up Docker containerization and GitHub Actions CI/CD pipelines.
 
 ---
@@ -105,30 +110,32 @@ Praneeth completed a **213-day Project Internship** at **DRDO — Defence Resear
 
 ## Q: What projects has Praneeth built? / What has he made? / What has he developed? / Show me his projects / What are his side projects? / What applications has he created? / What software has he developed? / What is he most proud of building?
 
-1. **OpenViz** — Generative AI analytics platform using Llama 4 via Groq SDK, React 19, Vega-Lite, and Arquero for zero-latency prompt-driven chart generation.
+1. **NaukriBot** — Autonomous job-application agent automating Naukri searching/applying with Playwright stealth, SentenceTransformers + FAISS matching, screening Q&A solver, Telegram bot control, and FastAPI analytics dashboard.
+2. **OpenViz** — Generative AI analytics platform using Llama 4 via Groq SDK, React 19, Vega-Lite, and Arquero for zero-latency prompt-driven chart generation.
 2. **SiLens AI** — STEM learning platform (FastAPI Clean Architecture, PaddleOCR, Pix2Tex, React/TanStack) for interactive document-based Q&A.
 3. **AI File Explorer** — Local AI-powered semantic search desktop app (Electron, Ollama llama3.2, Groq, ChromaDB, watchdog).
 4. **AURASELECT** — AI video interview evaluator (React, FastAPI, Groq Whisper speech transcription, LLM multi-dimensional evaluation).
-5. **Meet-Ops** — Autonomous Microsoft Teams meeting bot with Hugging Face AI summarizer (CognitBotz / Adani).
-6. **Live Missile Trajectory Simulation** — Real-time DRDO system with React.js, FastAPI, and WebSockets.
-7. **App Connectivity Dashboard** — Adani operational analytics with cascading filters (State → Region → Substation).
-8. **Landed Tariff Data Visualization** — Adani tariff analytics dashboard with REST APIs and multi-level filters.
+6. **Meet-Ops** — Autonomous Microsoft Teams meeting bot with Hugging Face AI summarizer (CognitBotz / Adani).
+7. **Live Missile Trajectory Simulation** — Real-time DRDO system presenting telemetry data (acceleration, velocity, height) via WebSockets.
+8. **NOC Data Analytics Dashboard** — Adani enterprise dashboard featuring a 4-level hierarchical data model for organizing high-volume operational data.
+9. **App Connectivity Dashboard** — Adani operational analytics with cascading filters (State → Region → Substation).
+10. **Landed Tariff Data Visualization** — Adani tariff analytics dashboard with REST APIs and multi-level filters.
 
 ---
 
 ## Q: What are Praneeth's technical skills / tech stack? / What technologies does he know? / What programming languages does he use? / What frameworks is he good at? / What tools does he use? / What is his expertise?
 
-**AI & GenAI:** Llama 4, Llama 3.3, Groq SDK, OpenAI API, Ollama, Pydantic AI, LangChain, LlamaIndex, sentence-transformers, ChromaDB, Pinecone, Supabase pgvector, BM25 (rank_bm25), Cross-Encoder reranking, Groq Whisper, PaddleOCR, Pix2Tex, Crawl4AI
+**AI & Machine Learning:** Generative AI, LLMs, RAG, AI Agents, Agent Orchestration, Vector Search (FAISS, ChromaDB), SentenceTransformers, spaCy, Prompt Engineering
 
-**Frontend:** React 19, React.js, Next.js, TanStack (Start, Router, Query), Electron, Vite, Tailwind CSS, Vega-Lite, TypeScript, JavaScript (ES6+), Framer Motion, HTML5, CSS3
+**Backend:** Python, FastAPI, Node.js, REST APIs, WebSockets
 
-**Backend:** FastAPI, Python, Node.js, Express, REST APIs, WebSockets, SSE, SQLAlchemy 2.0, Alembic, Clean (Hexagonal) Architecture, Dependency Injection
+**Frontend:** React.js, TypeScript, JavaScript, HTML5, CSS3, Vite, Responsive Design, Data Visualization
 
-**Databases:** PostgreSQL, MySQL, SQLite, ChromaDB, Supabase pgvector, Pinecone
+**Database:** PostgreSQL, MySQL, SQL, ChromaDB
 
-**DevOps & Tools:** Docker, GitHub Actions CI/CD, Git, AWS S3, GCP Cloud Run, VS Code, Postman, FFmpeg, Microsoft Teams API
+**Languages:** Python, Java, Advanced Java, C, C++, TypeScript, JavaScript
 
-**Languages:** Python, TypeScript, JavaScript, SQL, Java, C, C++
+**Tools & DevOps:** Git, Docker, Claude Code, VS Code, Postman, Playwright, FFmpeg
 
 ---
 

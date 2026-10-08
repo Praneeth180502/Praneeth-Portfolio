@@ -144,11 +144,10 @@ const HeroSection = () => {
               }}
               className="mx-auto lg:mx-0"
             >
-              Building{" "}
-              <strong style={{ color: "#38bdf8", fontWeight: 700 }}>production-ready AI agents</strong>,{" "}
-              <strong style={{ color: "#60a5fa", fontWeight: 700 }}>RAG systems</strong>, and{" "}
-              <strong style={{ color: "#c084fc", fontWeight: 700 }}>enterprise dashboards</strong> that
-              redefine industry standards.
+              AI Engineer building the{" "}
+              <strong style={{ color: "#38bdf8", fontWeight: 700 }}>orchestration layer</strong> behind{" "}
+              <strong style={{ color: "#22d3ee", fontWeight: 700 }}>production AI</strong>, coordinating agents,{" "}
+              <strong style={{ color: "#60a5fa", fontWeight: 700 }}>RAG pipelines</strong>, and workflows into reliable, scalable systems.
             </motion.p>
 
             {/* CTA Buttons */}

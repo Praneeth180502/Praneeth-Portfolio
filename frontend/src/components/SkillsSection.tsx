@@ -3,18 +3,44 @@ import { Code, Database, Layout, Server, Terminal, Globe, Bot } from "lucide-rea
 
 const skillCategories = [
   {
-    title: "Frontend",
-    icon: Layout,
-    skills: ["React.js", "TypeScript", "HTML5", "CSS3", "JavaScript", "Vite"],
-    color: "#3b82f6",
-    tagColor: "blue",
+    title: "AI & Machine Learning",
+    icon: Bot,
+    skills: [
+      "Generative AI",
+      "LLMs",
+      "RAG",
+      "AI Agents",
+      "Agent Orchestration",
+      "Vector Search (FAISS, ChromaDB)",
+      "SentenceTransformers",
+      "spaCy",
+      "Prompt Engineering",
+    ],
+    color: "#8b5cf6",
+    tagColor: "violet",
   },
   {
     title: "Backend",
     icon: Server,
-    skills: ["FastAPI", "Python", "REST APIs", "Node.js"],
+    skills: ["Python", "FastAPI", "Node.js", "REST APIs", "WebSockets"],
     color: "#06b6d4",
     tagColor: "cyan",
+  },
+  {
+    title: "Frontend",
+    icon: Layout,
+    skills: [
+      "React.js",
+      "TypeScript",
+      "JavaScript",
+      "HTML5",
+      "CSS3",
+      "Vite",
+      "Responsive Design",
+      "Data Visualization",
+    ],
+    color: "#3b82f6",
+    tagColor: "blue",
   },
   {
     title: "Database",
@@ -26,30 +52,16 @@ const skillCategories = [
   {
     title: "Languages",
     icon: Code,
-    skills: ["Python", "C", "C++", "Java", "Advanced Java"],
+    skills: ["Python", "Java", "Advanced Java", "C", "C++", "TypeScript", "JavaScript"],
     color: "#8b5cf6",
     tagColor: "violet",
   },
   {
     title: "Tools & DevOps",
     icon: Terminal,
-    skills: ["Git", "Docker", "VS Code", "Postman", "FFmpeg"],
+    skills: ["Git", "Docker", "Claude Code", "VS Code", "Postman", "Playwright", "FFmpeg"],
     color: "#f59e0b",
     tagColor: "amber",
-  },
-  {
-    title: "Web Technologies",
-    icon: Globe,
-    skills: ["REST APIs", "WebSockets", "Responsive Design", "Data Viz"],
-    color: "#06b6d4",
-    tagColor: "cyan",
-  },
-  {
-    title: "AI & Machine Learning",
-    icon: Bot,
-    skills: ["Generative AI", "LLMs", "RAG", "Groq API", "Vector DBs", "Whisper"],
-    color: "#8b5cf6",
-    tagColor: "violet",
   },
 ];
 
