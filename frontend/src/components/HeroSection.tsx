@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, Github, Linkedin, Mail, Download, Eye } from "lucide-react";
-import praneethPhoto from "@/assets/Photo.png";
+import praneethPhoto from "@/assets/Photo.jpg";
 
 /* ── Node-graph canvas background (White & Silver) ── */
 function NodeGraphCanvas() {
