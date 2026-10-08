@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { GraduationCap, MapPin, Briefcase, Award } from "lucide-react";
+import praneethPhoto from "@/assets/Photo.png";
 
 const stats = [
   { icon: Briefcase, label: "Internships", value: "2+", desc: "DRDO & CognitBotz" },
@@ -64,37 +65,61 @@ export default function AboutSection() {
             </div>
           </motion.div>
 
-          {/* Quick Stats Grid (5 cols) */}
-          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {stats.map((stat, idx) => {
-              const Icon = stat.icon;
-              return (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: idx * 0.08 }}
-                  className="card-silver p-5 flex flex-col justify-between"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-mono text-[#a1a1aa] uppercase tracking-wider">
-                      {stat.label}
-                    </span>
-                    <Icon size={18} className="text-[#ffffff]" />
-                  </div>
+          {/* Large Photo & Quick Stats Column (5 cols) */}
+          <div className="lg:col-span-5 space-y-6">
+            
+            {/* Enlarged Featured Photo Frame */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+              className="relative overflow-hidden rounded-2xl bg-[#0c0c0e] border border-[#3f3f46] shadow-2xl p-2 group"
+            >
+              <img
+                src={praneethPhoto}
+                alt="Praneeth Reddy Ankey"
+                className="w-full h-72 sm:h-80 object-cover object-top rounded-xl transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="p-3 flex items-center justify-between text-xs font-mono text-[#a1a1aa]">
+                <span className="text-[#ffffff] font-semibold">Ankey Praneeth Reddy</span>
+                <span>AI Engineer</span>
+              </div>
+            </motion.div>
 
-                  <div>
-                    <div className="text-2xl font-bold font-mono text-[#ffffff] mb-1">
-                      {stat.value}
+            {/* Quick Stats Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {stats.map((stat, idx) => {
+                const Icon = stat.icon;
+                return (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: idx * 0.08 }}
+                    className="card-silver p-5 flex flex-col justify-between"
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-xs font-mono text-[#a1a1aa] uppercase tracking-wider">
+                        {stat.label}
+                      </span>
+                      <Icon size={18} className="text-[#ffffff]" />
                     </div>
-                    <div className="text-xs text-[#a1a1aa] font-sans">
-                      {stat.desc}
+
+                    <div>
+                      <div className="text-2xl font-bold font-mono text-[#ffffff] mb-1">
+                        {stat.value}
+                      </div>
+                      <div className="text-xs text-[#a1a1aa] font-sans">
+                        {stat.desc}
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              );
-            })}
+                  </motion.div>
+                );
+              })}
+            </div>
+
           </div>
 
         </div>

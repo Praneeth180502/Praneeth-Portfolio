@@ -245,16 +245,19 @@ export default function HeroSection() {
               {/* Silver top accent line */}
               <div className="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-[#ffffff] to-transparent opacity-40" />
 
-              <div className="flex items-center gap-4">
+              <div className="relative w-full overflow-hidden rounded-xl border border-[#3f3f46] mb-5 group/img">
                 <img
                   src={praneethPhoto}
                   alt="Praneeth Reddy Ankey"
-                  className="w-20 h-20 rounded-xl object-cover border border-[#27272a] shadow-md group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-80 sm:h-96 object-cover object-top transition-transform duration-500 group-hover/img:scale-105"
                 />
-                <div>
-                  <h3 className="font-semibold text-lg text-[#ffffff]">Praneeth Reddy Ankey</h3>
-                  <p className="text-xs font-mono text-[#a1a1aa]">Associate AI Engineer</p>
-                  <p className="text-xs text-[#e4e4e7] mt-1">Digimaxx AI Solutions</p>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0e] via-transparent to-transparent opacity-80" />
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+                  <div>
+                    <h3 className="font-bold text-xl text-[#ffffff] tracking-tight">Praneeth Reddy Ankey</h3>
+                    <p className="text-xs font-mono text-[#a1a1aa]">Associate AI Engineer · Digimaxx</p>
+                  </div>
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#10b981] animate-pulse" title="Available for AI Projects" />
                 </div>
               </div>
 
