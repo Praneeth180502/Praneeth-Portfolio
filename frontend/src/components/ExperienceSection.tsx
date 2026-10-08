@@ -5,7 +5,7 @@ const experiences = [
   {
     company: "Digimaxx AI Solutions",
     role: "Associate AI Engineer",
-    period: "2025 — PRESENT",
+    period: " August 2026 — PRESENT",
     status: "active",
     location: "Hyderabad, India",
     description: "Designing and engineering autonomous agent workflows, enterprise RAG pipelines, and intelligent decision systems.",
@@ -51,7 +51,7 @@ export default function ExperienceSection() {
   return (
     <section id="experience" className="relative py-24 bg-[#000000] text-[#e4e4e7]">
       <div className="container mx-auto px-6">
-        
+
         {/* Section Header */}
         <div className="space-y-3 mb-16">
           <span className="eyebrow text-[#a1a1aa]">EXPERIENCE</span>
@@ -78,20 +78,18 @@ export default function ExperienceSection() {
               >
                 {/* Node dot on timeline */}
                 <div
-                  className={`absolute -left-[31px] md:-left-[39px] top-1.5 w-4 h-4 rounded-full border-2 transition-all ${
-                    isActive
+                  className={`absolute -left-[31px] md:-left-[39px] top-1.5 w-4 h-4 rounded-full border-2 transition-all ${isActive
                       ? "bg-[#ffffff] border-[#ffffff] shadow-[0_0_12px_rgba(255,255,255,0.8)]"
                       : "bg-[#0c0c0e] border-[#52525b] group-hover:border-[#ffffff]"
-                  }`}
+                    }`}
                 />
 
                 {/* Card Container */}
                 <div
-                  className={`p-6 sm:p-8 rounded-xl transition-all ${
-                    isActive
+                  className={`p-6 sm:p-8 rounded-xl transition-all ${isActive
                       ? "bg-[#0c0c0e] border border-[#52525b] shadow-xl"
                       : "bg-[#0c0c0e] border border-[#27272a] hover:border-[#3f3f46]"
-                  }`}
+                    }`}
                 >
                   {/* Top Bar: Company & Date */}
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-2">

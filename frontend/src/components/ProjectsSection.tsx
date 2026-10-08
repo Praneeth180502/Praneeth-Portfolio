@@ -1,18 +1,12 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Github, ExternalLink } from "lucide-react";
+import { ChevronDown, Github, ExternalLink, Bot, Video, BarChart3, GraduationCap, FolderSearch, Activity } from "lucide-react";
 
 /* ── Pipeline pulse SVG background ── */
 function PipelinePulseBackground() {
   return (
     <div className="absolute inset-0 pointer-events-none opacity-20 overflow-hidden">
       <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 1000 400">
-        <defs>
-          <linearGradient id="silver-pulse" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#a1a1aa" stopOpacity="0.2" />
-          </linearGradient>
-        </defs>
         <path
           d="M0,100 Q250,50 500,200 T1000,100"
           fill="none"
@@ -32,14 +26,14 @@ function PipelinePulseBackground() {
   );
 }
 
-const categories = ["All", "AI Agents", "RAG", "Full-stack", "Automation"] as const;
+const categories = ["All", "AI Agents", "RAG", "Full-stack", "Automation", "Enterprise"] as const;
 type Category = (typeof categories)[number];
 
 interface Project {
   id: string;
   index: string;
   title: string;
-  category: string;
+  categoryLabel: string;
   categoryGroup: Category[];
   outcome: string;
   description: string;
@@ -48,78 +42,186 @@ interface Project {
   github?: string;
   liveUrl?: string;
   tags: string[];
+  icon: typeof Bot;
 }
 
 const projects: Project[] = [
   {
     id: "naukribot",
     index: "01",
-    title: "NaukriBot",
-    category: "AI · AUTOMATION",
+    title: "NaukriBot — Autonomous Job Application Agent",
+    categoryLabel: "AI AGENT · AUTOMATION",
     categoryGroup: ["AI Agents", "Automation"],
-    outcome: "Autonomous job search & auto-apply bot handling 50+ applications daily with AI screening Q&A.",
-    description: "An intelligent autonomous agent that navigates job portals, bypasses multi-step application forms, solves custom screening questions using LLMs, and triggers real-time Telegram updates.",
+    outcome: "Autonomous job search & auto-apply agent handling end-to-end applications with AI screening Q&A.",
+    description: "NaukriBot automates Naukri job searching and multi-step application submission. Uses Playwright with stealth for persistent sessions, semantic resume-to-job matching (SentenceTransformers + FAISS), dynamic screening Q&A solver, Telegram bot control, and a FastAPI analytics dashboard.",
     capabilities: [
-      "Persistent browser session management with Playwright & anti-detection",
-      "Semantic resume matching using SentenceTransformers & FAISS embeddings",
-      "Dynamic screening Q&A solver powered by GPT-4 and custom RAG memory",
-      "Telegram control interface & real-time analytics dashboard via FastAPI"
+      "Persistent browser session management with Playwright & stealth anti-detection",
+      "Semantic resume-to-job matching with SentenceTransformers & FAISS vector search",
+      "Dynamic LLM screening Q&A solver powered by GPT-4 & local memory",
+      "Telegram bot control interface + FastAPI analytics dashboard"
     ],
     metrics: "50+ applications/day · 94% screening accuracy",
-    github: "https://github.com",
-    tags: ["Playwright", "FastAPI", "FAISS", "SentenceTransformers", "Python", "Telegram API"],
+    github: "https://github.com/Praneeth180502/NaukriBot.git",
+    tags: ["Playwright", "SentenceTransformers", "FAISS", "FastAPI", "Telegram Bot", "Python"],
+    icon: Bot,
+  },
+  {
+    id: "auraselect",
+    index: "02",
+    title: "AURASELECT — AI Video Interview Evaluator",
+    categoryLabel: "AI · HR TECH",
+    categoryGroup: ["AI Agents", "Full-stack"],
+    outcome: "AI-powered automated video screening platform evaluating candidate responses via Groq Whisper & LLMs.",
+    description: "Automates the initial HR screening process. Candidates record responses via webcam; an AI pipeline transcribes audio using Groq Whisper, semantically evaluates answers against benchmark criteria, and generates detailed score reports.",
+    capabilities: [
+      "Webcam audio recording & low-latency transcription via Groq Whisper API",
+      "Semantic response scoring against benchmark answer vectors",
+      "Automated PDF evaluation summary report generation",
+      "Interactive candidate review dashboard built with React & FastAPI"
+    ],
+    metrics: "Automated candidate evaluation pipeline",
+    tags: ["React", "FastAPI", "Groq Whisper", "LLMs", "AI Evaluation", "Python"],
+    icon: Video,
+  },
+  {
+    id: "openviz",
+    index: "03",
+    title: "OpenViz — Generative AI Analytics Platform",
+    categoryLabel: "GEN AI · ANALYTICS",
+    categoryGroup: ["RAG", "Full-stack"],
+    outcome: "Prompt-driven data analytics platform converting raw datasets into interactive charts via natural language.",
+    description: "Turns CSV and tabular datasets into interactive visualizations through plain text commands. Uses client-side RAG with Arquero for zero-latency profiling and data privacy.",
+    capabilities: [
+      "Natural language prompt translation into Vega-Lite chart specs",
+      "Zero-latency client-side dataset profiling via Arquero",
+      "Llama 4 & Groq SDK integration for rapid visualization generation",
+      "Exportable SVG/PNG charts & interactive data filters"
+    ],
+    metrics: "Zero-latency in-browser data profiling",
+    tags: ["React 19", "Vega-Lite", "Llama 4", "Groq SDK", "Arquero", "RAG"],
+    icon: BarChart3,
+  },
+  {
+    id: "silens-ai",
+    index: "04",
+    title: "SiLens AI — STEM Learning Platform",
+    categoryLabel: "EDTECH · GEN AI",
+    categoryGroup: ["RAG", "Full-stack"],
+    outcome: "Interactive learning platform extracting LaTeX equations and diagrams from STEM documents for Q&A.",
+    description: "Transforms static STEM textbooks and PDFs into interactive experiences. Uses PaddleOCR + Pix2Tex to extract complex math equations into LaTeX, paired with FastAPI Clean Architecture for hot-swappable LLM provider Q&A.",
+    capabilities: [
+      "LaTeX math equation extraction using PaddleOCR & Pix2Tex models",
+      "FastAPI Clean Architecture supporting hot-swappable LLM backends",
+      "Document-grounded RAG query answering over STEM textbooks",
+      "Interactive mathematical notation renderer with MathJax"
+    ],
+    tags: ["FastAPI", "React", "TypeScript", "Groq LLM", "PaddleOCR", "Pix2Tex"],
+    icon: GraduationCap,
+  },
+  {
+    id: "ai-file-explorer",
+    index: "05",
+    title: "AI File Explorer — Local Semantic Search",
+    categoryLabel: "DESKTOP · LOCAL AI",
+    categoryGroup: ["AI Agents", "RAG"],
+    outcome: "Privacy-first desktop AI app performing local semantic vector search across personal documents.",
+    description: "Desktop application built in Electron with real-time folder monitoring, multi-format file parsing (PDF, DOCX, TXT), ChromaDB vector embeddings, and hybrid execution using Ollama local LLMs.",
+    capabilities: [
+      "Real-time local filesystem watcher and document indexer",
+      "ChromaDB local vector embeddings for instant semantic search",
+      "Hybrid local LLM inference via Ollama (Llama 3 / Mistral)",
+      "Multi-format document parsing with PyMuPDF & python-docx"
+    ],
+    tags: ["FastAPI", "React", "Electron", "Ollama", "ChromaDB", "PyMuPDF"],
+    icon: FolderSearch,
+  },
+  {
+    id: "meet-ops",
+    index: "06",
+    title: "Meet-Ops — AI Meeting Analytics",
+    categoryLabel: "ENTERPRISE · AI",
+    categoryGroup: ["AI Agents", "Enterprise"],
+    outcome: "Autonomous meeting bot joining MS Teams calls, transcribing audio, and summarizing key decision items.",
+    description: "Developed during internship at CognitBotz for enterprise clients. The bot joins Microsoft Teams calls, captures live audio streams, generates automated transcriptions, and surfaces summaries on a centralized dashboard.",
+    capabilities: [
+      "Microsoft Teams call integration and audio stream capture",
+      "Hugging Face Transformers for automated transcript summarization",
+      "Centralized web dashboard for action item tracking & search",
+      "PostgreSQL database integration for team meeting archives"
+    ],
+    metrics: "Deployed for enterprise team operations (Adani / CognitBotz)",
+    tags: ["React.js", "FastAPI", "Hugging Face", "PostgreSQL", "MS Teams API"],
+    icon: Bot,
   },
   {
     id: "drdo-missile-sim",
-    index: "02",
-    title: "Live Missile Data Simulation",
-    category: "AI · ENTERPRISE",
-    categoryGroup: ["Full-stack", "RAG"],
-    outcome: "Real-time telemetry trajectory visualization and analysis pipeline built at DRDO.",
-    description: "Developed high-speed trajectory visualization software for defence missile testing data, parsing high-frequency telemetry streams and generating interactive telemetry heatmaps.",
+    index: "07",
+    title: "Live Missile Trajectory Simulation",
+    categoryLabel: "DEFENSE · SIMULATION",
+    categoryGroup: ["Full-stack", "Enterprise"],
+    outcome: "Real-time trajectory visualization and telemetry simulation platform engineered at DRDO.",
+    description: "Developed during software engineering internship at DRDO (Defense Research & Development Organisation). Real-time simulation and visualization presenting live missile telemetry data including acceleration, velocity, altitude, and flight trajectory streams.",
     capabilities: [
-      "High-throughput real-time telemetry data processing pipeline",
-      "Low-latency dynamic charting with custom WebGL rendering",
+      "Sub-50ms telemetry data stream parsing in C++ and Python",
+      "Real-time trajectory rendering using WebSockets and WebGL charts",
       "Automated anomaly detection on live sensor readings",
-      "Exportable tactical analytics report generation"
+      "Tactical defense analytics interface for missile flight tests"
     ],
-    metrics: "Sub-50ms render latency · DRDO Defence Project",
-    tags: ["Python", "C++", "FastAPI", "React", "WebGL", "Telemetry"],
+    metrics: "Sub-50ms render latency · DRDO Defense Project",
+    tags: ["C++", "Python", "FastAPI", "React.js", "WebSockets", "DRDO"],
+    icon: Activity,
   },
   {
-    id: "cognitbotz-dashboards",
-    index: "03",
-    title: "Adani Enterprise Analytics Dashboards",
-    category: "ENTERPRISE · FULL-STACK",
-    categoryGroup: ["Full-stack"],
-    outcome: "Enterprise operational dashboards processing multi-facility data streams for Adani Group.",
-    description: "Built scalable frontend and backend architecture for Adani Group facility operations during internship at CognitBotz, aggregating real-time telemetry into unified decision metrics.",
+    id: "noc-analytics",
+    index: "08",
+    title: "NOC Data Analytics Dashboard",
+    categoryLabel: "ENTERPRISE · DASHBOARD",
+    categoryGroup: ["Full-stack", "Enterprise"],
+    outcome: "Enterprise operational dashboard with a 4-level hierarchical data model for Adani Group.",
+    description: "Engineered at CognitBotz for Adani Group facility operations. Features a 4-level hierarchical data model organizing and filtering massive operational datasets with high rendering performance.",
     capabilities: [
-      "Modular React & TypeScript component architecture",
-      "FastAPI REST endpoints integrated with PostgreSQL database",
-      "Role-based access control and secure JWT authentication",
-      "Interactive data filtering, exports, and real-time alerts"
+      "4-level hierarchical data tree filtering (Group → Site → System → Node)",
+      "Optimized high-throughput table virtualization for 100k+ rows",
+      "FastAPI backend with PostgreSQL index optimization",
+      "Custom role-based permissions and data export tools"
     ],
-    metrics: "Used across 12+ enterprise facilities",
-    tags: ["React.js", "FastAPI", "PostgreSQL", "TailwindCSS", "Enterprise API"],
+    metrics: "Used across 12+ enterprise facilities (Adani / CognitBotz)",
+    tags: ["React.js", "FastAPI", "PostgreSQL", "Hierarchical Data Model"],
+    icon: BarChart3,
   },
   {
-    id: "multimodal-rag",
-    index: "04",
-    title: "Multimodal Enterprise Document RAG",
-    category: "AI · RAG",
-    categoryGroup: ["RAG", "AI Agents"],
-    outcome: "Hybrid RAG search system indexing PDFs, schematics, and tabular data with citation tracking.",
-    description: "End-to-end RAG architecture parsing complex multi-page PDF documents containing tables, charts, and diagrams with precise source text grounding.",
+    id: "app-connectivity",
+    index: "09",
+    title: "App Connectivity & Substation Dashboard",
+    categoryLabel: "ENTERPRISE · ANALYTICS",
+    categoryGroup: ["Full-stack", "Enterprise"],
+    outcome: "Operational dashboard visualizing grid datasets with cascading filters (State → Region → Substation).",
+    description: "Built for Adani facility operations. Visualizes Excel/CSV datasets with dynamic cascading dependent dropdown filters, KPI summary cards, and interactive trend charts.",
     capabilities: [
-      "Unstructured PDF layout parsing with OCR & table extraction",
-      "Hybrid dense-sparse retrieval combining BGE-M3 and BM25 lexemes",
-      "Cross-encoder re-ranking for high precision context window loading",
-      "Streaming inline markdown responses with source page citations"
+      "Cascading multi-level dependent filters (State → Region → Substation)",
+      "Dynamic KPI summary card aggregation engine",
+      "Automated CSV/Excel file parser returning JSON responses",
+      "Interactive grid connectivity status charts"
     ],
-    metrics: "91% retrieval precision · Sub-second response",
-    github: "https://github.com",
-    tags: ["LangChain", "Qdrant", "BM25", "LlamaParse", "FastAPI", "Python"],
+    tags: ["React.js", "FastAPI", "PostgreSQL", "Charts", "Adani"],
+    icon: Activity,
+  },
+  {
+    id: "landed-tariff",
+    index: "10",
+    title: "Landed Tariff Data Visualization",
+    categoryLabel: "ENTERPRISE · DATA",
+    categoryGroup: ["Full-stack", "Enterprise"],
+    outcome: "Analytics dashboard processing complex landed tariff datasets into structured interactive reports.",
+    description: "Processes landed tariff datasets with multi-level dependent filters backed by REST APIs transforming raw tabular datasets into structured JSON analytical responses.",
+    capabilities: [
+      "Multi-level tariff dataset REST API parsing engine",
+      "Interactive cost breakdown visualization charts",
+      "Custom filter presets and scenario comparison tools",
+      "Exportable financial summary reports"
+    ],
+    tags: ["React.js", "FastAPI", "PostgreSQL", "Data Analytics"],
+    icon: BarChart3,
   },
 ];
 
@@ -145,7 +247,7 @@ export default function ProjectsSection() {
             Systems built to work in the real world.
           </h2>
           <p className="text-[#a1a1aa] text-base max-w-2xl font-normal">
-            Production AI agents, RAG architectures, and enterprise engineering projects built for measurable outcome.
+            Production AI agents, RAG architectures, defense simulation software, and enterprise engineering projects built for measurable outcome.
           </p>
         </div>
 
@@ -169,10 +271,12 @@ export default function ProjectsSection() {
           })}
         </div>
 
-        {/* Project Cards Grid (Numbered card pattern per design.md §7) */}
+        {/* Project Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {filteredProjects.map((project) => {
             const isExpanded = expandedId === project.id;
+            const ProjectIcon = project.icon;
+
             return (
               <motion.div
                 key={project.id}
@@ -184,13 +288,19 @@ export default function ProjectsSection() {
                 className="card-silver group flex flex-col justify-between"
               >
                 <div>
-                  {/* Top Bar: Index & Category */}
+                  {/* Top Bar: Index, Icon & Category */}
                   <div className="flex items-center justify-between mb-4">
-                    <span className="font-mono text-xl font-bold text-[#ffffff] group-hover:text-[#ffffff] transition-colors">
-                      {project.index}
-                    </span>
+                    <div className="flex items-center gap-3">
+                      <span className="font-mono text-xl font-bold text-[#ffffff]">
+                        {project.index}
+                      </span>
+                      <div className="p-2 rounded-lg bg-[#16161a] border border-[#27272a] text-[#ffffff]">
+                        <ProjectIcon size={18} />
+                      </div>
+                    </div>
+                    
                     <span className="font-mono text-[11px] uppercase tracking-wider text-[#a1a1aa] bg-[#16161a] px-2.5 py-1 rounded border border-[#27272a]">
-                      {project.category}
+                      {project.categoryLabel}
                     </span>
                   </div>
 
@@ -226,18 +336,33 @@ export default function ProjectsSection() {
 
                 {/* Expand / Collapse Details Button */}
                 <div className="pt-4 border-t border-[#27272a]">
-                  <button
-                    onClick={() => setExpandedId(isExpanded ? null : project.id)}
-                    className="w-full flex items-center justify-between text-xs font-mono text-[#a1a1aa] hover:text-[#ffffff] py-1 transition-colors"
-                  >
-                    <span>{isExpanded ? "Hide details" : "View details"}</span>
-                    <ChevronDown
-                      size={16}
-                      className={`transform transition-transform duration-200 ${
-                        isExpanded ? "rotate-180 text-[#ffffff]" : ""
-                      }`}
-                    />
-                  </button>
+                  <div className="flex items-center justify-between">
+                    <button
+                      onClick={() => setExpandedId(isExpanded ? null : project.id)}
+                      className="flex items-center gap-2 text-xs font-mono text-[#a1a1aa] hover:text-[#ffffff] py-1 transition-colors"
+                    >
+                      <span>{isExpanded ? "Hide details" : "View details"}</span>
+                      <ChevronDown
+                        size={16}
+                        className={`transform transition-transform duration-200 ${
+                          isExpanded ? "rotate-180 text-[#ffffff]" : ""
+                        }`}
+                      />
+                    </button>
+
+                    {project.github && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs font-mono text-[#ffffff] hover:underline"
+                        title="View GitHub Repository"
+                      >
+                        <Github size={14} />
+                        <span>GitHub Repo</span>
+                      </a>
+                    )}
+                  </div>
 
                   {/* Expanded Core Capabilities Panel */}
                   <AnimatePresence>
@@ -264,32 +389,6 @@ export default function ProjectsSection() {
                               </li>
                             ))}
                           </ul>
-                        </div>
-
-                        {/* Action buttons */}
-                        <div className="flex items-center gap-4 pt-2">
-                          {project.github && (
-                            <a
-                              href={project.github}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 text-xs font-mono text-[#ffffff] hover:underline"
-                            >
-                              <Github size={14} />
-                              <span>Source Code</span>
-                            </a>
-                          )}
-                          {project.liveUrl && (
-                            <a
-                              href={project.liveUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 text-xs font-mono text-[#ffffff] hover:underline"
-                            >
-                              <ExternalLink size={14} />
-                              <span>Live Application</span>
-                            </a>
-                          )}
                         </div>
                       </motion.div>
                     )}
