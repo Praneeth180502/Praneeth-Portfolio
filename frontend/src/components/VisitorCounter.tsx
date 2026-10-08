@@ -36,29 +36,16 @@ export const VisitorCounter = ({ isMobile = false }: VisitorCounterProps) => {
 
   if (isMobile) {
     return (
-      <div
-        className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium my-1"
-        style={{
-          background: "rgba(15, 23, 42, 0.75)",
-          border: "1px solid rgba(6, 182, 212, 0.25)",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
-        }}
-      >
+      <div className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs bg-[#12121a] border border-[#1e293b] my-1">
         <div className="flex items-center gap-2">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10b981] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10b981]"></span>
           </span>
-          <Users size={14} className="text-cyan-400" />
-          <span className="text-slate-200 font-medium">Site Visitors</span>
+          <Users size={14} className="text-[#06b6d4]" />
+          <span className="text-[#cbd5e1] font-mono text-xs">Site Visitors</span>
         </div>
-        <span
-          className="px-2.5 py-1 rounded-md font-mono font-bold text-cyan-300 text-xs tracking-wider"
-          style={{
-            background: "rgba(6, 182, 212, 0.15)",
-            border: "1px solid rgba(6, 182, 212, 0.3)",
-          }}
-        >
+        <span className="px-2 py-0.5 rounded font-mono font-semibold text-[#06b6d4] text-xs bg-[#06b6d4]/12 border border-[#06b6d4]/20">
           {loading ? "..." : formattedCount}
         </span>
       </div>
@@ -67,26 +54,19 @@ export const VisitorCounter = ({ isMobile = false }: VisitorCounterProps) => {
 
   return (
     <div
-      className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-300 hover:scale-105"
-      style={{
-        background: "rgba(6, 182, 212, 0.08)",
-        border: "1px solid rgba(6, 182, 212, 0.25)",
-        color: "#67e8f9",
-        boxShadow: "0 0 12px rgba(6, 182, 212, 0.12)",
-        backdropFilter: "blur(8px)",
-      }}
-      title="Live total site visitors who opened the link"
+      className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-mono bg-[#06b6d4]/12 border border-[#06b6d4]/30 text-[#06b6d4] transition-all"
+      title="Live portfolio visitor count"
     >
       <span className="relative flex h-2 w-2">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10b981] opacity-75"></span>
+        <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10b981]"></span>
       </span>
-      <Users size={14} className="text-cyan-400" />
-      <span className="font-mono text-cyan-200 font-bold">
+      <Users size={13} className="text-[#06b6d4]" />
+      <span className="font-bold text-[#f8fafc]">
         {loading ? "..." : formattedCount}
       </span>
-      <span className="text-[10px] text-cyan-400/80 font-medium uppercase tracking-wider">
-
+      <span className="text-[10px] text-[#94a3b8] uppercase tracking-wider">
+        visitors
       </span>
     </div>
   );

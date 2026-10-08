@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, X, Send, Sparkles, RefreshCw, User, FileText } from "lucide-react";
+import { Bot, X, Send, Sparkles, RefreshCw, User } from "lucide-react";
 import { streamChatMessage, ChatSource } from "@/lib/api";
 
 interface Message {
@@ -10,8 +10,6 @@ interface Message {
   sources?: ChatSource[];
   isStreaming?: boolean;
 }
-
-
 
 const renderMessageText = (text: string) => {
   if (!text) return null;
@@ -40,7 +38,7 @@ const renderMessageText = (text: string) => {
           const parts = str.split(/\*\*([^*]+)\*\*/g);
           return parts.map((part, i) => {
             if (i % 2 === 1) {
-              return <strong key={i} className="font-semibold text-foreground">{part}</strong>;
+              return <strong key={i} className="font-semibold text-[#f8fafc]">{part}</strong>;
             }
             return part;
           });
@@ -65,7 +63,7 @@ const renderMessageText = (text: string) => {
             const contentText = numberMatch[2];
             renderedElements.push(
               <div key={`num-${lineIdx}`} className="flex gap-2 my-1 pl-1 leading-relaxed">
-                <span className="font-semibold text-primary">{line.match(/^\s*(\d+\.)/)?.[1]}</span>
+                <span className="font-semibold text-[#06b6d4] font-mono">{line.match(/^\s*(\d+\.)/)?.[1]}</span>
                 <span className="flex-1">{formatInline(contentText)}</span>
               </div>
             );
@@ -98,7 +96,7 @@ const ChatWidget = () => {
     {
       id: "welcome",
       sender: "assistant",
-      text: "Hi there! I'm Bittu 🤖, Praneeth's AI Assistant. Ask me anything about his work experience, GenAI projects, tech stack, or background!",
+      text: "Hi there! I'm Praneeth's AI Assistant. Ask me anything about his work, agent architectures, RAG pipelines, or experience at Digimaxx & DRDO!",
     },
   ]);
   const [input, setInput] = useState("");
@@ -152,15 +150,15 @@ const ChatWidget = () => {
             prev.map((msg) => (msg.id === assistantMsgId ? { ...msg, sources } : msg))
           );
         },
-        onError: (err) => {
+        onError: () => {
           setMessages((prev) =>
             prev.map((msg) =>
               msg.id === assistantMsgId
                 ? {
-                  ...msg,
-                  text: msg.text || "Sorry, I couldn't process your request right now. Please email Praneeth directly at apraneethreddy20891a0502@gmail.com!",
-                  isStreaming: false,
-                }
+                    ...msg,
+                    text: msg.text || "I couldn't reach the backend server right now. You can email Praneeth directly at apraneethreddy20891a0502@gmail.com!",
+                    isStreaming: false,
+                  }
                 : msg
             )
           );
@@ -180,139 +178,137 @@ const ChatWidget = () => {
       {
         id: "welcome",
         sender: "assistant",
-        text: "Hi there! I'm Bittu 🤖, Praneeth's AI Assistant. Ask me anything about his work experience, GenAI projects, tech stack, or background!",
+        text: "Hi there! I'm Praneeth's AI Assistant. Ask me anything about his work, agent architectures, RAG pipelines, or experience at Digimaxx & DRDO!",
       },
     ]);
   };
 
   return (
     <>
-      {/* Greeting Bubble near Chatbot Button */}
+      {/* Greeting Bubble per design.md §7 ("Ask about my work") */}
       <AnimatePresence>
         {!isOpen && showGreeting && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, x: 20 }}
+            initial={{ opacity: 0, scale: 0.9, x: 20 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.8, x: 20 }}
+            exit={{ opacity: 0, scale: 0.9, x: 20 }}
             transition={{ delay: 1, duration: 0.3 }}
-            className="fixed bottom-6 right-24 mr-2 z-50 flex items-center gap-2 max-w-[calc(100vw-8rem)] sm:max-w-[280px] bg-background/95 backdrop-blur-md border border-border shadow-lg p-3 rounded-2xl rounded-br-none text-xs text-foreground cursor-pointer hover:bg-secondary/50 transition-colors group/bubble"
+            className="fixed bottom-6 right-24 mr-2 z-50 flex items-center gap-2.5 max-w-[calc(100vw-8rem)] sm:max-w-[280px] bg-[#12121a]/95 backdrop-blur-md border border-[#1e293b] shadow-xl p-3 rounded-xl text-xs text-[#cbd5e1] cursor-pointer hover:bg-[#181824] transition-colors group/bubble"
             onClick={() => setIsOpen(true)}
           >
-            <div className="flex-1 pr-2 leading-relaxed select-none">
-              <span className="font-semibold text-primary">Bittu 🤖: </span>
-              Hi there! I'm Bittu, Praneeth's AI Assistant. Ask me anything!
+            <div className="flex-1 pr-1 leading-relaxed select-none">
+              <span className="font-mono text-[#06b6d4] font-medium">Assistant: </span>
+              Ask about my work & RAG projects!
             </div>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 setShowGreeting(false);
               }}
-              className="p-1 rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors self-start -mt-1 -mr-1"
+              className="p-1 rounded text-[#94a3b8] hover:text-[#f8fafc] hover:bg-[#181824] transition-colors self-start -mt-0.5 -mr-1"
               title="Dismiss"
             >
               <X size={12} />
             </button>
-            {/* Little tail pointing to the button */}
-            <div className="absolute right-[-6px] bottom-4 w-3 h-3 rotate-45 bg-background border-r border-t border-border group-hover/bubble:bg-secondary/50 transition-colors" />
+            <div className="absolute right-[-5px] bottom-4 w-2.5 h-2.5 rotate-45 bg-[#12121a] border-r border-t border-[#1e293b] group-hover/bubble:bg-[#181824] transition-colors" />
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Floating Toggle Button */}
+      {/* Floating Assistant Button per design.md §7 */}
       <motion.button
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 p-4 rounded-full bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-xl hover:shadow-primary/25 transition-all flex items-center justify-center gap-2 group"
-        aria-label="Open Bittu AI Assistant"
+        className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-full bg-[#06b6d4] text-[#040810] font-medium text-xs tracking-wide shadow-lg hover:bg-[#22d3ee] transition-all flex items-center gap-2 group border border-[#06b6d4]/40"
+        aria-label="Ask about my work"
       >
-        <Bot size={24} className="group-hover:rotate-12 transition-transform" />
-        <span className="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-300 text-sm font-semibold pr-1">
-          Ask Bittu AI
-        </span>
-        <span className="absolute top-0 right-0 w-3.5 h-3.5 rounded-full bg-green-500 border-2 border-background animate-pulse" />
+        <Bot size={18} className="text-[#040810] group-hover:rotate-12 transition-transform" />
+        <span className="font-mono font-semibold">Ask about my work</span>
+        <span className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse" />
       </motion.button>
 
       {/* Chat Window Modal */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            initial={{ opacity: 0, y: 15, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            exit={{ opacity: 0, y: 15, scale: 0.96 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-28 top-20 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[420px] max-h-[calc(100vh-9rem)] flex flex-col rounded-2xl border border-border shadow-2xl overflow-hidden bg-background"
+            className="fixed bottom-24 top-20 right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[420px] max-h-[calc(100vh-8rem)] flex flex-col rounded-xl border border-[#1e293b] shadow-2xl overflow-hidden bg-[#0a0a0f]"
           >
             {/* Header */}
-            <div className="px-5 py-4 bg-secondary/50 border-b border-border flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-primary/10 text-primary">
-                  <Bot size={20} />
+            <div className="px-4 py-3.5 bg-[#12121a] border-b border-[#1e293b] flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="p-1.5 rounded-lg bg-[#06b6d4]/12 text-[#06b6d4]">
+                  <Bot size={18} />
                 </div>
                 <div>
-                  <h3 className="font-heading font-bold text-sm text-foreground flex items-center gap-1.5">
-                    Bittu
-                    <Sparkles size={14} className="text-primary animate-pulse" />
+                  <h3 className="font-sans font-semibold text-sm text-[#f8fafc] flex items-center gap-1.5">
+                    Portfolio Assistant
+                    <Sparkles size={13} className="text-[#06b6d4]" />
                   </h3>
-                  <p className="text-xs text-muted-foreground">Praneeth's AI Assistant</p>
+                  <p className="text-[11px] font-mono text-[#94a3b8]">Powered by RAG & LangChain</p>
                 </div>
               </div>
               <div className="flex items-center gap-1">
                 <button
                   onClick={clearChat}
                   title="Clear chat"
-                  className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                  className="p-1.5 rounded-lg text-[#94a3b8] hover:text-[#f8fafc] hover:bg-[#181824] transition-colors"
                 >
-                  <RefreshCw size={16} />
+                  <RefreshCw size={14} />
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
                   title="Close"
-                  className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                  className="p-1.5 rounded-lg text-[#94a3b8] hover:text-[#f8fafc] hover:bg-[#181824] transition-colors"
                 >
-                  <X size={18} />
+                  <X size={16} />
                 </button>
               </div>
             </div>
 
             {/* Message Body */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 text-sm">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex gap-3 ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+                  className={`flex gap-2.5 ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
                 >
                   {msg.sender === "assistant" && (
-                    <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 mt-1">
-                      <Bot size={16} />
+                    <div className="w-7 h-7 rounded-lg bg-[#06b6d4]/12 text-[#06b6d4] flex items-center justify-center flex-shrink-0 mt-0.5 border border-[#06b6d4]/20">
+                      <Bot size={14} />
                     </div>
                   )}
 
-                  <div className={`max-w-[82%] space-y-2`}>
+                  <div className="max-w-[84%] space-y-1.5">
                     <div
-                      className={`p-3.5 rounded-2xl leading-relaxed ${msg.sender === "user"
-                        ? "bg-primary text-primary-foreground rounded-tr-none font-medium whitespace-pre-wrap"
-                        : "bg-secondary text-secondary-foreground rounded-tl-none border border-border/50"
-                        }`}
+                      className={`p-3 rounded-xl leading-relaxed ${
+                        msg.sender === "user"
+                          ? "bg-[#06b6d4] text-[#040810] font-medium"
+                          : "bg-[#12121a] text-[#cbd5e1] border border-[#1e293b]"
+                      }`}
                     >
                       {msg.sender === "user" ? (
                         msg.text
                       ) : msg.text ? (
                         renderMessageText(msg.text)
                       ) : (
-                        msg.isStreaming ? "Thinking..." : ""
+                        msg.isStreaming ? "Retrieving contextual answer..." : ""
                       )}
                       {msg.isStreaming && (
-                        <span className="inline-block w-2 h-4 ml-1 bg-primary animate-pulse align-middle" />
+                        <span className="inline-block w-1.5 h-3 ml-1 bg-[#06b6d4] animate-pulse align-middle" />
                       )}
                     </div>
                   </div>
 
                   {msg.sender === "user" && (
-                    <div className="w-8 h-8 rounded-full bg-accent/20 text-accent flex items-center justify-center flex-shrink-0 mt-1">
-                      <User size={16} />
+                    <div className="w-7 h-7 rounded-lg bg-[#3b82f6]/15 text-[#3b82f6] flex items-center justify-center flex-shrink-0 mt-0.5 border border-[#3b82f6]/20">
+                      <User size={14} />
                     </div>
                   )}
                 </div>
@@ -320,30 +316,28 @@ const ChatWidget = () => {
               <div ref={messagesEndRef} />
             </div>
 
-
-
             {/* Input Bar */}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 handleSend();
               }}
-              className="p-3 border-t border-border bg-secondary/30 flex items-center gap-2"
+              className="p-3 border-t border-[#1e293b] bg-[#12121a] flex items-center gap-2"
             >
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask Bittu about projects, skills, or DRDO..."
+                placeholder="Ask about NaukriBot, DRDO, or AI Agents..."
                 disabled={isGenerating}
-                className="flex-1 px-4 py-2.5 rounded-xl bg-background border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none text-sm text-foreground placeholder:text-muted-foreground transition-all"
+                className="flex-1 px-3.5 py-2 rounded-lg bg-[#0a0a0f] border border-[#1e293b] focus:border-[#06b6d4] outline-none text-xs text-[#f8fafc] placeholder:text-[#94a3b8] font-sans transition-all"
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isGenerating}
-                className="p-2.5 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="p-2 rounded-lg bg-[#06b6d4] text-[#040810] hover:bg-[#22d3ee] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
-                <Send size={16} />
+                <Send size={14} />
               </button>
             </form>
           </motion.div>

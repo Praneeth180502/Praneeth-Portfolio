@@ -9,67 +9,64 @@ export default {
     container: {
       center: true,
       padding: {
-        DEFAULT: "1rem",
+        DEFAULT: "1.5rem",
         sm: "2rem",
-        lg: "4rem",
-        xl: "5rem",
-        "2xl": "6rem",
+        lg: "3rem",
+        xl: "4rem",
       },
     },
     extend: {
       fontFamily: {
-        heading: ['"Space Grotesk"', 'sans-serif'],
+        heading: ['Inter', 'sans-serif'],
         body: ['Inter', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
       },
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
+        bg: "#0a0a0f",
+        surface: "#12121a",
+        "surface-2": "#181824",
+        border: "#1e293b",
+        "text-strong": "#f8fafc",
+        text: "#cbd5e1",
+        "text-muted": "#94a3b8",
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "#06b6d4",
+          2: "#3b82f6",
+          soft: "rgba(6, 182, 212, 0.12)",
+          foreground: "#040810",
+        },
+        "glow-blue": "rgba(59, 130, 246, 0.15)",
+        success: "#10b981",
+        focus: "#22d3ee",
+
+        // Compatibility aliases for shadcn UI components
+        background: "#0a0a0f",
+        foreground: "#cbd5e1",
+        card: {
+          DEFAULT: "#12121a",
+          foreground: "#f8fafc",
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: "#12121a",
+          foreground: "#f8fafc",
         },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+        primary: {
+          DEFAULT: "#06b6d4",
+          foreground: "#040810",
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
+        secondary: {
+          DEFAULT: "#181824",
+          foreground: "#f8fafc",
+        },
+        muted: {
+          DEFAULT: "#181824",
+          foreground: "#94a3b8",
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "12px",
+        md: "8px",
+        sm: "6px",
       },
       keyframes: {
         "accordion-down": {
@@ -80,24 +77,14 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "fade-up": {
-          "0%": { opacity: "0", transform: "translateY(30px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
-        "float": {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" },
-        },
         "pulse-glow": {
-          "0%, 100%": { boxShadow: "0 0 20px hsla(220, 90%, 56%, 0.2)" },
-          "50%": { boxShadow: "0 0 40px hsla(220, 90%, 56%, 0.4)" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(6, 182, 212, 0.2)" },
+          "50%": { boxShadow: "0 0 40px rgba(6, 182, 212, 0.4)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-up": "fade-up 0.6s ease-out forwards",
-        "float": "float 3s ease-in-out infinite",
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
       },
     },

@@ -1,64 +1,32 @@
-import { Github, Linkedin, Mail, Zap, Heart } from "lucide-react";
+import { Github, Linkedin, Mail } from "lucide-react";
 
 const FooterSection = () => {
   return (
     <footer
       style={{
-        borderTop: "1px solid rgba(59, 130, 246, 0.12)",
-        background: "rgba(3, 7, 18, 0.8)",
-        backdropFilter: "blur(16px)",
-        padding: "2rem 0",
+        borderTop: "1px solid #1e293b",
+        background: "#0a0a0f",
+        padding: "2.5rem 0",
       }}
     >
-      <div className="container mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="container mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
         {/* Brand */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: 7,
-              background: "linear-gradient(135deg, #3b82f6, #06b6d4)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 0 10px rgba(59, 130, 246, 0.4)",
-            }}
-          >
-            <Zap size={14} color="white" fill="white" />
-          </div>
-          <span
-            style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontWeight: 700,
-              fontSize: "0.95rem",
-              background: "linear-gradient(135deg, #3b82f6, #06b6d4)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            Praneeth.AI
+        <div className="flex items-center gap-2">
+          <span className="font-mono font-bold text-base tracking-tight text-[#f8fafc]">
+            P<span className="text-[#06b6d4]">.</span>AI
+          </span>
+          <span className="text-xs font-mono text-[#94a3b8] ml-2 pl-2 border-l border-[#1e293b]">
+            AI Engineer
           </span>
         </div>
 
         {/* Copyright */}
-        <p
-          style={{
-            fontSize: "0.8rem",
-            color: "#475569",
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-          }}
-        >
-          Built
-
-          by Ankey Praneeth Reddy · © 2025
+        <p className="text-xs text-[#94a3b8] font-mono">
+          Praneeth Reddy Ankey · © 2026 · Built with React & TypeScript
         </p>
 
         {/* Socials */}
-        <div style={{ display: "flex", gap: 8 }}>
+        <div className="flex items-center gap-3">
           {[
             { icon: Github, href: "https://github.com", label: "GitHub" },
             { icon: Linkedin, href: "https://www.linkedin.com/in/praneeth-reddy-ankey", label: "LinkedIn" },
@@ -70,31 +38,7 @@ const FooterSection = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={label}
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 9,
-                border: "1px solid rgba(59, 130, 246, 0.18)",
-                background: "rgba(15, 23, 42, 0.5)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#475569",
-                textDecoration: "none",
-                transition: "all 0.25s ease",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.color = "#93c5fd";
-                el.style.borderColor = "rgba(59,130,246,0.5)";
-                el.style.boxShadow = "0 0 10px rgba(59,130,246,0.25)";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.color = "#475569";
-                el.style.borderColor = "rgba(59, 130, 246, 0.18)";
-                el.style.boxShadow = "none";
-              }}
+              className="w-9 h-9 rounded-lg border border-[#1e293b] bg-[#12121a] flex items-center justify-center text-[#94a3b8] hover:text-[#06b6d4] hover:border-[#06b6d4]/40 hover:bg-[#181824] transition-all"
             >
               <Icon size={16} />
             </a>
