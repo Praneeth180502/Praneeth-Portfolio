@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Github, Linkedin, Mail, Download, Eye, Sparkles, MapPin, Briefcase, Cpu } from "lucide-react";
+import { ArrowDown, Github, Linkedin, Mail, Download, Eye } from "lucide-react";
 import praneethPhoto from "@/assets/Photo.jpg";
 
 /* ── Node-graph canvas background (White & Silver) ── */
@@ -18,14 +18,15 @@ function NodeGraphCanvas() {
     let height = (canvas.height = canvas.offsetHeight);
 
     const isMobile = window.innerWidth < 768;
-    const nodeCount = isMobile ? 20 : 45;
+    const nodeCount = isMobile ? 25 : 60;
 
+    // Nodes with white and silver tones
     const nodes = Array.from({ length: nodeCount }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      radius: Math.random() * 2 + 1,
+      vx: (Math.random() - 0.5) * 0.45,
+      vy: (Math.random() - 0.5) * 0.45,
+      radius: Math.random() * 2 + 1.2,
       isSilver: Math.random() > 0.4,
     }));
 
@@ -50,6 +51,17 @@ function NodeGraphCanvas() {
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
+      // Radial spotlight glow behind headline
+      const grd = ctx.createRadialGradient(
+        width * 0.4, height * 0.4, 10,
+        width * 0.4, height * 0.4, width * 0.5
+      );
+      grd.addColorStop(0, "rgba(255, 255, 255, 0.05)");
+      grd.addColorStop(0.6, "rgba(161, 161, 170, 0.02)");
+      grd.addColorStop(1, "transparent");
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, width, height);
+
       // Update positions
       for (let i = 0; i < nodes.length; i++) {
         const n = nodes[i];
@@ -64,8 +76,8 @@ function NodeGraphCanvas() {
           const dx = n.x - n2.x;
           const dy = n.y - n2.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120) {
-            const alpha = (1 - dist / 120) * 0.18;
+          if (dist < 130) {
+            const alpha = (1 - dist / 130) * 0.22;
             ctx.strokeStyle = `rgba(228, 228, 231, ${alpha})`;
             ctx.lineWidth = 0.75;
             ctx.beginPath();
@@ -79,8 +91,8 @@ function NodeGraphCanvas() {
         const mdx = n.x - mouseX;
         const mdy = n.y - mouseY;
         const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
-        if (mdist < 150) {
-          const alpha = (1 - mdist / 150) * 0.4;
+        if (mdist < 160) {
+          const alpha = (1 - mdist / 160) * 0.45;
           ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
           ctx.lineWidth = 1;
           ctx.beginPath();
@@ -90,7 +102,7 @@ function NodeGraphCanvas() {
         }
 
         // Draw Node
-        ctx.fillStyle = n.isSilver ? "rgba(255, 255, 255, 0.75)" : "rgba(161, 161, 170, 0.5)";
+        ctx.fillStyle = n.isSilver ? "rgba(255, 255, 255, 0.85)" : "rgba(161, 161, 170, 0.6)";
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
         ctx.fill();
@@ -111,8 +123,8 @@ function NodeGraphCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none z-10"
-      style={{ opacity: 0.75 }}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ opacity: 0.85 }}
     />
   );
 }
@@ -123,31 +135,15 @@ export default function HeroSection() {
       id="hero"
       className="relative min-h-screen flex items-center justify-center pt-24 pb-16 bg-[#000000] text-[#e4e4e7] overflow-hidden"
     >
-      {/* ── Background Blended Portrait Image Layer ── */}
-      <div className="absolute top-0 right-0 bottom-0 w-full lg:w-[58%] pointer-events-none overflow-hidden z-0">
-        <img
-          src={praneethPhoto}
-          alt="Praneeth Reddy Ankey"
-          className="w-full h-full object-cover object-top opacity-35 sm:opacity-45 lg:opacity-55 filter brightness-[0.75] contrast-[1.08] transition-all duration-700"
-        />
-        {/* Left-to-right pitch black blend */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#000000] via-[#000000]/75 to-transparent" />
-        {/* Top-and-bottom pitch black fades */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#000000] via-transparent to-[#000000]/80" />
-        {/* Subtle radial spotlight over portrait */}
-        <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[#000000]/40 to-[#000000]" />
-      </div>
-
-      {/* Interactive Node Canvas Overlay */}
       <NodeGraphCanvas />
 
-      {/* Ambient top lighting */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-b from-white/[0.04] to-transparent rounded-full blur-3xl pointer-events-none z-0" />
+      {/* Ambient top light */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-b from-white/[0.04] to-transparent rounded-full blur-3xl pointer-events-none" />
 
-      <div className="container relative z-20 mx-auto px-6">
+      <div className="container relative z-10 mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           
-          {/* Headline & Value Statement (7 cols desktop) */}
+          {/* Headline & Value Statement (8 cols desktop) */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -155,7 +151,7 @@ export default function HeroSection() {
             className="lg:col-span-7 space-y-6 text-left"
           >
             {/* Eyebrow Label */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0c0c0e]/90 border border-[#27272a] backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0c0c0e] border border-[#27272a]">
               <span className="w-2 h-2 rounded-full bg-[#ffffff] animate-pulse" />
               <span className="eyebrow text-[#a1a1aa] tracking-widest text-[11px]">
                 ASSOCIATE AI ENGINEER · DIGIMAXX
@@ -171,14 +167,14 @@ export default function HeroSection() {
             </h1>
 
             {/* Sub-headline per design.md §9 */}
-            <p className="text-base sm:text-lg text-[#e4e4e7] max-w-2xl font-normal leading-relaxed drop-shadow">
+            <p className="text-base sm:text-lg text-[#e4e4e7] max-w-2xl font-normal leading-relaxed">
               Autonomous agents, RAG pipelines, and intelligent workflows, coordinated into reliable, enterprise-ready software systems.
             </p>
 
             {/* Key Capability Chips */}
             <div className="flex flex-wrap gap-2 pt-1 font-mono text-xs text-[#a1a1aa]">
               {["LangChain & LlamaIndex", "Multi-Agent Swarms", "Hybrid RAG + Vector DBs", "FastAPI & Python", "React / Next.js"].map((tag) => (
-                <span key={tag} className="px-2.5 py-1 rounded-md bg-[#0c0c0e]/80 backdrop-blur-md border border-[#27272a] text-[#e4e4e7]">
+                <span key={tag} className="px-2.5 py-1 rounded-md bg-[#0c0c0e] border border-[#27272a] text-[#e4e4e7]">
                   {tag}
                 </span>
               ))}
@@ -191,7 +187,7 @@ export default function HeroSection() {
                 <span>View projects</span>
               </a>
 
-              <a href="#contact" className="btn-secondary backdrop-blur-md">
+              <a href="#contact" className="btn-secondary">
                 <Mail size={16} />
                 <span>Contact me</span>
               </a>
@@ -238,60 +234,47 @@ export default function HeroSection() {
             </div>
           </motion.div>
 
-          {/* Right Column: Sleek Glass Engineering Stats Panel (5 cols desktop) */}
+          {/* Profile Card & Engineering Fact Box (5 cols desktop) */}
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.15 }}
             className="lg:col-span-5 flex flex-col items-center lg:items-end justify-center"
           >
-            <div className="relative w-full max-w-sm rounded-2xl bg-[#0c0c0e]/85 backdrop-blur-md border border-[#27272a] p-6 shadow-2xl hover:border-[#3f3f46] transition-all group">
+            <div className="relative w-full max-w-sm rounded-2xl bg-[#0c0c0e] border border-[#27272a] p-6 shadow-2xl hover:border-[#3f3f46] transition-all group">
               {/* Silver top accent line */}
               <div className="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-[#ffffff] to-transparent opacity-40" />
 
-              <div className="flex items-center justify-between border-b border-[#27272a] pb-4 mb-4">
-                <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-lg bg-[#ffffff]/10 text-[#ffffff]">
-                    <Cpu size={18} />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-sm text-[#ffffff] tracking-tight">System Specification</h3>
-                    <p className="text-[11px] font-mono text-[#a1a1aa]">Engineering Metrics</p>
-                  </div>
-                </div>
-                <Sparkles size={16} className="text-[#a1a1aa]" />
+              <div className="relative w-full overflow-hidden rounded-xl border border-[#3f3f46] mb-5 bg-[#000000] group/img">
+                <img
+                  src={praneethPhoto}
+                  alt="Praneeth Reddy Ankey"
+                  className="w-full h-auto max-h-[440px] object-cover object-top transition-transform duration-500 group-hover/img:scale-105"
+                />
               </div>
 
-              <div className="space-y-3 text-xs font-mono text-[#a1a1aa]">
-                <div className="flex items-center justify-between py-1 border-b border-[#16161a]">
-                  <span className="flex items-center gap-1.5">
-                    <MapPin size={13} className="text-[#ffffff]" /> LOCATION:
-                  </span>
-                  <span className="text-[#ffffff] font-semibold">Hyderabad, India</span>
+              <div className="mt-5 pt-4 border-t border-[#27272a] space-y-2 text-xs font-mono text-[#a1a1aa]">
+                <div className="flex justify-between">
+                  <span>LOCATION:</span>
+                  <span className="text-[#ffffff]">Hyderabad, India</span>
                 </div>
-                
-                <div className="flex items-center justify-between py-1 border-b border-[#16161a]">
-                  <span className="flex items-center gap-1.5">
-                    <Cpu size={13} className="text-[#ffffff]" /> SPECIALIZATION:
-                  </span>
-                  <span className="text-[#ffffff] font-semibold">Agents & RAG Systems</span>
+                <div className="flex justify-between">
+                  <span>SPECIALIZATION:</span>
+                  <span className="text-[#ffffff]">Agents & RAG Systems</span>
                 </div>
-
-                <div className="flex items-center justify-between py-1 border-b border-[#16161a]">
-                  <span className="flex items-center gap-1.5">
-                    <Briefcase size={13} className="text-[#ffffff]" /> EXPERIENCE:
-                  </span>
-                  <span className="text-[#ffffff] font-semibold">Assoc AI Eng @ Digimaxx</span>
+                <div className="flex justify-between">
+                  <span>EXPERIENCE:</span>
+                  <span className="text-[#ffffff]">Associate AI Eng @ Digimaxx</span>
                 </div>
               </div>
 
               {/* Status Indicator */}
-              <div className="mt-5 p-3 rounded-xl bg-[#16161a]/90 border border-[#27272a] flex items-center gap-2.5">
-                <span className="relative flex h-2.5 w-2.5">
+              <div className="mt-4 p-2.5 rounded-lg bg-[#16161a] border border-[#27272a] flex items-center gap-2.5">
+                <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10b981] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#10b981]"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10b981]"></span>
                 </span>
-                <span className="text-[11px] font-mono text-[#e4e4e7] font-medium">
+                <span className="text-[11px] font-mono text-[#e4e4e7]">
                   Building autonomous agent workflows
                 </span>
               </div>
