@@ -245,11 +245,11 @@ export default function HeroSection() {
               {/* Silver top accent line */}
               <div className="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-[#ffffff] to-transparent opacity-40" />
 
-              <div className="relative w-full overflow-hidden rounded-xl border border-[#3f3f46] mb-5 group/img">
+              <div className="relative w-full overflow-hidden rounded-xl border border-[#3f3f46] mb-5 bg-[#000000] group/img">
                 <img
                   src={praneethPhoto}
                   alt="Praneeth Reddy Ankey"
-                  className="w-full h-80 sm:h-96 object-cover object-top transition-transform duration-500 group-hover/img:scale-105"
+                  className="w-full h-auto max-h-[440px] object-cover object-top transition-transform duration-500 group-hover/img:scale-105"
                 />
               </div>
 
