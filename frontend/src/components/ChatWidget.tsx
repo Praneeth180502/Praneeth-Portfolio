@@ -189,11 +189,11 @@ const ChatWidget = () => {
       <AnimatePresence>
         {!isOpen && showGreeting && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, x: 20 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.9, x: 20 }}
+            initial={{ opacity: 0, scale: 0.9, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 10 }}
             transition={{ delay: 1, duration: 0.3 }}
-            className="fixed bottom-6 right-24 mr-2 z-50 flex items-center gap-2.5 max-w-[calc(100vw-8rem)] sm:max-w-[280px] bg-[#0c0c0e]/95 backdrop-blur-md border border-[#27272a] shadow-xl p-3 rounded-xl text-xs text-[#e4e4e7] cursor-pointer hover:bg-[#16161a] transition-colors group/bubble"
+            className="fixed bottom-20 right-6 z-50 flex items-center gap-2.5 max-w-[calc(100vw-3rem)] sm:max-w-[280px] bg-[#0c0c0e]/95 backdrop-blur-md border border-[#27272a] shadow-xl p-3 rounded-xl text-xs text-[#e4e4e7] cursor-pointer hover:bg-[#16161a] transition-colors group/bubble"
             onClick={() => setIsOpen(true)}
           >
             <div className="flex-1 pr-1 leading-relaxed select-none">
@@ -210,7 +210,8 @@ const ChatWidget = () => {
             >
               <X size={12} />
             </button>
-            <div className="absolute right-[-5px] bottom-4 w-2.5 h-2.5 rotate-45 bg-[#0c0c0e] border-r border-t border-[#27272a] group-hover/bubble:bg-[#16161a] transition-colors" />
+            {/* Downward pointing tail */}
+            <div className="absolute right-6 -bottom-1.5 w-2.5 h-2.5 rotate-45 bg-[#0c0c0e] border-r border-b border-[#27272a] group-hover/bubble:bg-[#16161a] transition-colors" />
           </motion.div>
         )}
       </AnimatePresence>
