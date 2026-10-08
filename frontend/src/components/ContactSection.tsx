@@ -40,8 +40,8 @@ const contactChannels = [
   {
     icon: Phone,
     title: "Phone",
-    label: "+91 80963 80608",
-    href: "tel:+918096380608",
+    label: "+91 8179141580",
+    href: "tel:+918179141580",
     actionText: "Call directly",
   },
 ];
@@ -52,7 +52,7 @@ export default function ContactSection() {
       <ConcentricSignalRings />
 
       <div className="container relative z-10 mx-auto px-6 max-w-4xl">
-        
+
         {/* Centered Section Header with design.md §9 Headline */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
