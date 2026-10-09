@@ -89,16 +89,16 @@ const renderMessageText = (text: string) => {
   );
 };
 
+const WELCOME_MESSAGE: Message = {
+  id: "welcome",
+  sender: "assistant",
+  text: "Hi there! I'm Bittu 🤖, Praneeth's AI Assistant. Ask me anything about his education, work experience, jobs, projects, skills, or background!",
+};
+
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showGreeting, setShowGreeting] = useState(true);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "welcome",
-      sender: "assistant",
-      text: "Hi there! I'm Praneeth's AI Assistant. Ask me anything about his work, agent architectures, RAG pipelines, or experience at Digimaxx & DRDO!",
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
   const [input, setInput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [sessionId] = useState(() => `session-${Math.random().toString(36).substring(2, 10)}`);
@@ -155,10 +155,10 @@ const ChatWidget = () => {
             prev.map((msg) =>
               msg.id === assistantMsgId
                 ? {
-                    ...msg,
-                    text: msg.text || "I couldn't reach the backend server right now. You can email Praneeth directly at apraneethreddy20891a0502@gmail.com!",
-                    isStreaming: false,
-                  }
+                  ...msg,
+                  text: msg.text || "I couldn't reach the backend server right now. You can email Praneeth directly at apraneethreddy20891a0502@gmail.com!",
+                  isStreaming: false,
+                }
                 : msg
             )
           );
@@ -174,18 +174,12 @@ const ChatWidget = () => {
   };
 
   const clearChat = () => {
-    setMessages([
-      {
-        id: "welcome",
-        sender: "assistant",
-        text: "Hi there! I'm Praneeth's AI Assistant. Ask me anything about his work, agent architectures, RAG pipelines, or experience at Digimaxx & DRDO!",
-      },
-    ]);
+    setMessages([WELCOME_MESSAGE]);
   };
 
   return (
     <>
-      {/* Greeting Bubble per design.md §7 ("Ask about my work") */}
+      {/* Greeting Bubble */}
       <AnimatePresence>
         {!isOpen && showGreeting && (
           <motion.div
@@ -197,8 +191,8 @@ const ChatWidget = () => {
             onClick={() => setIsOpen(true)}
           >
             <div className="flex-1 pr-1 leading-relaxed select-none">
-              <span className="font-mono text-[#ffffff] font-semibold">Assistant: </span>
-              Ask about my work & RAG projects!
+              <span className="font-mono text-[#ffffff] font-semibold">Bittu 🤖: </span>
+              Ask me anything about Praneeth's education, jobs & projects!
             </div>
             <button
               onClick={(e) => {
@@ -216,7 +210,7 @@ const ChatWidget = () => {
         )}
       </AnimatePresence>
 
-      {/* Floating Assistant Button per design.md §7 */}
+      {/* Floating Assistant Button */}
       <motion.button
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
@@ -224,10 +218,10 @@ const ChatWidget = () => {
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-full bg-[#ffffff] text-[#000000] font-semibold text-xs tracking-wide shadow-xl hover:bg-[#e4e4e7] transition-all flex items-center gap-2 group border border-[#ffffff]/30"
-        aria-label="Ask about my work"
+        aria-label="Ask Bittu AI"
       >
         <Bot size={18} className="text-[#000000] group-hover:rotate-12 transition-transform" />
-        <span className="font-mono font-bold">Ask about my work</span>
+        <span className="font-mono font-bold">Ask Bittu AI</span>
         <span className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse" />
       </motion.button>
 
@@ -249,10 +243,10 @@ const ChatWidget = () => {
                 </div>
                 <div>
                   <h3 className="font-sans font-semibold text-sm text-[#ffffff] flex items-center gap-1.5">
-                    Portfolio Assistant
+                    Bittu AI 🤖
                     <Sparkles size={13} className="text-[#a1a1aa]" />
                   </h3>
-                  <p className="text-[11px] font-mono text-[#a1a1aa]">Powered by RAG & LangChain</p>
+                  <p className="text-[11px] font-mono text-[#a1a1aa]">Praneeth's Portfolio Assistant</p>
                 </div>
               </div>
               <div className="flex items-center gap-1">
@@ -288,11 +282,10 @@ const ChatWidget = () => {
 
                   <div className="max-w-[84%] space-y-1.5">
                     <div
-                      className={`p-3 rounded-xl leading-relaxed ${
-                        msg.sender === "user"
+                      className={`p-3 rounded-xl leading-relaxed ${msg.sender === "user"
                           ? "bg-[#ffffff] text-[#000000] font-semibold"
                           : "bg-[#0c0c0e] text-[#e4e4e7] border border-[#27272a]"
-                      }`}
+                        }`}
                     >
                       {msg.sender === "user" ? (
                         msg.text
@@ -314,6 +307,30 @@ const ChatWidget = () => {
                   )}
                 </div>
               ))}
+
+              {/* Quick suggestion prompt chips */}
+              {messages.length === 1 && !isGenerating && (
+                <div className="pt-2 border-t border-[#27272a]/50">
+                  <p className="text-[11px] font-mono text-[#a1a1aa] mb-2">Suggested questions:</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {[
+                      "🎓 What is Praneeth's education?",
+                      "💼 Tell me about his jobs & work experience",
+                      "🚀 What are his top projects?",
+                      "🛠️ What are his key technical skills?",
+                    ].map((promptText, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => handleSend(promptText)}
+                        className="text-[11px] px-2.5 py-1.5 rounded-lg bg-[#16161a] hover:bg-[#27272a] text-[#e4e4e7] border border-[#27272a] transition-all text-left font-sans"
+                      >
+                        {promptText}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div ref={messagesEndRef} />
             </div>
 
@@ -329,7 +346,7 @@ const ChatWidget = () => {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about NaukriBot, DRDO, or AI Agents..."
+                placeholder="Ask Bittu about education, jobs, skills, projects..."
                 disabled={isGenerating}
                 className="flex-1 px-3.5 py-2 rounded-lg bg-[#000000] border border-[#27272a] focus:border-[#ffffff] outline-none text-xs text-[#ffffff] placeholder:text-[#a1a1aa] font-sans transition-all"
               />

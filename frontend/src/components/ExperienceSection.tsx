@@ -20,7 +20,7 @@ const experiences = [
   {
     company: "CognitBotz",
     role: "AI / Full Stack Developer Intern",
-    period: "2024",
+    period: "Oct 2025- May 2026",
     status: "past",
     location: "Hyderabad, India",
     description: "Built scalable enterprise web dashboards and data integration services for major industrial clients.",
@@ -34,7 +34,7 @@ const experiences = [
   {
     company: "DRDO (Defense Research & Dev Organisation)",
     role: "Software Engineering Intern",
-    period: "2023",
+    period: "Nov 2023 - May 2024",
     status: "past",
     location: "Hyderabad, India",
     description: "Built high-frequency telemetry simulation software for live missile testing and trajectory tracking.",
